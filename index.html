@@ -4,25 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Module E Bagrut Vocabulary</title>
-<meta name="description" content="Interactive vocabulary practice for Module E Bagrut by Teacher Simon Halevi. Lists A–D, divided into three practice groups. Play online or download.">
+<meta name="description" content="Interactive vocabulary practice for Module E Bagrut by Teacher Simon Halevi. Lists A–D, divided into three practice groups. Play online or copy a direct link.">
 <link rel="canonical" href="https://simonh68.github.io/module-e-vocab/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Module E Bagrut Vocabulary">
 <meta property="og:title" content="Module E Bagrut Vocabulary">
-<meta property="og:description" content="Interactive vocabulary practice for Module E Bagrut by Teacher Simon Halevi. Lists A–D, divided into three practice groups. Play online or download.">
+<meta property="og:description" content="Interactive vocabulary practice for Module E Bagrut by Teacher Simon Halevi. Lists A–D, divided into three practice groups. Play online or copy a direct link.">
 <meta property="og:url" content="https://simonh68.github.io/module-e-vocab/">
-<meta property="og:image" content="https://simonh68.github.io/module-e-vocab/preview-simon-halevi.jpg">
-<meta property="og:image:secure_url" content="https://simonh68.github.io/module-e-vocab/preview-simon-halevi.jpg">
-<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image" content="https://simonh68.github.io/module-e-vocab/preview.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Module E Bagrut Vocabulary — Presented by Teacher Simon Halevi">
-
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Module E Bagrut Vocabulary">
 <meta name="twitter:description" content="Interactive vocabulary practice for Module E Bagrut by Teacher Simon Halevi. Lists A–D, divided into three practice groups.">
-<meta name="twitter:image" content="https://simonh68.github.io/module-e-vocab/preview-simon-halevi.jpg">
-
+<meta name="twitter:image" content="https://simonh68.github.io/module-e-vocab/preview.png">
 <style>
   :root{
     --bg1:#6d28d9;
@@ -232,7 +229,7 @@
     gap:10px;
     flex-wrap:wrap;
   }
-  a{
+  a, button.copy-link{
     text-decoration:none;
     font-weight:800;
     border-radius:14px;
@@ -242,7 +239,7 @@
     gap:8px;
     transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
   }
-  a:hover{
+  a:hover, button.copy-link:hover{
     transform:translateY(-2px);
     filter:saturate(1.05);
   }
@@ -251,7 +248,9 @@
     background:linear-gradient(135deg,#111827,#374151);
     box-shadow:0 10px 18px rgba(17,24,39,.18);
   }
-  .download{
+  .copy-link{
+    cursor:pointer;
+    font:inherit;
     color:#1f2340;
     background:linear-gradient(135deg,#ffffff,#eef4ff);
     border:1px solid rgba(91,97,120,.18);
@@ -271,7 +270,7 @@
     .wrap{padding:20px 14px 40px;}
     .hero{padding:24px 20px;}
     .list-card{padding:18px;}
-    .actions a{width:100%;justify-content:center;}
+    .actions a, .actions button{width:100%;justify-content:center;}
   }
 </style>
 </head>
@@ -289,13 +288,13 @@
         Welcome to your colorful vocabulary practice page for the <strong>Module E Bagrut</strong>.
         Each vocabulary list — <strong>A, B, C and D</strong> — was shuffled and divided as evenly as possible into
         <strong>three groups</strong>. Choose any group below. You can either <strong>play</strong> the activity
-        in your browser or <strong>download</strong> the HTML file to keep it.
+        in your browser or <strong>copy a direct link</strong> to share that practice activity.
         <br><br><strong>Presented by Teacher Simon Halevi.</strong>
       </p>
       <div class="hero-note">
         <span class="pill">✨ 4 vocabulary lists</span>
         <span class="pill">🎯 12 practice activities</span>
-        <span class="pill">🖥️ Play or download</span>
+        <span class="pill">🖥️ Play or copy link</span>
         <span class="pill">👨‍🏫 Teacher Simon Halevi</span>
       </div>
     </header>
@@ -310,7 +309,7 @@
           <div class="group-head"><div class="group-title">Group 1</div><div class="spark">🌟</div></div>
           <div class="actions">
             <a class="play" href="A1v2.html">▶ Play</a>
-            <a class="download" href="A1v2.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="A1v2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -318,7 +317,7 @@
           <div class="group-head"><div class="group-title">Group 2</div><div class="spark">🌟</div></div>
           <div class="actions">
             <a class="play" href="A2v2.html">▶ Play</a>
-            <a class="download" href="A2v2.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="A2v2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -326,7 +325,7 @@
           <div class="group-head"><div class="group-title">Group 3</div><div class="spark">🌟</div></div>
           <div class="actions">
             <a class="play" href="A3v2.html">▶ Play</a>
-            <a class="download" href="A3v2.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="A3v2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
       </section>
@@ -340,7 +339,7 @@
           <div class="group-head"><div class="group-title">Group 1</div><div class="spark">🎈</div></div>
           <div class="actions">
             <a class="play" href="B1.html">▶ Play</a>
-            <a class="download" href="B1.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="B1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -348,7 +347,7 @@
           <div class="group-head"><div class="group-title">Group 2</div><div class="spark">🎈</div></div>
           <div class="actions">
             <a class="play" href="B2.html">▶ Play</a>
-            <a class="download" href="B2.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="B2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -356,7 +355,7 @@
           <div class="group-head"><div class="group-title">Group 3</div><div class="spark">🎈</div></div>
           <div class="actions">
             <a class="play" href="B3.html">▶ Play</a>
-            <a class="download" href="B3.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="B3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
       </section>
@@ -370,7 +369,7 @@
           <div class="group-head"><div class="group-title">Group 1</div><div class="spark">💫</div></div>
           <div class="actions">
             <a class="play" href="C1.html">▶ Play</a>
-            <a class="download" href="C1.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="C1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -378,7 +377,7 @@
           <div class="group-head"><div class="group-title">Group 2</div><div class="spark">💫</div></div>
           <div class="actions">
             <a class="play" href="C2.html">▶ Play</a>
-            <a class="download" href="C2.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="C2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -386,7 +385,7 @@
           <div class="group-head"><div class="group-title">Group 3</div><div class="spark">💫</div></div>
           <div class="actions">
             <a class="play" href="C3.html">▶ Play</a>
-            <a class="download" href="C3.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="C3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
       </section>
@@ -400,7 +399,7 @@
           <div class="group-head"><div class="group-title">Group 1</div><div class="spark">🎨</div></div>
           <div class="actions">
             <a class="play" href="D1.html">▶ Play</a>
-            <a class="download" href="D1.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="D1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -408,7 +407,7 @@
           <div class="group-head"><div class="group-title">Group 2</div><div class="spark">🎨</div></div>
           <div class="actions">
             <a class="play" href="D2.html">▶ Play</a>
-            <a class="download" href="D2.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="D2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
 
@@ -416,7 +415,7 @@
           <div class="group-head"><div class="group-title">Group 3</div><div class="spark">🎨</div></div>
           <div class="actions">
             <a class="play" href="D3.html">▶ Play</a>
-            <a class="download" href="D3.html" download>⬇ Download</a>
+            <button type="button" class="copy-link" data-file="D3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
           </div>
         </div>
       </section>
@@ -426,5 +425,28 @@
       Module E Bagrut vocabulary practice · presented by Teacher Simon Halevi
     </footer>
   </div>
+
+  <script>
+    async function copyPracticeLink(button) {
+      const publicBase = 'https://simonh68.github.io/module-e-vocab/';
+      const url = new URL(button.dataset.file, publicBase).href;
+      const originalText = button.textContent;
+      try {
+        await navigator.clipboard.writeText(url);
+        button.textContent = '✓ Link copied';
+      } catch (err) {
+        const area = document.createElement('textarea');
+        area.value = url;
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+        button.textContent = '✓ Link copied';
+      }
+      setTimeout(() => { button.textContent = originalText; }, 1800);
+    }
+  </script>
 </body>
 </html>
