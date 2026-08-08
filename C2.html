@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychometric Vocabulary Flashcards - Part 2 (C)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .counter {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            background: #e0e7ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 100%;
+            height: 380px;
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            user-select: none;
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #ffffff;
+            overflow-y: auto;
+        }
+
+        .card-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pos-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .tts-btn {
+            background: #eef2ff;
+            border: none;
+            color: var(--primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .tts-btn:hover { background: #e0e7ff; }
+        .tts-btn:active { transform: scale(0.95); }
+
+        .word-main-container {
+            text-align: center;
+            margin: auto 0;
+        }
+
+        .word-en {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .word-grammar {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .flip-hint {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        .translations-section { margin-bottom: 15px; }
+
+        .trans-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+        }
+
+        .lang-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .trans-he {
+            font-weight: 700;
+            direction: rtl;
+            color: var(--primary);
+        }
+
+        .synonyms-box {
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .example-box {
+            background: #fdf2f8;
+            border-left: 4px solid #db2777;
+            padding: 10px 14px;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .example-en {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #831843;
+        }
+
+        .example-trans {
+            font-size: 0.85rem;
+            color: #9d174d;
+        }
+
+        .example-trans.he { direction: rtl; }
+
+        .nav-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .nav-btn:active { transform: scale(0.97); }
+        .nav-btn svg { width: 18px; height: 18px; }
+        
+        .jump-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .jump-container a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+        }
+    </style>
+    <script>
+        const words = [
+            {"en": "bottom", "pos": "adj/n", "grammar": "adj., n.", "mean_he": "תחתית / תחתון", "ex_en": "Look at the bottom line.", "ex_he": "הסתכל על השורה התחתונה."},
+            {"en": "hold up", "pos": "phrase", "grammar": "phrase", "mean_he": "לעכב / להרים", "ex_en": "Traffic held us up.", "ex_he": "התנועה עיכבה אותנו."},
+            {"en": "in your twenties", "pos": "phrase", "grammar": "phrase", "mean_he": "בשנות העשרים לחייך", "ex_en": "She is in her twenties.", "ex_he": "היא בשנות העשרים לחייה."},
+            {"en": "elderly", "pos": "adj", "grammar": "adj.", "mean_he": "קשיש", "ex_en": "An elderly man sat down.", "ex_he": "אדם קשיש התיישב."},
+            {"en": "some kind of", "pos": "phrase", "grammar": "phrase", "mean_he": "סוג של", "ex_en": "It is some kind of animal.", "ex_he": "זה סוג של חיה."},
+            {"en": "quit", "pos": "v", "grammar": "v.", "mean_he": "לפרוש / לעזוב", "ex_en": "I decided to quit my job.", "ex_he": "החלטתי לעזוב את העבודה שלי."},
+            {"en": "capacity", "pos": "n", "grammar": "n.", "mean_he": "קיבולת / נפח", "ex_en": "The room is at full capacity.", "ex_he": "החדר בקיבולת מלאה."},
+            {"en": "distinguish", "pos": "v", "grammar": "v.", "mean_he": "להבחין / להבדיל", "ex_en": "Distinguish between right and wrong.", "ex_he": "להבדיל בין טוב לרע."},
+            {"en": "look", "pos": "n", "grammar": "n.", "mean_he": "מראה", "ex_en": "I love your new look.", "ex_he": "אני אוהב את המראה החדש שלך."},
+            {"en": "underline", "pos": "v", "grammar": "v.", "mean_he": "להדגיש / קו תחתון", "ex_en": "Please underline the word.", "ex_he": "אנא מתח קו תחתון תחת המילה."},
+            {"en": "on your own", "pos": "phrase", "grammar": "phrase", "mean_he": "בעצמך / לבד", "ex_en": "You can do it on your own.", "ex_he": "אתה יכול לעשות את זה בעצמך."},
+            {"en": "lose interest", "pos": "phrase", "grammar": "phrase", "mean_he": "לאבד עניין", "ex_en": "I easily lose interest in sports.", "ex_he": "אני מאבד עניין בספורט בקלות."},
+            {"en": "follow", "pos": "v", "grammar": "v.", "mean_he": "להבין / לעקוב", "ex_en": "Do you follow my explanation?", "ex_he": "אתה מבין את ההסבר שלי?"},
+            {"en": "trade", "pos": "n", "grammar": "n.", "mean_he": "סחר / מקצוע", "ex_en": "International trade is important.", "ex_he": "סחר בינלאומי הוא חשוב."},
+            {"en": "let in", "pos": "phrase", "grammar": "phrase", "mean_he": "להכניס", "ex_en": "Let the dog in.", "ex_he": "הכנס את הכלב."},
+            {"en": "struggle", "pos": "n/v", "grammar": "n., v.", "mean_he": "מאבק / להיאבק", "ex_en": "It was a hard struggle.", "ex_he": "זה היה מאבק קשה."},
+            {"en": "debt", "pos": "n", "grammar": "n.", "mean_he": "חוב", "ex_en": "He paid his debt.", "ex_he": "הוא שילם את החוב שלו."},
+            {"en": "bother", "pos": "v", "grammar": "v.", "mean_he": "להטריד / להטריח", "ex_en": "Please don't bother me.", "ex_he": "בבקשה אל תטריד אותי."},
+            {"en": "load", "pos": "v", "grammar": "v.", "mean_he": "להטעין", "ex_en": "Load the boxes into the truck.", "ex_he": "הטען את הקופסאות למשאית."},
+            {"en": "tired of doing", "pos": "phrase", "grammar": "phrase", "mean_he": "נמאס מ...", "ex_en": "I'm tired of waiting.", "ex_he": "נמאס לי לחכות."},
+            {"en": "cash", "pos": "v", "grammar": "v.", "mean_he": "לפדות", "ex_en": "I need to cash this check.", "ex_he": "אני צריך לפדות את הצ'ק הזה."},
+            {"en": "sign", "pos": "n/v", "grammar": "n., v.", "mean_he": "לחתום / שלט", "ex_en": "Sign your name here.", "ex_he": "חתום את שמך כאן."},
+            {"en": "slip", "pos": "v", "grammar": "v.", "mean_he": "להחליק", "ex_en": "I slipped on the wet floor.", "ex_he": "החלקתי על הרצפה הרטובה."},
+            {"en": "loan", "pos": "n/v", "grammar": "n., v.", "mean_he": "הלוואה", "ex_en": "We got a bank loan.", "ex_he": "קיבלנו הלוואה מהבנק."},
+            {"en": "fire", "pos": "v", "grammar": "v.", "mean_he": "לפטר", "ex_en": "The boss will fire him.", "ex_he": "הבוס יפטר אותו."},
+            {"en": "direct", "pos": "v", "grammar": "v.", "mean_he": "לביים / לכוון", "ex_en": "He will direct the new movie.", "ex_he": "הוא יביים את הסרט החדש."},
+            {"en": "swear", "pos": "v", "grammar": "v.", "mean_he": "להישבע", "ex_en": "I swear it is true.", "ex_he": "אני נשבע שזה נכון."},
+            {"en": "fare", "pos": "n", "grammar": "n.", "mean_he": "דמי נסיעה", "ex_en": "How much is the bus fare?", "ex_he": "כמה עולים דמי הנסיעה באוטובוס?"},
+            {"en": "awareness", "pos": "n", "grammar": "n.", "mean_he": "מודעות", "ex_en": "Raise public awareness.", "ex_he": "להעלות את המודעות הציבורית."},
+            {"en": "miss", "pos": "n", "grammar": "n.", "mean_he": "החטאה / פספוס", "ex_en": "It was a near miss.", "ex_he": "זה היה כמעט פספוס."},
+            {"en": "spill", "pos": "v", "grammar": "v.", "mean_he": "לשפוך", "ex_en": "Don't spill the water.", "ex_he": "אל תשפוך את המים."},
+            {"en": "casual", "pos": "adj", "grammar": "adj.", "mean_he": "יומיומי / אגבי", "ex_en": "He wore casual clothes.", "ex_he": "הוא לבש בגדים יומיומיים."},
+            {"en": "once in a while", "pos": "phrase", "grammar": "phrase", "mean_he": "פעם ב... / מדי פעם", "ex_en": "We meet once in a while.", "ex_he": "אנחנו נפגשים מדי פעם."},
+            {"en": "be about to", "pos": "phrase", "grammar": "phrase", "mean_he": "עומד ל...", "ex_en": "I am about to leave.", "ex_he": "אני עומד לעזוב."},
+            {"en": "offense", "pos": "n", "grammar": "n.", "mean_he": "עבירה / פגיעה", "ex_en": "A serious criminal offense.", "ex_he": "עבירה פלילית חמורה."},
+            {"en": "dramatic", "pos": "adj", "grammar": "adj.", "mean_he": "דרמטי", "ex_en": "A dramatic change in weather.", "ex_he": "שינוי דרמטי במזג האוויר."},
+            {"en": "classic", "pos": "adj", "grammar": "adj.", "mean_he": "קלאסי", "ex_en": "A classic car.", "ex_he": "מכונית קלאסית."},
+            {"en": "shame", "pos": "n", "grammar": "n.", "mean_he": "בושה / חבל", "ex_en": "What a shame you can't come.", "ex_he": "איזה חבל שאתה לא יכול לבוא."},
+            {"en": "stay", "pos": "n", "grammar": "n.", "mean_he": "שהייה", "ex_en": "Enjoy your stay at the hotel.", "ex_he": "תהנה מהשהייה שלך במלון."},
+            {"en": "firm", "pos": "adj", "grammar": "adj.", "mean_he": "מוצק / תקיף", "ex_en": "A firm handshake.", "ex_he": "לחיצת יד חזקה (מוצקה)."},
+            {"en": "breeze", "pos": "n", "grammar": "n.", "mean_he": "בריזה / רוח קלה", "ex_en": "A cool summer breeze.", "ex_he": "בריזת קיץ קרירה."},
+            {"en": "cheat", "pos": "v", "grammar": "v.", "mean_he": "לרמות", "ex_en": "Don't cheat on the exam.", "ex_he": "אל תרמה בבחינה."},
+            {"en": "fold", "pos": "v", "grammar": "v.", "mean_he": "לקפל", "ex_en": "Fold the paper in half.", "ex_he": "קפל את הנייר לחצי."},
+            {"en": "cure", "pos": "n/v", "grammar": "n., v.", "mean_he": "תרופה / לרפא", "ex_en": "There is no cure for this cold.", "ex_he": "אין תרופה להצטננות הזו."},
+            {"en": "dozen", "pos": "n", "grammar": "n.", "mean_he": "תריסר (12)", "ex_en": "I bought a dozen eggs.", "ex_he": "קניתי תריסר ביצים."},
+            {"en": "free will", "pos": "phrase", "grammar": "phrase", "mean_he": "רצון חופשי", "ex_en": "He did it of his own free will.", "ex_he": "הוא עשה זאת מרצונו החופשי."},
+            {"en": "frozen", "pos": "adj", "grammar": "adj.", "mean_he": "קפוא", "ex_en": "I bought frozen vegetables.", "ex_he": "קניתי ירקות קפואים."},
+            {"en": "tip", "pos": "n", "grammar": "n.", "mean_he": "טיפ / עצה", "ex_en": "He gave me a good tip.", "ex_he": "הוא נתן לי עצה טובה."},
+            {"en": "so did we", "pos": "phrase", "grammar": "phrase", "mean_he": "גם אנחנו", "ex_en": "He left, and so did we.", "ex_he": "הוא עזב, וגם אנחנו."},
+            {"en": "give in", "pos": "phrase", "grammar": "phrase", "mean_he": "להיכנע", "ex_en": "Never give in to pressure.", "ex_he": "לעולם אל תיכנע ללחץ."},
+            {"en": "subway", "pos": "n", "grammar": "n.", "mean_he": "רכבת תחתית", "ex_en": "Take the subway to work.", "ex_he": "קח את הרכבת התחתית לעבודה."},
+            {"en": "speak about", "pos": "phrase", "grammar": "phrase", "mean_he": "לדבר על", "ex_en": "We will speak about the project.", "ex_he": "אנחנו נדבר על הפרויקט."},
+            {"en": "bitter", "pos": "adj", "grammar": "adj.", "mean_he": "מר / מריר", "ex_en": "A bitter taste of coffee.", "ex_he": "טעם מר של קפה."},
+            {"en": "wear out", "pos": "phrase", "grammar": "phrase", "mean_he": "לשחוק / להתבלות", "ex_en": "These shoes will wear out soon.", "ex_he": "הנעליים האלו ישחקו בקרוב."},
+            {"en": "server", "pos": "n", "grammar": "n.", "mean_he": "שרת", "ex_en": "The computer server is down.", "ex_he": "שרת המחשב קרס."},
+            {"en": "signal", "pos": "n/v", "grammar": "n., v.", "mean_he": "לאותת / אות", "ex_en": "A clear signal from the phone.", "ex_he": "אות ברור מהטלפון."},
+            {"en": "destination", "pos": "n", "grammar": "n.", "mean_he": "יעד", "ex_en": "We reached our destination.", "ex_he": "הגענו ליעד שלנו."},
+            {"en": "tight", "pos": "adj", "grammar": "adj.", "mean_he": "הדוק / צמוד", "ex_en": "These pants are too tight.", "ex_he": "המכנסיים האלה צמודים מדי."},
+            {"en": "smart", "pos": "adj", "grammar": "adj.", "mean_he": "חכם", "ex_en": "She is a smart student.", "ex_he": "היא תלמידה חכמה."},
+            {"en": "enter", "pos": "v", "grammar": "v.", "mean_he": "להזין / להיכנס", "ex_en": "Enter the details in the system.", "ex_he": "הזן את הפרטים במערכת."},
+            {"en": "access", "pos": "n/v", "grammar": "n., v.", "mean_he": "גישה / לגשת", "ex_en": "Free internet access.", "ex_he": "גישה חינם לאינטרנט."},
+            {"en": "tough", "pos": "adj", "grammar": "adj.", "mean_he": "קשוח / קשה", "ex_en": "It was a tough game.", "ex_he": "זה היה משחק קשה."},
+            {"en": "race", "pos": "n", "grammar": "n.", "mean_he": "גזע / מירוץ", "ex_en": "The human race.", "ex_he": "הגזע האנושי."},
+            {"en": "log in", "pos": "phrase", "grammar": "phrase", "mean_he": "להתחבר (מחשב)", "ex_en": "Log in to your account.", "ex_he": "התחבר לחשבון שלך."},
+            {"en": "for the sake of", "pos": "phrase", "grammar": "phrase", "mean_he": "למען", "ex_en": "Do it for the sake of the kids.", "ex_he": "עשה זאת למען הילדים."},
+            {"en": "maker", "pos": "n", "grammar": "n.", "mean_he": "יצרן / יוצר", "ex_en": "A famous car maker.", "ex_he": "יצרן רכבים מפורסם."},
+            {"en": "Yours sincerely", "pos": "phrase", "grammar": "phrase", "mean_he": "בברכה (במכתב)", "ex_en": "Yours sincerely, Anna.", "ex_he": "בברכה, אנה."},
+            {"en": "take sb's place", "pos": "phrase", "grammar": "phrase", "mean_he": "לתפוס את המקום של", "ex_en": "He will take my place.", "ex_he": "הוא יתפוס את מקומי."},
+            {"en": "decorate", "pos": "v", "grammar": "v.", "mean_he": "לקשט", "ex_en": "Decorate the room for the party.", "ex_he": "לקשט את החדר למסיבה."},
+            {"en": "or so", "pos": "phrase", "grammar": "phrase", "mean_he": "בערך", "ex_en": "It takes an hour or so.", "ex_he": "זה לוקח שעה בערך."},
+            {"en": "show up", "pos": "phrase", "grammar": "phrase", "mean_he": "להופיע / להגיע", "ex_en": "He didn't show up for work.", "ex_he": "הוא לא הופיע לעבודה."},
+            {"en": "somewhere around", "pos": "phrase", "grammar": "phrase", "mean_he": "בערך בסביבות", "ex_en": "Somewhere around 5 PM.", "ex_he": "בסביבות השעה 5."},
+            {"en": "liquid", "pos": "n/adj", "grammar": "n., adj.", "mean_he": "נוזל / נוזלי", "ex_en": "Water is a clear liquid.", "ex_he": "מים הם נוזל צלול."},
+            {"en": "pace", "pos": "n", "grammar": "n.", "mean_he": "קצב", "ex_en": "We walked at a fast pace.", "ex_he": "הלכנו בקצב מהיר."},
+            {"en": "go ahead", "pos": "phrase", "grammar": "phrase", "mean_he": "קדימה / להמשיך", "ex_en": "You can go ahead and start.", "ex_he": "אתה יכול להמשיך ולהתחיל."}
+        ];
+    </script>
+</head>
+<body>
+    <header>
+        <div class="title">Flashcards - Part 2 (C)</div>
+        <div class="counter" id="counter">1 / 1</div>
+    </header>
+
+    <div class="container" id="cardContainer">
+        <div class="card" id="flashcard" onclick="toggleCard()">
+            <div class="card-face">
+                <div class="card-header-top">
+                    <span class="pos-badge" id="posBadge">NOUN</span>
+                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </button>
+                </div>
+                <div class="word-main-container">
+                    <div class="word-en" id="wordEn">Loading...</div>
+                    <div class="word-grammar" id="wordGrammar"></div>
+                </div>
+                <div class="flip-hint">Tap card to flip ↺</div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="translations-section">
+                    <div class="trans-row">
+                        <span class="lang-label">Hebrew</span>
+                        <span class="trans-he" id="transHe">-</span>
+                    </div>
+                </div>
+                <div class="synonyms-box" id="synonymsBox">
+                    <strong>Synonyms:</strong> <span id="wordSynonyms">-</span>
+                </div>
+                <div class="example-box">
+                    <div class="example-en" id="exEn">-</div>
+                    <div class="example-trans he" id="exHe">-</div>
+                </div>
+                <div class="flip-hint" style="margin-top: 10px;">Tap to flip back</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-container">
+        <button class="nav-btn" onclick="prevCard()">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Previous
+        </button>
+        <button class="nav-btn" onclick="nextCard()">
+            Next
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+    <div class="jump-container">
+        <a href="C1.html" class="nav-btn">Go to Previous Part</a>
+        <a href="C3.html" class="nav-btn">Go to Next Part</a>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let hasUserInteracted = false;
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function updateCard() {
+            if (typeof words === 'undefined' || words.length === 0) return;
+            const item = words[currentIndex];
+            
+            document.getElementById('flashcard').classList.remove('is-flipped');
+            document.getElementById('posBadge').innerText = item.pos || '';
+            document.getElementById('wordEn').innerText = item.en || '';
+            document.getElementById('wordGrammar').innerText = item.grammar || '';
+            document.getElementById('transHe').innerText = item.mean_he || '';
+            
+            if (item.synonyms && item.synonyms.length > 0) {
+                document.getElementById('synonymsBox').style.display = 'block';
+                document.getElementById('wordSynonyms').innerText = item.synonyms.join(', ');
+            } else {
+                document.getElementById('synonymsBox').style.display = 'none';
+            }
+
+            document.getElementById('exEn').innerText = item.ex_en || '';
+            document.getElementById('exHe').innerText = item.ex_he || '';
+            document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            
+            if (hasUserInteracted) {
+                speakText(item.en);
+            }
+        }
+
+        function toggleCard() {
+            hasUserInteracted = true;
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('is-flipped');
+            if (card.classList.contains('is-flipped')) {
+                speakText(words[currentIndex].ex_en);
+            }
+        }
+
+        function nextCard() {
+            hasUserInteracted = true;
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        }
+
+        function prevCard() {
+            hasUserInteracted = true;
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        }
+
+        function playAudio(event) {
+            hasUserInteracted = true;
+            if (event) event.stopPropagation();
+            speakText(words[currentIndex].en);
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const cardElement = document.getElementById('flashcard');
+
+        cardElement.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        cardElement.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (touchEndX < touchStartX - threshold) nextCard();
+            if (touchEndX > touchStartX + threshold) prevCard();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === 'ArrowLeft') prevCard();
+            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        });
+
+        document.body.addEventListener('click', () => {
+            if (!hasUserInteracted) {
+                hasUserInteracted = true;
+                speakText(words[currentIndex].en);
+            }
+        }, { once: true });
+
+        window.onload = updateCard;
+    </script>
+</body>
+</html>

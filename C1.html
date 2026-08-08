@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychometric Vocabulary Flashcards - Part 1 (C)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .counter {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            background: #e0e7ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 100%;
+            height: 380px;
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            user-select: none;
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #ffffff;
+            overflow-y: auto;
+        }
+
+        /* Front Face Layout */
+        .card-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pos-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .tts-btn {
+            background: #eef2ff;
+            border: none;
+            color: var(--primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .tts-btn:hover {
+            background: #e0e7ff;
+        }
+
+        .tts-btn:active {
+            transform: scale(0.95);
+        }
+
+        .word-main-container {
+            text-align: center;
+            margin: auto 0;
+        }
+
+        .word-en {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .word-grammar {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .flip-hint {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        /* Back Face Layout */
+        .translations-section {
+            margin-bottom: 15px;
+        }
+
+        .trans-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+        }
+
+        .lang-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .trans-he {
+            font-weight: 700;
+            direction: rtl;
+            color: var(--primary);
+        }
+
+        .synonyms-box {
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .example-box {
+            background: #fdf2f8;
+            border-left: 4px solid #db2777;
+            padding: 10px 14px;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .example-en {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #831843;
+        }
+
+        .example-trans {
+            font-size: 0.85rem;
+            color: #9d174d;
+        }
+
+        .example-trans.he {
+            direction: rtl;
+        }
+
+        /* Navigation Controls */
+        .nav-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.97);
+        }
+
+        .nav-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .jump-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .jump-container a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+        }
+    </style>
+    <script>
+        const words = [
+            {"en": "reserve", "pos": "v", "grammar": "v.", "mean_he": "לשמור / להזמין מראש", "ex_en": "I will reserve a table for us.", "ex_he": "אני אזמין שולחן עבורנו."},
+            {"en": "weigh", "pos": "v", "grammar": "v.", "mean_he": "לשקול", "ex_en": "Please weigh the flour.", "ex_he": "אנא שקול את הקמח."},
+            {"en": "powder", "pos": "n", "grammar": "n.", "mean_he": "אבקה", "ex_en": "She used baby powder.", "ex_he": "היא השתמשה באבקת תינוקות."},
+            {"en": "might as well", "pos": "phrase", "grammar": "phrase", "mean_he": "באותה מידה", "ex_en": "We might as well go home.", "ex_he": "באותה מידה אנחנו יכולים ללכת הביתה."},
+            {"en": "peaceful", "pos": "adj", "grammar": "adj.", "mean_he": "שליו", "ex_en": "It was a peaceful day.", "ex_he": "זה היה יום שליו."},
+            {"en": "reassure", "pos": "v", "grammar": "v.", "mean_he": "להרגיע", "ex_en": "He tried to reassure her.", "ex_he": "הוא ניסה להרגיע אותה."},
+            {"en": "ceremony", "pos": "n", "grammar": "n.", "mean_he": "טקס", "ex_en": "A beautiful wedding ceremony.", "ex_he": "טקס חתונה יפהפה."},
+            {"en": "chase", "pos": "v/n", "grammar": "v., n.", "mean_he": "לרדוף / מרדף", "ex_en": "The dog chased the cat.", "ex_he": "הכלב רדף אחרי החתול."},
+            {"en": "biology", "pos": "n", "grammar": "n.", "mean_he": "ביולוגיה", "ex_en": "I study biology at school.", "ex_he": "אני לומד ביולוגיה בבית הספר."},
+            {"en": "strike", "pos": "v/n", "grammar": "v., n.", "mean_he": "לשבות / מכה", "ex_en": "The workers went on strike.", "ex_he": "העובדים פתחו בשביתה."},
+            {"en": "incident", "pos": "n", "grammar": "n.", "mean_he": "תקרית", "ex_en": "It was a strange incident.", "ex_he": "זו הייתה תקרית מוזרה."},
+            {"en": "bold", "pos": "adj", "grammar": "adj.", "mean_he": "מודגש / נועז", "ex_en": "That was a bold decision.", "ex_he": "זו הייתה החלטה נועזת."},
+            {"en": "weather forecast", "pos": "phrase", "grammar": "phrase", "mean_he": "תחזית מזג האוויר", "ex_en": "Check the weather forecast.", "ex_he": "בדוק את תחזית מזג האוויר."},
+            {"en": "that's it", "pos": "phrase", "grammar": "phrase", "mean_he": "זהו זה", "ex_en": "That's it, I'm done.", "ex_he": "זהו זה, סיימתי."},
+            {"en": "fortune", "pos": "n", "grammar": "n.", "mean_he": "הון / מזל", "ex_en": "This car costs a fortune.", "ex_he": "המכונית הזו עולה הון."},
+            {"en": "tribe", "pos": "n", "grammar": "n.", "mean_he": "שבט", "ex_en": "An ancient tribe lived here.", "ex_he": "שבט עתיק חי כאן."},
+            {"en": "idiom", "pos": "n", "grammar": "n.", "mean_he": "ניב / ביטוי", "ex_en": "'Break a leg' is a common idiom.", "ex_he": "'שבור רגל' זה ביטוי נפוץ."},
+            {"en": "give up", "pos": "v", "grammar": "v.", "mean_he": "לוותר", "ex_en": "Never give up on your dreams.", "ex_he": "לעולם אל תוותר על החלומות שלך."},
+            {"en": "wise", "pos": "adj", "grammar": "adj.", "mean_he": "חכם", "ex_en": "He is a very wise man.", "ex_he": "הוא אדם מאוד חכם."},
+            {"en": "get in touch", "pos": "phrase", "grammar": "phrase", "mean_he": "ליצור קשר", "ex_en": "Let's get in touch soon.", "ex_he": "בוא ניצור קשר בקרוב."},
+            {"en": "dedicate", "pos": "v", "grammar": "v.", "mean_he": "להקדיש", "ex_en": "Dedicate more time to study.", "ex_he": "הקדש יותר זמן ללימודים."},
+            {"en": "that kind of thing", "pos": "phrase", "grammar": "phrase", "mean_he": "דברים מהסוג הזה", "ex_en": "I like art and that kind of thing.", "ex_he": "אני אוהב אמנות ודברים מהסוג הזה."},
+            {"en": "term", "pos": "n", "grammar": "n.", "mean_he": "מונח / תקופה", "ex_en": "It is a legal term.", "ex_he": "זהו מונח משפטי."},
+            {"en": "costume", "pos": "n", "grammar": "n.", "mean_he": "תחפושת", "ex_en": "A scary Halloween costume.", "ex_he": "תחפושת מפחידה לליל כל הקדושים."},
+            {"en": "assure", "pos": "v", "grammar": "v.", "mean_he": "להבטיח", "ex_en": "I assure you it is safe.", "ex_he": "אני מבטיח לך שזה בטוח."},
+            {"en": "weird", "pos": "adj", "grammar": "adj.", "mean_he": "מוזר", "ex_en": "I heard a weird noise.", "ex_he": "שמעתי רעש מוזר."},
+            {"en": "mark", "pos": "n/v", "grammar": "n., v.", "mean_he": "סימן / לסמן", "ex_en": "Don't leave a mark on the wall.", "ex_he": "אל תשאיר סימן על הקיר."},
+            {"en": "pause", "pos": "n/v", "grammar": "n., v.", "mean_he": "הפסקה / להשהות", "ex_en": "Please pause the video.", "ex_he": "אנא השהה את הסרטון."},
+            {"en": "generous", "pos": "adj", "grammar": "adj.", "mean_he": "נדיב", "ex_en": "That was a generous gift.", "ex_he": "זו הייתה מתנה נדיבה."},
+            {"en": "super", "pos": "adj", "grammar": "adj.", "mean_he": "מעולה / סופר", "ex_en": "The car is super fast.", "ex_he": "המכונית סופר מהירה."},
+            {"en": "ashamed", "pos": "adj", "grammar": "adj.", "mean_he": "מתבייש", "ex_en": "I feel ashamed of my mistake.", "ex_he": "אני מתבייש בטעות שלי."},
+            {"en": "draft", "pos": "n", "grammar": "n.", "mean_he": "טיוטה", "ex_en": "This is just the first draft.", "ex_he": "זו רק הטיוטה הראשונה."},
+            {"en": "will", "pos": "n", "grammar": "n.", "mean_he": "רצון / צוואה", "ex_en": "She has a strong will.", "ex_he": "יש לה רצון חזק."},
+            {"en": "remain calm", "pos": "phrase", "grammar": "phrase", "mean_he": "להישאר רגוע", "ex_en": "Remain calm during the exam.", "ex_he": "הישאר רגוע במהלך המבחן."},
+            {"en": "light", "pos": "v", "grammar": "v.", "mean_he": "להדליק / להאיר", "ex_en": "Please light the fire.", "ex_he": "אנא הדלק את האש."},
+            {"en": "quarrel", "pos": "n/v", "grammar": "n., v.", "mean_he": "לריב / ריב", "ex_en": "The brothers had a big quarrel.", "ex_he": "לאחים היה ריב גדול."},
+            {"en": "grab", "pos": "v", "grammar": "v.", "mean_he": "לתפוס", "ex_en": "Grab a chair and sit down.", "ex_he": "תפוס כיסא ושב."},
+            {"en": "preposition", "pos": "n", "grammar": "n.", "mean_he": "מילת יחס", "ex_en": "'On' is a common preposition.", "ex_he": "'על' היא מילת יחס נפוצה."},
+            {"en": "pride", "pos": "n", "grammar": "n.", "mean_he": "גאווה", "ex_en": "He takes pride in his work.", "ex_he": "הוא מתגאה בעבודתו."},
+            {"en": "union", "pos": "n", "grammar": "n.", "mean_he": "איגוד / איחוד", "ex_en": "He joined the labor union.", "ex_he": "הוא הצטרף לאיגוד העובדים."},
+            {"en": "the following day", "pos": "phrase", "grammar": "phrase", "mean_he": "למחרת", "ex_en": "We left the following day.", "ex_he": "עזבנו למחרת."},
+            {"en": "transfer", "pos": "v/n", "grammar": "v., n.", "mean_he": "להעביר / העברה", "ex_en": "Transfer the money to my bank.", "ex_he": "העבר את הכסף לבנק שלי."},
+            {"en": "earth", "pos": "n", "grammar": "n.", "mean_he": "אדמה / כדור הארץ", "ex_en": "We must protect planet Earth.", "ex_he": "עלינו להגן על כדור הארץ."},
+            {"en": "symbol", "pos": "n", "grammar": "n.", "mean_he": "סמל", "ex_en": "The dove is a symbol of peace.", "ex_he": "היונה היא סמל של שלום."},
+            {"en": "aside", "pos": "adv", "grammar": "adv.", "mean_he": "הצידה", "ex_en": "Please step aside.", "ex_he": "אנא זוז הצידה."},
+            {"en": "courage", "pos": "n", "grammar": "n.", "mean_he": "אומץ", "ex_en": "It takes courage to speak up.", "ex_he": "צריך אומץ כדי לדבר."},
+            {"en": "strong", "pos": "adj", "grammar": "adj.", "mean_he": "חזק / נחרץ", "ex_en": "He has a strong character.", "ex_he": "יש לו אופי חזק."},
+            {"en": "tiring", "pos": "adj", "grammar": "adj.", "mean_he": "מעייף", "ex_en": "It was a very tiring day.", "ex_he": "זה היה יום מאוד מעייף."},
+            {"en": "lightly", "pos": "adv", "grammar": "adv.", "mean_he": "בקלילות", "ex_en": "She touched his arm lightly.", "ex_he": "היא נגעה בזרועו בקלילות."},
+            {"en": "via", "pos": "prep", "grammar": "prep.", "mean_he": "דרך / באמצעות", "ex_en": "We flew to New York via Paris.", "ex_he": "טסנו לניו יורק דרך פריז."},
+            {"en": "terminal", "pos": "n", "grammar": "n.", "mean_he": "טרמינל", "ex_en": "Meet me at the airport terminal.", "ex_he": "פגוש אותי בטרמינל שבשדה התעופה."},
+            {"en": "organic", "pos": "adj", "grammar": "adj.", "mean_he": "אורגני", "ex_en": "They only buy organic food.", "ex_he": "הם קונים רק אוכל אורגני."},
+            {"en": "message", "pos": "n", "grammar": "n.", "mean_he": "מסר / הודעה", "ex_en": "The movie has a strong message.", "ex_he": "לסרט יש מסר חזק."},
+            {"en": "collector", "pos": "n", "grammar": "n.", "mean_he": "אספן", "ex_en": "He is a famous stamp collector.", "ex_he": "הוא אספן בולים מפורסם."},
+            {"en": "departure", "pos": "n", "grammar": "n.", "mean_he": "המראה / עזיבה", "ex_en": "What is the departure time?", "ex_he": "מהי שעת ההמראה?"},
+            {"en": "pour", "pos": "v", "grammar": "v.", "mean_he": "למזוג", "ex_en": "Please pour the water.", "ex_he": "אנא מזוג את המים."},
+            {"en": "dispute", "pos": "n", "grammar": "n.", "mean_he": "סכסוך / מחלוקת", "ex_en": "They had a legal dispute.", "ex_he": "הייתה להם מחלוקת משפטית."},
+            {"en": "strengthen", "pos": "v", "grammar": "v.", "mean_he": "לחזק", "ex_en": "Exercise will strengthen your muscles.", "ex_he": "פעילות גופנית תחזק את שריריך."},
+            {"en": "mayor", "pos": "n", "grammar": "n.", "mean_he": "ראש עיר", "ex_en": "The mayor of the city spoke.", "ex_he": "ראש העיר נשא דברים."},
+            {"en": "sink", "pos": "v", "grammar": "v.", "mean_he": "לשקוע / לטבוע", "ex_en": "The old ship will sink.", "ex_he": "הספינה הישנה תשקע."},
+            {"en": "bend", "pos": "v/n", "grammar": "v., n.", "mean_he": "לכופף / להתכופף", "ex_en": "Bend your knees when you jump.", "ex_he": "כופף את הברכיים כשאתה קופץ."},
+            {"en": "layer", "pos": "n", "grammar": "n.", "mean_he": "שכבה", "ex_en": "A thick layer of dust.", "ex_he": "שכבת אבק עבה."},
+            {"en": "special offer", "pos": "phrase", "grammar": "phrase", "mean_he": "מבצע מיוחד", "ex_en": "We have a special offer today.", "ex_he": "יש לנו מבצע מיוחד היום."},
+            {"en": "disturb", "pos": "v", "grammar": "v.", "mean_he": "להפריע", "ex_en": "Please do not disturb.", "ex_he": "נא לא להפריע."},
+            {"en": "suffer from", "pos": "phrase", "grammar": "phrase", "mean_he": "לסבול מ", "ex_en": "Many people suffer from headaches.", "ex_he": "אנשים רבים סובלים מכאבי ראש."},
+            {"en": "deaf", "pos": "adj", "grammar": "adj.", "mean_he": "חירש", "ex_en": "He uses sign language because he is deaf.", "ex_he": "הוא משתמש בשפת סימנים כי הוא חירש."},
+            {"en": "Who cares?", "pos": "phrase", "grammar": "phrase", "mean_he": "למי אכפת?", "ex_en": "It's broken, but who cares?", "ex_he": "זה שבור, אבל למי אכפת?"},
+            {"en": "membership", "pos": "n", "grammar": "n.", "mean_he": "חברות (בארגון)", "ex_en": "I renewed my gym membership.", "ex_he": "חידשתי את החברות שלי במכון הכושר."},
+            {"en": "marvelous", "pos": "adj", "grammar": "adj.", "mean_he": "נפלא", "ex_en": "That is a marvelous idea.", "ex_he": "זה רעיון נפלא."},
+            {"en": "thief", "pos": "n", "grammar": "n.", "mean_he": "גנב", "ex_en": "The thief ran away quickly.", "ex_he": "הגנב ברח במהירות."},
+            {"en": "cover", "pos": "v", "grammar": "v.", "mean_he": "לסקר / לכסות", "ex_en": "Journalists cover the news.", "ex_he": "עיתונאים מסקרים את החדשות."},
+            {"en": "free", "pos": "adj/adv", "grammar": "adj., adv.", "mean_he": "חופשי / חינם", "ex_en": "Entrance to the park is free.", "ex_he": "הכניסה לפארק היא בחינם."},
+            {"en": "spirit", "pos": "n", "grammar": "n.", "mean_he": "רוח / מורל", "ex_en": "We have great team spirit.", "ex_he": "יש לנו מורל קבוצתי נהדר."},
+            {"en": "here you are", "pos": "phrase", "grammar": "phrase", "mean_he": "בבקשה / הנה", "ex_en": "Here you are, your coffee.", "ex_he": "בבקשה, הקפה שלך."},
+            {"en": "mood", "pos": "n", "grammar": "n.", "mean_he": "מצב רוח", "ex_en": "I am in a very good mood today.", "ex_he": "אני במצב רוח טוב מאוד היום."}
+        ];
+    </script>
+</head>
+<body>
+    <header>
+        <div class="title">Flashcards - Part 1 (C)</div>
+        <div class="counter" id="counter">1 / 1</div>
+    </header>
+
+    <div class="container" id="cardContainer">
+        <div class="card" id="flashcard" onclick="toggleCard()">
+            <div class="card-face">
+                <div class="card-header-top">
+                    <span class="pos-badge" id="posBadge">NOUN</span>
+                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </button>
+                </div>
+                <div class="word-main-container">
+                    <div class="word-en" id="wordEn">Loading...</div>
+                    <div class="word-grammar" id="wordGrammar"></div>
+                </div>
+                <div class="flip-hint">Tap card to flip ↺</div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="translations-section">
+                    <div class="trans-row">
+                        <span class="lang-label">Hebrew</span>
+                        <span class="trans-he" id="transHe">-</span>
+                    </div>
+                </div>
+                <div class="synonyms-box" id="synonymsBox">
+                    <strong>Synonyms:</strong> <span id="wordSynonyms">-</span>
+                </div>
+                <div class="example-box">
+                    <div class="example-en" id="exEn">-</div>
+                    <div class="example-trans he" id="exHe">-</div>
+                </div>
+                <div class="flip-hint" style="margin-top: 10px;">Tap to flip back</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-container">
+        <button class="nav-btn" onclick="prevCard()">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Previous
+        </button>
+        <button class="nav-btn" onclick="nextCard()">
+            Next
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+    <div class="jump-container">
+        <a href="C2.html" class="nav-btn">Go to Next Part</a>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let hasUserInteracted = false;
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function updateCard() {
+            if (typeof words === 'undefined' || words.length === 0) return;
+            const item = words[currentIndex];
+            
+            document.getElementById('flashcard').classList.remove('is-flipped');
+
+            document.getElementById('posBadge').innerText = item.pos || '';
+            document.getElementById('wordEn').innerText = item.en || '';
+            document.getElementById('wordGrammar').innerText = item.grammar || '';
+            document.getElementById('transHe').innerText = item.mean_he || '';
+            
+            if (item.synonyms && item.synonyms.length > 0) {
+                document.getElementById('synonymsBox').style.display = 'block';
+                document.getElementById('wordSynonyms').innerText = item.synonyms.join(', ');
+            } else {
+                document.getElementById('synonymsBox').style.display = 'none';
+            }
+
+            document.getElementById('exEn').innerText = item.ex_en || '';
+            document.getElementById('exHe').innerText = item.ex_he || '';
+            document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            
+            if (hasUserInteracted) {
+                speakText(item.en);
+            }
+        }
+
+        function toggleCard() {
+            hasUserInteracted = true;
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('is-flipped');
+            if (card.classList.contains('is-flipped')) {
+                speakText(words[currentIndex].ex_en);
+            }
+        }
+
+        function nextCard() {
+            hasUserInteracted = true;
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        }
+
+        function prevCard() {
+            hasUserInteracted = true;
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        }
+
+        function playAudio(event) {
+            hasUserInteracted = true;
+            if (event) event.stopPropagation();
+            speakText(words[currentIndex].en);
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const cardElement = document.getElementById('flashcard');
+
+        cardElement.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        cardElement.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (touchEndX < touchStartX - threshold) nextCard();
+            if (touchEndX > touchStartX + threshold) prevCard();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === 'ArrowLeft') prevCard();
+            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        });
+
+        document.body.addEventListener('click', () => {
+            if (!hasUserInteracted) {
+                hasUserInteracted = true;
+                speakText(words[currentIndex].en);
+            }
+        }, { once: true });
+
+        window.onload = updateCard;
+    </script>
+</body>
+</html>

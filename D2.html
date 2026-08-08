@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychometric Vocabulary Flashcards - Part 2 (D)</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        header {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .counter {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            background: #e0e7ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 100%;
+            height: 380px;
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            user-select: none;
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background-color: #ffffff;
+            overflow-y: auto;
+        }
+
+        /* Front Face Layout */
+        .card-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pos-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            background: #f1f5f9;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .tts-btn {
+            background: #eef2ff;
+            border: none;
+            color: var(--primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .tts-btn:hover {
+            background: #e0e7ff;
+        }
+
+        .tts-btn:active {
+            transform: scale(0.95);
+        }
+
+        .word-main-container {
+            text-align: center;
+            margin: auto 0;
+        }
+
+        .word-en {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .word-grammar {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .flip-hint {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+
+        /* Back Face Layout */
+        .translations-section {
+            margin-bottom: 15px;
+        }
+
+        .trans-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+        }
+
+        .lang-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .trans-he {
+            font-weight: 700;
+            direction: rtl;
+            color: var(--primary);
+        }
+
+        .synonyms-box {
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .example-box {
+            background: #fdf2f8;
+            border-left: 4px solid #db2777;
+            padding: 10px 14px;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .example-en {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #831843;
+        }
+
+        .example-trans {
+            font-size: 0.85rem;
+            color: #9d174d;
+        }
+
+        .example-trans.he {
+            direction: rtl;
+        }
+
+        /* Navigation Controls */
+        .nav-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.97);
+        }
+
+        .nav-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .jump-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .jump-container a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 8px 16px;
+        }
+        
+        /* Watermark / Author styling */
+        .watermark {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 600;
+            font-style: italic;
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+    <script>
+        const words = [{"en": "get away with sth", "he": "להתחמק מעונש על משהו", "ex_en": "You won't get away with this crime.", "ex_he": "אתה לא תתחמק מעונש על הפשע הזה."}, {"en": "get in", "he": "להיכנס", "ex_en": "Get in the car.", "ex_he": "היכנס למכונית."}, {"en": "ghost", "he": "רוח רפאים", "ex_en": "A ghost story.", "ex_he": "סיפור רוחות."}, {"en": "giant", "he": "ענק", "ex_en": "A giant tree.", "ex_he": "עץ ענק."}, {"en": "grow tired/old/calm", "he": "להפוך ליותר עייף/זקן/רגוע", "ex_en": "I grow tired of this game.", "ex_he": "אני מתחיל להתעייף מהמשחק הזה."}, {"en": "hang about/around", "he": "להסתובב באזור", "ex_en": "Don't hang around here.", "ex_he": "אל תסתובב פה."}, {"en": "hang out", "he": "לבלות / להסתובב", "ex_en": "Let's hang out at the mall.", "ex_he": "בוא נבלה בקניון."}, {"en": "harbor", "he": "נמל", "ex_en": "The ships are in the harbor.", "ex_he": "הספינות נמצאות בנמל."}, {"en": "heaven", "he": "גן עדן / שמיים", "ex_en": "Look up at the heaven.", "ex_he": "הסתכל למעלה לשמיים."}, {"en": "heel", "he": "עקב", "ex_en": "My shoe heel is broken.", "ex_he": "עקב הנעל שלי שבור."}, {"en": "hell", "he": "גיהנום", "ex_en": "It was pure hell.", "ex_he": "זה היה גיהנום צרוף."}, {"en": "horror", "he": "אימה / זעזוע", "ex_en": "A horror movie.", "ex_he": "סרט אימה."}, {"en": "hunt", "he": "לצוד / ציד", "ex_en": "Lions hunt for food.", "ex_he": "אריות צדים למזון."}, {"en": "hurry up", "he": "למהר / לזרז", "ex_en": "Hurry up or we'll be late.", "ex_he": "מהר או שנאחר."}, {"en": "hut", "he": "בקתה / צריף", "ex_en": "A small wooden hut.", "ex_he": "בקתת עץ קטנה."}, {"en": "immoral", "he": "לא מוסרי", "ex_en": "Stealing is immoral.", "ex_he": "גניבה היא מעשה לא מוסרי."}, {"en": "in tears", "he": "בדמעות", "ex_en": "She left the room in tears.", "ex_he": "היא עזבה את החדר בדמעות."}, {"en": "initial", "he": "התחלתי / ראשוני", "ex_en": "My initial reaction was surprise.", "ex_he": "התגובה הראשונית שלי הייתה הפתעה."}, {"en": "insult", "he": "להעליב / העלבה", "ex_en": "Please don't insult me.", "ex_he": "בבקשה אל תעליב אותי."}, {"en": "insurance", "he": "ביטוח", "ex_en": "Car insurance is important.", "ex_he": "ביטוח רכב הוא חשוב."}, {"en": "iron", "he": "ברזל / מגהץ", "ex_en": "The gate is made of iron.", "ex_he": "השער עשוי מברזל."}, {"en": "jog", "he": "לרוץ קלות (ריצת קל)", "ex_en": "I jog in the park every morning.", "ex_he": "אני עושה ריצת קל בפארק כל בוקר."}, {"en": "jump", "he": "לקפוץ / קפיצה", "ex_en": "The frog can jump high.", "ex_he": "הצפרדע יכולה לקפוץ גבוה."}, {"en": "jury", "he": "חבר מושבעים", "ex_en": "The jury found him guilty.", "ex_he": "חבר המושבעים מצא אותו אשם."}, {"en": "knit", "he": "לסרוג", "ex_en": "My grandma knits sweaters.", "ex_he": "סבתא שלי סורגת סוודרים."}, {"en": "laser", "he": "לייזר", "ex_en": "A laser beam.", "ex_he": "קרן לייזר."}, {"en": "lead", "he": "להוביל / עופרת", "ex_en": "The guide will lead the way.", "ex_he": "המדריך יוביל את הדרך."}, {"en": "learning", "he": "למידה", "ex_en": "Learning is a lifelong process.", "ex_he": "למידה היא תהליך של חיים שלמים."}, {"en": "lightning", "he": "ברק", "ex_en": "A flash of lightning in the sky.", "ex_he": "הבזק ברק בשמיים."}, {"en": "literary", "he": "ספרותי", "ex_en": "A famous literary work.", "ex_he": "יצירה ספרותית מפורסמת."}, {"en": "loaf", "he": "כיכר לחם", "ex_en": "I bought a loaf of bread.", "ex_he": "קניתי כיכר לחם."}, {"en": "loose", "he": "משוחרר / רפוי", "ex_en": "My tooth is loose.", "ex_he": "השן שלי רופפת."}, {"en": "madam", "he": "גבירתי", "ex_en": "Can I help you, madam?", "ex_he": "אוכל לעזור לך, גבירתי?"}, {"en": "magnificent", "he": "מרהיב", "ex_en": "A magnificent view.", "ex_he": "נוף מרהיב."}, {"en": "make", "he": "לעשות / להכין", "ex_en": "I will make dinner tonight.", "ex_he": "אני אכין ארוחת ערב הלילה."}, {"en": "marriage", "he": "נישואין", "ex_en": "A happy marriage.", "ex_he": "נישואים מאושרים."}, {"en": "mask", "he": "מסכה", "ex_en": "He wore a scary mask.", "ex_he": "הוא חבש מסכה מפחידה."}, {"en": "mate", "he": "חבר / בן זוג (לחיים)", "ex_en": "He is my best mate.", "ex_he": "הוא החבר הכי טוב שלי."}, {"en": "mess", "he": "בלגן", "ex_en": "Clean up this mess.", "ex_he": "נקה את הבלגן הזה."}, {"en": "mineral water", "he": "מים מינרלים", "ex_en": "A bottle of mineral water.", "ex_he": "בקבוק מים מינרלים."}, {"en": "mix up", "he": "לבלבל / לערבב", "ex_en": "Don't mix up the dates.", "ex_he": "אל תבלבל את התאריכים."}, {"en": "monster", "he": "מפלצת", "ex_en": "A scary monster under the bed.", "ex_he": "מפלצת מפחידה מתחת למיטה."}, {"en": "moral", "he": "מוסרי / מוסר השכל", "ex_en": "The moral of the story.", "ex_he": "מוסר ההשכל של הסיפור."}, {"en": "naked", "he": "עירום", "ex_en": "The naked truth.", "ex_he": "האמת העירומה."}, {"en": "nasty", "he": "מגעיל / מרושע", "ex_en": "A nasty smell.", "ex_he": "ריח מגעיל."}, {"en": "navy", "he": "חיל הים / צבע כחול כהה", "ex_en": "He serves in the navy.", "ex_he": "הוא משרת בחיל הים."}, {"en": "neat", "he": "מסודר / נקי", "ex_en": "A very neat room.", "ex_he": "חדר מאוד מסודר."}, {"en": "next door", "he": "דלת ליד (שכן)", "ex_en": "The boy next door.", "ex_he": "הילד מהדלת ליד (השכן)."}, {"en": "not believe your eyes/ears", "he": "לא להאמין למראה עינייך/למשמע אוזנייך", "ex_en": "I could not believe my eyes.", "ex_he": "לא יכולתי להאמין למראה עיניי."}, {"en": "nut", "he": "אגוז / מטורף", "ex_en": "A bowl of mixed nuts.", "ex_he": "קערה של אגוזים מעורבים."}, {"en": "on a diet", "he": "בדיאטה", "ex_en": "She is on a diet.", "ex_he": "היא נמצאת בדיאטה."}, {"en": "on board", "he": "על הסיפון / בפנים", "ex_en": "Welcome on board.", "ex_he": "ברוכים הבאים לסיפון."}, {"en": "on display", "he": "בתצוגה", "ex_en": "The art is on display.", "ex_he": "האמנות נמצאת בתצוגה."}, {"en": "on duty/off duty", "he": "בתפקיד / מחוץ לתפקיד", "ex_en": "The guard is off duty now.", "ex_he": "השומר כעת מחוץ לתפקיד (בהפסקה)."}, {"en": "orchestra", "he": "תזמורת", "ex_en": "The symphony orchestra.", "ex_he": "התזמורת הסימפונית."}, {"en": "pack", "he": "לארוז / חבילה", "ex_en": "Pack your bags.", "ex_he": "ארוז את התיקים שלך."}, {"en": "painful", "he": "כואב", "ex_en": "A painful injury.", "ex_he": "פציעה כואבת."}, {"en": "pale", "he": "חיוור", "ex_en": "You look very pale.", "ex_he": "אתה נראה מאוד חיוור."}, {"en": "passage", "he": "מעבר / קטע קריאה", "ex_en": "Read the passage carefully.", "ex_he": "קרא את קטע הקריאה בעיון."}, {"en": "pavement", "he": "מדרכה (באנגליה) / סלילה", "ex_en": "Walk on the pavement.", "ex_he": "ללכת על המדרכה."}, {"en": "peak", "he": "פסגה / שיא", "ex_en": "The peak of the mountain.", "ex_he": "פסגת ההר."}, {"en": "penalty", "he": "עונש / קנס / פנדל", "ex_en": "A penalty kick in soccer.", "ex_he": "בעיטת פנדל בכדורגל."}, {"en": "pill", "he": "גלולה", "ex_en": "Take this pill with water.", "ex_he": "קח את הגלולה הזו עם מים."}, {"en": "pin", "he": "סיכה / לחבר בסיכה", "ex_en": "A safety pin.", "ex_he": "סיכת ביטחון."}, {"en": "pity", "he": "רחמים / חבל", "ex_en": "It's a pity you missed it.", "ex_he": "חבל שפספסת את זה."}, {"en": "pray", "he": "להתפלל", "ex_en": "They pray in the church.", "ex_he": "הם מתפללים בכנסייה."}, {"en": "pregnant", "he": "בהיריון", "ex_en": "My sister is pregnant.", "ex_he": "אחותי בהיריון."}, {"en": "priest", "he": "כומר", "ex_en": "The priest gave a sermon.", "ex_he": "הכומר נשא דרשה."}, {"en": "propose", "pos": "v", "grammar": "v.", "mean_he": "להציע / להציע נישואין", "ex_en": "He proposed to her.", "ex_he": "הוא הציע לה נישואין."}, {"en": "pump", "he": "משאבה / לשאוב", "ex_en": "Pump up the tire.", "ex_he": "נפח את הצמיג במשאבה."}, {"en": "queue", "he": "תור (של אנשים)", "ex_en": "Wait in the queue.", "ex_he": "המתן בתור."}, {"en": "racket", "he": "מחבט / רעש גדול", "ex_en": "A tennis racket.", "ex_he": "מחבט טניס."}, {"en": "rainbow", "he": "קשת בענן", "ex_en": "A beautiful rainbow in the sky.", "ex_he": "קשת יפה בענן."}, {"en": "range", "he": "טווח / רכס / לנוע בין", "ex_en": "A wide range of options.", "ex_he": "טווח רחב של אפשרויות."}];
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="title">Flashcards - Part 2 (D)</div>
+        <div class="counter" id="counter">1 / 1</div>
+    </header>
+
+    <div class="container" id="cardContainer">
+        <div class="card" id="flashcard" onclick="toggleCard()">
+            <!-- Front Face -->
+            <div class="card-face">
+                <div class="card-header-top">
+                    <span class="pos-badge" id="posBadge">WORD</span>
+                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </button>
+                </div>
+                <div class="word-main-container">
+                    <div class="word-en" id="wordEn">Loading...</div>
+                    <div class="word-grammar" id="wordGrammar"></div>
+                </div>
+                <div class="flip-hint">Tap card to flip ↺</div>
+                <div class="watermark">By Simon Halevi</div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="card-face card-back">
+                <div class="translations-section">
+                    <div class="trans-row">
+                        <span class="lang-label">Hebrew</span>
+                        <span class="trans-he" id="transHe">-</span>
+                    </div>
+                </div>
+                <div class="synonyms-box" id="synonymsBox">
+                    <strong>Synonyms:</strong> <span id="wordSynonyms">-</span>
+                </div>
+                <div class="example-box">
+                    <div class="example-en" id="exEn">-</div>
+                    <div class="example-trans he" id="exHe">-</div>
+                </div>
+                <div class="flip-hint" style="margin-top: 10px;">Tap to flip back</div>
+                <div class="watermark">By Simon Halevi</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-container">
+        <button class="nav-btn" onclick="prevCard()">
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Previous
+        </button>
+        <button class="nav-btn" onclick="nextCard()">
+            Next
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+
+    <div class="jump-container">
+        <a href="D1.html" class="nav-btn">Go to Previous Part</a>
+        <a href="D3.html" class="nav-btn">Go to Next Part</a>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let hasUserInteracted = false;
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function updateCard() {
+            if (typeof words === 'undefined' || words.length === 0) return;
+            const item = words[currentIndex];
+            
+            document.getElementById('flashcard').classList.remove('is-flipped');
+
+            // Optional: fallback logic if pos exists
+            let posText = item.pos || "WORD";
+            document.getElementById('posBadge').innerText = posText.toUpperCase();
+            
+            document.getElementById('wordEn').innerText = item.en || '';
+            document.getElementById('wordGrammar').innerText = item.grammar || '';
+            document.getElementById('transHe').innerText = item.he || item.mean_he || '';
+            
+            // Hide synonyms box if empty
+            if (item.synonyms && item.synonyms.length > 0) {
+                document.getElementById('synonymsBox').style.display = 'block';
+                document.getElementById('wordSynonyms').innerText = item.synonyms.join(', ');
+            } else {
+                document.getElementById('synonymsBox').style.display = 'none';
+            }
+
+            document.getElementById('exEn').innerText = item.ex_en || '';
+            document.getElementById('exHe').innerText = item.ex_he || '';
+
+            document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            
+            if (hasUserInteracted) {
+                speakText(item.en);
+            }
+        }
+
+        function toggleCard() {
+            hasUserInteracted = true;
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('is-flipped');
+            
+            if (card.classList.contains('is-flipped')) {
+                speakText(words[currentIndex].ex_en);
+            }
+        }
+
+        function nextCard() {
+            hasUserInteracted = true;
+            if (typeof words === 'undefined') return;
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        }
+
+        function prevCard() {
+            hasUserInteracted = true;
+            if (typeof words === 'undefined') return;
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        }
+
+        function playAudio(event) {
+            hasUserInteracted = true;
+            if (event) event.stopPropagation();
+            if (typeof words === 'undefined') return;
+            speakText(words[currentIndex].en);
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const cardElement = document.getElementById('flashcard');
+
+        cardElement.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        cardElement.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (touchEndX < touchStartX - threshold) {
+                nextCard();
+            }
+            if (touchEndX > touchStartX + threshold) {
+                prevCard();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === 'ArrowLeft') prevCard();
+            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        });
+
+        document.body.addEventListener('click', () => {
+            if (!hasUserInteracted) {
+                hasUserInteracted = true;
+                speakText(words[currentIndex].en);
+            }
+        }, { once: true });
+
+        window.onload = function() {
+            updateCard();
+        };
+    </script>
+</body>
+</html>
