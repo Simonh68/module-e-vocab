@@ -81,8 +81,8 @@
     background:linear-gradient(145deg, rgba(255,255,255,.96), rgba(216,246,226,.90));
     border:1px solid rgba(255,255,255,.95);
     border-radius:32px;
-    padding:34px 30px;
-    margin-bottom:28px;
+    padding:28px 30px 27px;
+    margin-bottom:24px;
     box-shadow:inset 0 2px 0 #fff, inset 0 -1px 0 rgba(60,133,89,.14), 0 9px 0 #75bd91, 0 26px 50px rgba(38,105,70,.23);
     backdrop-filter:blur(12px);
     transform:translateY(-4px) rotateX(.6deg);
@@ -99,7 +99,7 @@
   .hero:before{width:180px;height:180px;top:-70px;right:-40px;transform:translateZ(10px);}
   .hero:after{width:130px;height:130px;left:-40px;bottom:-55px;transform:translateZ(10px);}
   h1{
-    margin:0 0 14px;
+    margin:0 0 9px;
     font-size:clamp(2rem, 4vw, 3.4rem);
     line-height:1.05;
     color:#185239;
@@ -107,77 +107,51 @@
     transform:translateZ(18px);
   }
   .intro{
-    margin:0;
-    max-width:850px;
-    font-size:1.08rem;
-    line-height:1.7;
+    margin:5px 0 0;
+    max-width:920px;
+    font-size:1rem;
+    line-height:1.55;
     color:#315d47;
     transform:translateZ(14px);
   }
-  .hero-note{
-    margin-top:18px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
+  .tagline{
+    margin:0;
+    color:#245c40;
+    font-size:clamp(1.06rem,2vw,1.25rem);
+    font-weight:800;
+    line-height:1.45;
     transform:translateZ(16px);
   }
-  .responsive-callout{
-    margin-top:20px;
-    max-width:790px;
+  .hero-meta{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid rgba(63,126,88,.22);
     display:flex;
     align-items:center;
-    gap:15px;
-    padding:15px 18px;
-    border:1px solid rgba(255,255,255,.98);
-    border-radius:19px;
-    background:linear-gradient(145deg,#ffffff,#dff5e7);
-    box-shadow:inset 0 2px 0 #fff, 0 5px 0 #77b990, 0 13px 24px rgba(39,107,72,.16);
-    transform:translateZ(20px);
+    flex-wrap:wrap;
+    gap:10px 22px;
+    color:#35664d;
+    font-size:.92rem;
+    transform:translateZ(16px);
   }
-  .device-icons{
-    flex:0 0 auto;
-    display:grid;
-    place-items:center;
-    min-width:62px;
-    min-height:48px;
-    padding:7px 9px;
-    border-radius:14px;
-    color:#fff;
-    background:linear-gradient(145deg,#55b37f,#276b48);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 4px 0 #194d34;
-    font-size:1.35rem;
-  }
-  .responsive-callout strong{
-    display:block;
-    color:#185239;
-    font-size:1.08rem;
-    line-height:1.3;
-  }
-  .responsive-callout span:last-child{
-    color:#3d6852;
-    line-height:1.45;
-  }
-  .pill{
-    background:linear-gradient(145deg,#ffffff,#e7f8ed);
-    border:1px solid rgba(255,255,255,.96);
-    color:#245c40;
-    padding:10px 14px;
-    border-radius:999px;
+  .device-support,
+  .teacher-credit{
     font-weight:700;
-    font-size:.95rem;
-    box-shadow:inset 0 1px 0 #fff, 0 4px 0 #90cda8, 0 9px 17px rgba(39,107,72,.13);
   }
-  .about-link{
+  .guide-link{
+    margin-left:auto;
     color:#fff;
+    padding:9px 13px;
+    border-radius:12px;
     background:linear-gradient(145deg,#4ba875,#256b48);
-    border-color:#368b5f;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 4px 0 #194d34, 0 9px 17px rgba(29,89,58,.18);
+    border:1px solid #368b5f;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 4px 0 #194d34, 0 8px 14px rgba(29,89,58,.16);
   }
 
   .lists{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
     perspective:1100px;
   }
 
@@ -187,7 +161,7 @@
     background:var(--card);
     border:1px solid rgba(255,255,255,.96);
     border-radius:28px;
-    padding:22px;
+    padding:20px;
     box-shadow:var(--shadow);
     backdrop-filter:blur(12px);
     transform:translateY(-2px) rotateX(.35deg);
@@ -213,31 +187,38 @@
   .list-c::after{background:#a8dfbb;}
   .list-d::after{background:#71bf91;}
 
-  .list-badge{
-    display:inline-block;
-    padding:8px 14px;
-    border-radius:999px;
-    font-size:.8rem;
-    font-weight:800;
-    letter-spacing:.05em;
-    text-transform:uppercase;
-    color:white;
-    margin-bottom:12px;
+  .list-heading{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:17px;
   }
-  .list-a .list-badge{background:linear-gradient(145deg,#65bd88,#32845a);box-shadow:0 4px 0 #236442;}
-  .list-b .list-badge{background:linear-gradient(145deg,#70c793,#3a9062);box-shadow:0 4px 0 #286b49;}
-  .list-c .list-badge{background:linear-gradient(145deg,#5fb580,#2e7d53);box-shadow:0 4px 0 #205d3d;}
-  .list-d .list-badge{background:linear-gradient(145deg,#7aca9b,#45936a);box-shadow:0 4px 0 #2d704e;}
+  .list-letter{
+    flex:0 0 43px;
+    height:43px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    color:#fff;
+    font-size:1.2rem;
+    font-weight:900;
+    background:linear-gradient(145deg,#62bb86,#2f7f55);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 4px 0 #225f40;
+  }
+  .list-b .list-letter{background:linear-gradient(145deg,#70c793,#3a9062);}
+  .list-c .list-letter{background:linear-gradient(145deg,#5fb580,#2e7d53);}
+  .list-d .list-letter{background:linear-gradient(145deg,#7aca9b,#45936a);}
 
   h2{
-    margin:0 0 8px;
-    font-size:1.55rem;
+    margin:0;
+    font-size:1.35rem;
   }
-  .note{
-    margin:0 0 16px;
+  .list-summary{
+    margin:2px 0 0;
     color:var(--soft);
-    line-height:1.55;
-    font-size:.98rem;
+    font-size:.88rem;
   }
 
   .group{
@@ -245,7 +226,7 @@
     padding-top:14px;
     margin-top:14px;
   }
-  .group:first-of-type{
+  .list-heading + .group{
     border-top:0;
     padding-top:0;
     margin-top:0;
@@ -253,31 +234,26 @@
   .group-head{
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:10px;
+    margin-bottom:9px;
   }
   .group-title{
     font-weight:800;
-    font-size:1.02rem;
-  }
-  .spark{
-    font-size:1rem;
-    opacity:.8;
+    font-size:.96rem;
   }
 
   .actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:minmax(76px,.8fr) minmax(108px,1.2fr);
+    gap:8px;
   }
   a, button.copy-link{
     text-decoration:none;
     font-weight:800;
     border-radius:14px;
-    padding:11px 15px;
+    padding:10px 12px;
     display:inline-flex;
     align-items:center;
+    justify-content:center;
     gap:8px;
     transition:transform .16s ease, filter .16s ease, box-shadow .16s ease;
   }
@@ -312,13 +288,17 @@
     text-shadow:0 1px 0 rgba(255,255,255,.75);
   }
 
-  @media (max-width:700px){
+  @media (max-width:980px){
+    .lists{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media (max-width:620px){
     .wrap{padding:20px 14px 40px;}
-    .hero{padding:24px 20px;}
-    .responsive-callout{align-items:flex-start;padding:14px;}
-    .device-icons{min-width:54px;font-size:1.18rem;}
+    .hero{padding:23px 20px 22px;}
+    .hero-meta{align-items:flex-start;gap:9px;}
+    .hero-meta > *{width:100%;}
+    .guide-link{margin:3px 0 0;width:auto;}
+    .lists{grid-template-columns:1fr;}
     .list-card{padding:18px;}
-    .actions a, .actions button{width:100%;justify-content:center;}
   }
 </style>
 </head>
@@ -331,37 +311,26 @@
   <div class="wrap">
     <header class="hero">
       <h1>Module E Bagrut Vocabulary</h1>
+      <p class="tagline">12 focused activities for mastering Module E Bagrut vocabulary.</p>
       <p class="intro">
-        Welcome to this vocabulary practice site for the <strong>Module E Bagrut</strong>.
-        Each vocabulary list — <strong>A, B, C and D</strong> — was shuffled and divided as evenly as possible into
-        <strong>three groups</strong>. Choose any group below. You can either <strong>play</strong> the activity
-        in your browser or <strong>copy a direct link</strong> to share that practice activity.
-        <br><br><strong>Presented by Teacher Simon Halevi.</strong>
+        Lists <strong>A–D</strong> are shuffled and divided into three balanced groups. Choose a group to play online or copy its direct link.
       </p>
-      <div class="responsive-callout" role="note" aria-label="Device compatibility">
-        <span class="device-icons" aria-hidden="true">💻 📱</span>
-        <span>
-          <strong>A responsive learning web app</strong>
-          Designed to work smoothly on computers, tablets and phones of different sizes.
-        </span>
-      </div>
-      <div class="hero-note">
-        <span class="pill">✨ 4 vocabulary lists</span>
-        <span class="pill">🎯 12 practice activities</span>
-        <span class="pill">🖥️ Play or copy link</span>
-        <span class="pill">👨‍🏫 Teacher Simon Halevi</span>
-        <a class="pill about-link" href="about.html">📘 About &amp; Teacher Guide</a>
+      <div class="hero-meta" aria-label="Site information">
+        <span class="device-support">💻 📱 Responsive web app for computers, tablets and phones</span>
+        <span class="teacher-credit">Presented by Teacher Simon Halevi</span>
+        <a class="guide-link" href="about.html">About &amp; Teacher Guide →</a>
       </div>
     </header>
 
     <main class="lists">
       <section class="list-card list-a">
-        <div class="list-badge">List A</div>
-        <h2>List A</h2>
-        <p class="note">List A has been shuffled and divided into 3 balanced groups.</p>
+        <div class="list-heading">
+          <span class="list-letter" aria-hidden="true">A</span>
+          <div><h2>List A</h2><p class="list-summary">3 shuffled groups</p></div>
+        </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 1</div><div class="spark">🌟</div></div>
+          <div class="group-head"><div class="group-title">Group 1</div></div>
           <div class="actions">
             <a class="play" href="A1.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="A1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -369,7 +338,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 2</div><div class="spark">🌟</div></div>
+          <div class="group-head"><div class="group-title">Group 2</div></div>
           <div class="actions">
             <a class="play" href="A2.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="A2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -377,7 +346,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 3</div><div class="spark">🌟</div></div>
+          <div class="group-head"><div class="group-title">Group 3</div></div>
           <div class="actions">
             <a class="play" href="A3.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="A3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -386,12 +355,13 @@
       </section>
 
       <section class="list-card list-b">
-        <div class="list-badge">List B</div>
-        <h2>List B</h2>
-        <p class="note">List B has been shuffled and divided into 3 balanced groups.</p>
+        <div class="list-heading">
+          <span class="list-letter" aria-hidden="true">B</span>
+          <div><h2>List B</h2><p class="list-summary">3 shuffled groups</p></div>
+        </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 1</div><div class="spark">🎈</div></div>
+          <div class="group-head"><div class="group-title">Group 1</div></div>
           <div class="actions">
             <a class="play" href="B1.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="B1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -399,7 +369,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 2</div><div class="spark">🎈</div></div>
+          <div class="group-head"><div class="group-title">Group 2</div></div>
           <div class="actions">
             <a class="play" href="B2.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="B2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -407,7 +377,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 3</div><div class="spark">🎈</div></div>
+          <div class="group-head"><div class="group-title">Group 3</div></div>
           <div class="actions">
             <a class="play" href="B3.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="B3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -416,12 +386,13 @@
       </section>
 
       <section class="list-card list-c">
-        <div class="list-badge">List C</div>
-        <h2>List C</h2>
-        <p class="note">List C has been shuffled and divided into 3 balanced groups.</p>
+        <div class="list-heading">
+          <span class="list-letter" aria-hidden="true">C</span>
+          <div><h2>List C</h2><p class="list-summary">3 shuffled groups</p></div>
+        </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 1</div><div class="spark">💫</div></div>
+          <div class="group-head"><div class="group-title">Group 1</div></div>
           <div class="actions">
             <a class="play" href="C1.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="C1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -429,7 +400,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 2</div><div class="spark">💫</div></div>
+          <div class="group-head"><div class="group-title">Group 2</div></div>
           <div class="actions">
             <a class="play" href="C2.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="C2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -437,7 +408,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 3</div><div class="spark">💫</div></div>
+          <div class="group-head"><div class="group-title">Group 3</div></div>
           <div class="actions">
             <a class="play" href="C3.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="C3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -446,12 +417,13 @@
       </section>
 
       <section class="list-card list-d">
-        <div class="list-badge">List D</div>
-        <h2>List D</h2>
-        <p class="note">List D has been shuffled and divided into 3 balanced groups.</p>
+        <div class="list-heading">
+          <span class="list-letter" aria-hidden="true">D</span>
+          <div><h2>List D</h2><p class="list-summary">3 shuffled groups</p></div>
+        </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 1</div><div class="spark">🎨</div></div>
+          <div class="group-head"><div class="group-title">Group 1</div></div>
           <div class="actions">
             <a class="play" href="D1.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="D1.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -459,7 +431,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 2</div><div class="spark">🎨</div></div>
+          <div class="group-head"><div class="group-title">Group 2</div></div>
           <div class="actions">
             <a class="play" href="D2.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="D2.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
@@ -467,7 +439,7 @@
         </div>
 
         <div class="group">
-          <div class="group-head"><div class="group-title">Group 3</div><div class="spark">🎨</div></div>
+          <div class="group-head"><div class="group-title">Group 3</div></div>
           <div class="actions">
             <a class="play" href="D3.html">▶ Play</a>
             <button type="button" class="copy-link" data-file="D3.html" onclick="copyPracticeLink(this)">🔗 Copy link</button>
