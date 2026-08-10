@@ -611,6 +611,17 @@
             }
         }
 
+        function scheduleWordSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
+                    speakText(words[currentIndex].en);
+                }
+            }, 3000);
+        }
+
         function updateCard() {
             if (typeof words === 'undefined' || words.length === 0) return;
             const item = words[currentIndex];
@@ -674,6 +685,7 @@
             }
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
             announceCard('word');
+            scheduleWordSpeech();
             
         }
 
@@ -709,6 +721,11 @@
                 isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
             );
             announceCard(isFlipped ? 'answer' : 'word');
+            if (isFlipped) {
+                window.clearTimeout(scheduleWordSpeech.timer);
+            } else {
+                scheduleWordSpeech();
+            }
         }
 
         function nextCard() {
@@ -726,6 +743,7 @@
         }
 
         function playAudio(event) {
+            window.clearTimeout(scheduleWordSpeech.timer);
             hasUserInteracted = true;
             if (event) event.stopPropagation();
             if (typeof words === 'undefined') return;

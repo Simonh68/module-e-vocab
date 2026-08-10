@@ -142,6 +142,9 @@ def main() -> None:
             "document.getElementById('ttsBtn').disabled = isFlipped",
             "side === 'answer' ? 'Answer shown' : 'Word shown'",
             "isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'",
+            "function scheduleWordSpeech()",
+            "}, 3000);",
+            "announceCard('word');\n            scheduleWordSpeech();",
             "event.key === 'ArrowRight'",
             "event.key === 'ArrowLeft'",
             "prefers-reduced-motion: reduce",
@@ -153,9 +156,8 @@ def main() -> None:
             f"Conflicting global Enter/Space handler remains in {group}.html",
         )
         assert_true(
-            "speakText(words[currentIndex].ex_en)" not in text
-            and "if (hasUserInteracted) {\n                speakText(item.en);" not in text,
-            f"Automatic speech conflicts with screen-reader announcements in {group}.html",
+            "speakText(words[currentIndex].ex_en)" not in text,
+            f"The answer example should not interrupt screen-reader announcements in {group}.html",
         )
         for filename in POLICY_FILES:
             assert_true(f'href="{filename}"' in text, f"{filename} footer link missing in {group}.html")
@@ -252,6 +254,7 @@ def main() -> None:
         assert_true('class="skip-link" href="#main-content"' in text, f"Skip link missing in {filename}")
         assert_true('class="activity-home" href="index.html"' in text, f"Home control missing in {filename}")
         assert_true('id="flipButton"' in text, f"Accessible flip control missing in {filename}")
+        assert_true("function scheduleWordSpeech()" in text and "}, 3000);" in text, f"Delayed speech missing in {filename}")
         assert_true("e.key === ' ' || e.key === 'Enter'" not in text, f"Keyboard conflict remains in {filename}")
         for policy in POLICY_FILES:
             assert_true(f'href="{policy}"' in text, f"{policy} footer link missing in {filename}")

@@ -352,13 +352,42 @@ def patch_activity_page(path: Path) -> None:
                 "            flipButton.setAttribute('aria-label', 'Show answer for current word');",
                 1,
             )
-        text = text.replace(
-            "            if (hasUserInteracted) {\n"
-            "                speakText(item.en);\n"
-            "            }\n",
-            "",
-            1,
-        )
+        if "function scheduleWordSpeech()" not in text:
+            delayed_speech = r"""
+        function scheduleWordSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
+                    speakText(words[currentIndex].en);
+                }
+            }, 3000);
+        }
+"""
+            text, count = re.subn(
+                r"(        function speakText\(text\) \{.*?^        \}\n)",
+                r"\1" + delayed_speech,
+                text,
+                count=1,
+                flags=re.S | re.M,
+            )
+            if count != 1:
+                raise RuntimeError(f"Could not add delayed speech in {path.name}")
+        if "            announceCard('word');\n            scheduleWordSpeech();" not in text:
+            text = text.replace(
+                "            announceCard('word');",
+                "            announceCard('word');\n"
+                "            scheduleWordSpeech();",
+                1,
+            )
+        if "function playAudio(event) {\n            window.clearTimeout(scheduleWordSpeech.timer);" not in text:
+            text = text.replace(
+                "        function playAudio(event) {",
+                "        function playAudio(event) {\n"
+                "            window.clearTimeout(scheduleWordSpeech.timer);",
+                1,
+            )
         accessible_toggle = r"""        function announceCard(side) {
             const item = words[currentIndex];
             const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
@@ -391,6 +420,11 @@ def patch_activity_page(path: Path) -> None:
                 isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
             );
             announceCard(isFlipped ? 'answer' : 'word');
+            if (isFlipped) {
+                window.clearTimeout(scheduleWordSpeech.timer);
+            } else {
+                scheduleWordSpeech();
+            }
         }
 
 """
@@ -540,9 +574,31 @@ def patch_activity_page(path: Path) -> None:
         "            if (hasUserInteracted) {\n"
         "                speakText(item.en);\n"
         "            }\n",
-        "",
+        "            scheduleWordSpeech();\n",
         1,
     )
+
+    delayed_speech = r"""
+        function scheduleWordSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
+                    speakText(words[currentIndex].en);
+                }
+            }, 3000);
+        }
+"""
+    text, count = re.subn(
+        r"(        function speakText\(text\) \{.*?^        \}\n)",
+        r"\1" + delayed_speech,
+        text,
+        count=1,
+        flags=re.S | re.M,
+    )
+    if count != 1:
+        raise RuntimeError(f"Could not add delayed speech in {path.name}")
 
     accessible_toggle = r"""        function announceCard(side) {
             const item = words[currentIndex];
@@ -576,6 +632,11 @@ def patch_activity_page(path: Path) -> None:
                 isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
             );
             announceCard(isFlipped ? 'answer' : 'word');
+            if (isFlipped) {
+                window.clearTimeout(scheduleWordSpeech.timer);
+            } else {
+                scheduleWordSpeech();
+            }
         }
 
 """
@@ -588,6 +649,13 @@ def patch_activity_page(path: Path) -> None:
     )
     if count != 1:
         raise RuntimeError(f"Could not patch toggleCard in {path.name}")
+
+    text = text.replace(
+        "        function playAudio(event) {",
+        "        function playAudio(event) {\n"
+        "            window.clearTimeout(scheduleWordSpeech.timer);",
+        1,
+    )
 
     keyboard_handler = r"""        document.addEventListener('keydown', (event) => {
             if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
