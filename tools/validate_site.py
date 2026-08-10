@@ -13,7 +13,6 @@ import rebuild_official_vocab as vocab
 
 REPO = Path(__file__).resolve().parents[1]
 GROUPS = [f"{letter}{number}" for letter in "ABCD" for number in range(1, 4)]
-LEGACY_ACTIVITY_FILES = ["A1v2.html", "A2v2.html", "A3v2.html"]
 POLICY_FILES = ["accessibility.html", "privacy.html", "copyright.html"]
 EXPECTED_COUNTS = {
     "A1": 80, "A2": 80, "A3": 79,
@@ -251,16 +250,6 @@ def main() -> None:
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
 
-    for filename in LEGACY_ACTIVITY_FILES:
-        text = (REPO / filename).read_text(encoding="utf-8")
-        assert_true('class="skip-link" href="#main-content"' in text, f"Skip link missing in {filename}")
-        assert_true('class="activity-home" href="index.html"' in text, f"Home control missing in {filename}")
-        assert_true('id="flipButton"' in text, f"Accessible flip control missing in {filename}")
-        assert_true("function scheduleWordSpeech()" in text and "function scheduleExampleSpeech()" in text and "}, 900);" in text, f"Delayed speech missing in {filename}")
-        assert_true("e.key === ' ' || e.key === 'Enter'" not in text, f"Keyboard conflict remains in {filename}")
-        for policy in POLICY_FILES:
-            assert_true(f'href="{policy}"' in text, f"{policy} footer link missing in {filename}")
-
     all_html = {path.name: path.read_text(encoding="utf-8") for path in REPO.glob("*.html")}
     for filename, text in all_html.items():
         assert_true("document.cookie" not in text, f"Cookie-writing code found in {filename}")
@@ -277,7 +266,7 @@ def main() -> None:
             if local_path:
                 assert_true((REPO / local_path).exists(), f"Broken local link in {filename}: {href}")
 
-    print("PASS: 12 activities, 982 cards, legacy pages, policies, accessibility controls, privacy checks, archived A–D sources, official coverage, capitalization, punctuation, links and static assets validated.")
+    print("PASS: 12 activities, 982 cards, policies, accessibility controls, privacy checks, archived A–D sources, official coverage, capitalization, punctuation, links and static assets validated.")
 
 
 if __name__ == "__main__":
