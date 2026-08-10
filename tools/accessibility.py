@@ -37,6 +37,48 @@ ACCESSIBILITY_CSS = r"""
             top: 12px;
         }
 
+        .activity-top-nav {
+            width: 100%;
+            max-width: 480px;
+            min-height: 44px;
+            position: sticky;
+            top: 8px;
+            z-index: 40;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 6px;
+            pointer-events: none;
+        }
+
+        .activity-home {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 8px 13px;
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            color: var(--primary-hover);
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 3px 10px rgba(30, 41, 59, 0.14);
+            font-size: 0.85rem;
+            font-weight: 750;
+            line-height: 1;
+            text-decoration: none;
+            pointer-events: auto;
+        }
+
+        .activity-home:hover {
+            background: #eef2ff;
+        }
+
+        .activity-home svg {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 auto;
+        }
+
         .activity-main {
             width: 100%;
             flex: 1 0 auto;
@@ -121,6 +163,7 @@ ACCESSIBILITY_CSS = r"""
         @media (forced-colors: active) {
             .card,
             .card-face,
+            .activity-home,
             .tts-btn,
             .nav-btn {
                 border: 1px solid ButtonText;
@@ -138,6 +181,15 @@ LEGAL_FOOTER = """    <footer class="legal-footer" aria-label="Site information"
 
 """
 
+HOME_NAV = """    <nav class="activity-top-nav" aria-label="Activity navigation">
+        <a class="activity-home" href="index.html" aria-label="Return to Module E vocabulary home">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
+            <span>Home</span>
+        </a>
+    </nav>
+
+"""
+
 
 def require_replace(text: str, old: str, new: str, path: Path, label: str) -> str:
     if old not in text:
@@ -148,6 +200,60 @@ def require_replace(text: str, old: str, new: str, path: Path, label: str) -> st
 def patch_activity_page(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
     if "activity-accessibility-v1" in text:
+        if "activity-top-nav" not in text:
+            text = text.replace(
+                "        .activity-main {",
+                "        .activity-top-nav {\n"
+                "            width: 100%;\n"
+                "            max-width: 480px;\n"
+                "            min-height: 44px;\n"
+                "            position: sticky;\n"
+                "            top: 8px;\n"
+                "            z-index: 40;\n"
+                "            display: flex;\n"
+                "            justify-content: flex-start;\n"
+                "            margin-bottom: 6px;\n"
+                "            pointer-events: none;\n"
+                "        }\n\n"
+                "        .activity-home {\n"
+                "            min-height: 44px;\n"
+                "            display: inline-flex;\n"
+                "            align-items: center;\n"
+                "            justify-content: center;\n"
+                "            gap: 7px;\n"
+                "            padding: 8px 13px;\n"
+                "            border: 1px solid #c7d2fe;\n"
+                "            border-radius: 12px;\n"
+                "            color: var(--primary-hover);\n"
+                "            background: rgba(255, 255, 255, 0.96);\n"
+                "            box-shadow: 0 3px 10px rgba(30, 41, 59, 0.14);\n"
+                "            font-size: 0.85rem;\n"
+                "            font-weight: 750;\n"
+                "            line-height: 1;\n"
+                "            text-decoration: none;\n"
+                "            pointer-events: auto;\n"
+                "        }\n\n"
+                "        .activity-home:hover {\n"
+                "            background: #eef2ff;\n"
+                "        }\n\n"
+                "        .activity-home svg {\n"
+                "            width: 17px;\n"
+                "            height: 17px;\n"
+                "            flex: 0 0 auto;\n"
+                "        }\n\n"
+                "        .activity-main {",
+                1,
+            )
+            text = text.replace(
+                "    <header>",
+                HOME_NAV + "    <header>",
+                1,
+            )
+            text = text.replace(
+                "            .card-face,\n            .tts-btn,",
+                "            .card-face,\n            .activity-home,\n            .tts-btn,",
+                1,
+            )
         if "grid-template-columns: repeat(3, minmax(0, 1fr));" not in text:
             text = text.replace(
                 "        .flip-btn {\n"
@@ -238,7 +344,7 @@ def patch_activity_page(path: Path) -> None:
     text = require_replace(
         text,
         "<body>\n",
-        '<body>\n    <a class="skip-link" href="#main-content">Skip to main content</a>\n',
+        '<body>\n    <a class="skip-link" href="#main-content">Skip to main content</a>\n' + HOME_NAV,
         path,
         "skip link",
     )

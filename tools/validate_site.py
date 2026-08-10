@@ -118,6 +118,8 @@ def main() -> None:
         assert_true("familyBox.style.display = 'none'" in text, f"Empty-family hiding missing in {group}.html")
         accessibility_fragments = [
             'class="skip-link" href="#main-content"',
+            'class="activity-top-nav" aria-label="Activity navigation"',
+            'class="activity-home" href="index.html"',
             'class="activity-main" id="main-content"',
             'id="flipButton"',
             'id="cardStatus" role="status" aria-live="polite"',
@@ -228,6 +230,7 @@ def main() -> None:
     for filename in LEGACY_ACTIVITY_FILES:
         text = (REPO / filename).read_text(encoding="utf-8")
         assert_true('class="skip-link" href="#main-content"' in text, f"Skip link missing in {filename}")
+        assert_true('class="activity-home" href="index.html"' in text, f"Home control missing in {filename}")
         assert_true('id="flipButton"' in text, f"Accessible flip control missing in {filename}")
         assert_true("e.key === ' ' || e.key === 'Enter'" not in text, f"Keyboard conflict remains in {filename}")
         for policy in POLICY_FILES:
