@@ -29,6 +29,36 @@ def assert_true(condition: bool, message: str) -> None:
 def main() -> None:
     assert_true((REPO / ".nojekyll").exists(), ".nojekyll is missing")
     index = (REPO / "index.html").read_text(encoding="utf-8")
+    guide = (REPO / "teacher-guide.html").read_text(encoding="utf-8")
+    about = (REPO / "about.html").read_text(encoding="utf-8")
+    assert_true(
+        'class="teacher-guide-callout" href="teacher-guide.html"' in index,
+        "Prominent Teacher Guide link is missing from index.html",
+    )
+    assert_true('href="about.html"' in index, "About link is missing from index.html")
+    assert_true("<h1>Teacher Guide</h1>" in guide, "Dedicated Teacher Guide page is missing")
+    assert_true(
+        "<title>About | Module E Bagrut Vocabulary</title>" in about,
+        "Dedicated About page is missing",
+    )
+    assert_true(
+        "Source-data corrections and editorial transparency" not in about,
+        "Teacher Guide content still appears on the About page",
+    )
+    source_files = {
+        "LISTA12.12.21.xlsx": "List A",
+        "LISTB12.12.21.xlsx": "List B",
+        "LISTC12.12.21.xlsx": "List C",
+        "LIST-D.xlsx": "List D",
+    }
+    for filename, label in source_files.items():
+        source_path = REPO / "sources" / filename
+        assert_true(source_path.exists(), f"Archived Ministry {label} file is missing")
+        assert_true(source_path.read_bytes()[:2] == b"PK", f"Archived {label} is not a valid XLSX container")
+        assert_true(
+            f'href="sources/{filename}"' in guide,
+            f"Teacher Guide link to archived {label} is missing",
+        )
     for group in GROUPS:
         assert_true(f'href="{group}.html"' in index, f"Missing Play link for {group}")
         assert_true(f'data-file="{group}.html"' in index, f"Missing Copy link for {group}")
@@ -150,7 +180,7 @@ def main() -> None:
     assert_true(len(json_rows) == 982, f"Master JSON has {len(json_rows)} rows instead of 982")
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
-    print("PASS: 12 activity files, 982 cards, official A–D coverage, natural capitalization, punctuation, family data, titles, links and static assets validated.")
+    print("PASS: 12 activities, 982 cards, separate About and Teacher Guide pages, archived A–D sources, official coverage, capitalization, punctuation, links and static assets validated.")
 
 
 if __name__ == "__main__":
