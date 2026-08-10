@@ -619,7 +619,7 @@
                 if (automaticAudioEnabled && scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
                     speakText(words[currentIndex].en);
                 }
-            }, 3000);
+            }, 2000);
         }
 
         function enableAutomaticAudio(event) {
@@ -631,7 +631,7 @@
             button.setAttribute('aria-pressed', 'true');
             button.textContent = 'Audio on';
             button.disabled = true;
-            announceStatus('Audio enabled. Automatic pronunciation will start in three seconds.');
+            announceStatus('Audio enabled. Automatic pronunciation will start in two seconds.');
             scheduleWordSpeech();
         }
 

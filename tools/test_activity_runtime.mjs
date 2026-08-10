@@ -226,7 +226,7 @@ function testActivity(filename) {
   window.onload();
   assert.equal(elements.counter.innerText, `1 / ${words.length}`, `${filename}: first counter`);
   assert.equal(speech.length, 0, `${filename}: first word spoke immediately`);
-  clock.advance(3000);
+  clock.advance(2000);
   assert.equal(speech.length, 0, `${filename}: first word spoke before audio was enabled`);
   sandbox.enableAutomaticAudio(event());
   assert.equal(resumeCalls(), 1, `${filename}: audio engine was not resumed from the user action`);
@@ -234,16 +234,16 @@ function testActivity(filename) {
   assert.equal(elements.audioStart.disabled, true, `${filename}: Start audio remained enabled`);
   clock.advance(80);
   assert.match(elements.cardStatus.textContent, /^Audio enabled\./, `${filename}: audio status`);
-  clock.advance(2919);
-  assert.equal(speech.length, 0, `${filename}: first word spoke before 3 seconds after enabling audio`);
+  clock.advance(1919);
+  assert.equal(speech.length, 0, `${filename}: first word spoke before 2 seconds after enabling audio`);
   clock.advance(1);
-  assert.deepEqual(speech.at(-1), { at: 6000, text: words[0].en }, `${filename}: first word`);
+  assert.deepEqual(speech.at(-1), { at: 4000, text: words[0].en }, `${filename}: first word`);
 
   sandbox.nextCard();
   assert.equal(elements.counter.innerText, `2 / ${words.length}`, `${filename}: Next counter`);
   const beforeNextSpeech = speech.length;
-  clock.advance(2999);
-  assert.equal(speech.length, beforeNextSpeech, `${filename}: next word spoke before 3 seconds`);
+  clock.advance(1999);
+  assert.equal(speech.length, beforeNextSpeech, `${filename}: next word spoke before 2 seconds`);
   clock.advance(1);
   assert.equal(speech.at(-1).text, words[1].en, `${filename}: next word pronunciation`);
 
@@ -252,7 +252,7 @@ function testActivity(filename) {
   sandbox.nextCard();
   const quickTarget = words[3].en;
   const beforeQuickSpeech = speech.length;
-  clock.advance(2000);
+  clock.advance(1000);
   assert.equal(speech.length, beforeQuickSpeech, `${filename}: stale timer was not cancelled`);
   clock.advance(1000);
   assert.equal(speech.length, beforeQuickSpeech + 1, `${filename}: latest timer did not speak once`);
@@ -273,7 +273,7 @@ function testActivity(filename) {
   assert.equal(speech.length, beforeFlipSpeech, `${filename}: pending word spoke on answer side`);
 
   sandbox.toggleCard(event());
-  clock.advance(3000);
+  clock.advance(2000);
   assert.equal(speech.at(-1).text, words[4].en, `${filename}: word did not speak after returning`);
   assert.equal(elements.flipButton.getAttribute("aria-pressed"), "false", `${filename}: word pressed state`);
 
@@ -281,7 +281,7 @@ function testActivity(filename) {
   const beforeManualSpeech = speech.length;
   sandbox.playAudio(event());
   assert.equal(speech.length, beforeManualSpeech + 1, `${filename}: Listen button did not speak`);
-  clock.advance(3000);
+  clock.advance(2000);
   assert.equal(speech.length, beforeManualSpeech + 1, `${filename}: manual speech was duplicated`);
 
   const keydown = documentListeners.get("keydown")?.[0];
@@ -308,5 +308,5 @@ function testActivity(filename) {
 for (const filename of activities) testActivity(filename);
 
 console.log(
-  `PASS: ${activities.length} activities simulated: explicit audio enablement, first-card and Next pronunciation at 3000 ms after enablement, stale-timer cancellation, flip cancellation, live announcements, Listen, keyboard, Home, focus, reduced motion and language.`,
+  `PASS: ${activities.length} activities simulated: explicit audio enablement, first-card and Next pronunciation at 2000 ms after enablement, stale-timer cancellation, flip cancellation, live announcements, Listen, keyboard, Home, focus, reduced motion and language.`,
 );
