@@ -32,6 +32,8 @@
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
+  .skip-link{position:fixed;top:-100px;left:12px;z-index:1000;padding:10px 14px;border-radius:9px;color:#fff;background:#111827;font-weight:850;text-decoration:none}
+  .skip-link:focus{top:12px}
   body{
     margin:0;
     min-height:100vh;
@@ -44,6 +46,7 @@
   }
   a{color:#1e6845}
   a:hover{color:#124d32}
+  a:focus-visible{outline:3px solid #8b3f00;outline-offset:4px}
   .wrap{
     width:min(980px,calc(100% - 28px));
     margin:0 auto;
@@ -67,7 +70,7 @@
     text-decoration:none;
     border:1px solid #368b5f;
     border-radius:14px;
-    background:linear-gradient(145deg,#4ba875,#256b48);
+    background:linear-gradient(145deg,#2f7f55,#205d3f);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 5px 0 #194d34,0 10px 18px rgba(29,89,58,.18);
     transition:transform .16s ease;
   }
@@ -168,11 +171,13 @@
   .steps li{padding:5px 0;line-height:1.65}
   .source-table-wrap{overflow-x:auto;margin-top:16px}
   .source-table{width:100%;border-collapse:separate;border-spacing:0;min-width:690px}
+  .source-table caption{padding:0 0 10px;color:#315d47;font-weight:800;text-align:left}
   .source-table th,
   .source-table td{padding:13px 14px;text-align:left;border-bottom:1px solid #c9e8d5}
-  .source-table th{background:#26734d;color:#fff;font-size:.9rem}
-  .source-table th:first-child{border-radius:12px 0 0 0}
-  .source-table th:last-child{border-radius:0 12px 0 0}
+  .source-table thead th{background:#26734d;color:#fff;font-size:.9rem}
+  .source-table thead th:first-child{border-radius:12px 0 0 0}
+  .source-table thead th:last-child{border-radius:0 12px 0 0}
+  .source-table tbody th{color:#205f40;font-weight:850}
   .source-table tbody tr:nth-child(odd){background:#eefaf2}
   .source-table a{font-weight:800}
   .source-note{margin-top:15px;padding:14px 16px;border-radius:13px;background:#e7f8ed}
@@ -187,11 +192,16 @@
     text-decoration:none;
   }
   .footer{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:7px 15px;
     margin-top:28px;
     text-align:center;
     color:#285f43;
     line-height:1.6;
   }
+  .footer a{font-weight:750}
   @media(max-width:650px){
     .wrap{padding-top:20px}
     .topbar{align-items:flex-start;flex-direction:column}
@@ -199,9 +209,11 @@
     .hero{padding:27px 22px}
     .card{padding:23px 21px}
   }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="wrap">
     <nav class="topbar" aria-label="Primary navigation">
       <div class="top-links">
@@ -219,7 +231,7 @@
       </p>
     </header>
 
-    <main class="guide">
+    <main class="guide" id="main-content">
       <section class="card">
         <h2>1. Curriculum alignment and database structure</h2>
         <p>
@@ -237,27 +249,28 @@
         </p>
         <div class="source-table-wrap">
           <table class="source-table">
+            <caption>Archived official vocabulary source files</caption>
             <thead>
-              <tr><th>List</th><th>Archived copy in this site</th><th>Original Ministry file</th></tr>
+              <tr><th scope="col">List</th><th scope="col">Archived copy in this site</th><th scope="col">Original Ministry file</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>A</strong></td>
+                <th scope="row">A</th>
                 <td><a href="sources/LISTA12.12.21.xlsx" download>Download archived List A</a></td>
                 <td><a href="https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTA12.12.21.xlsx">Open Ministry source</a></td>
               </tr>
               <tr>
-                <td><strong>B</strong></td>
+                <th scope="row">B</th>
                 <td><a href="sources/LISTB12.12.21.xlsx" download>Download archived List B</a></td>
                 <td><a href="https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx">Open Ministry source</a></td>
               </tr>
               <tr>
-                <td><strong>C</strong></td>
+                <th scope="row">C</th>
                 <td><a href="sources/LISTC12.12.21.xlsx" download>Download archived List C</a></td>
                 <td><a href="https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx">Open Ministry source</a></td>
               </tr>
               <tr>
-                <td><strong>D</strong></td>
+                <th scope="row">D</th>
                 <td><a href="sources/LIST-D.xlsx" download>Download archived List D</a></td>
                 <td><a href="https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx">Open Ministry source</a></td>
               </tr>
@@ -365,8 +378,11 @@
       </section>
     </main>
 
-    <footer class="footer">
-      Module E Bagrut Vocabulary · Created and presented by Teacher Simon Halevi
+    <footer class="footer" aria-label="Site information">
+      <span>Module E Bagrut Vocabulary · Created and presented by Teacher Simon Halevi</span>
+      <a href="accessibility.html">Accessibility</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="copyright.html">Copyright</a>
     </footer>
   </div>
 </body>

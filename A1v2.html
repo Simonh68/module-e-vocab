@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="favicon.svg?v=20260809-1" type="image/svg+xml">
     <link rel="shortcut icon" href="favicon.svg?v=20260809-1" type="image/svg+xml">
-    < title> Module E 20027 Vocabulary Flashcards - Part 1</title>
+    <title>Module E 2027 Vocabulary Flashcards - Part A1</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -287,26 +287,142 @@
             font-size: 0.85rem;
             padding: 8px 16px;
         }
+
+
+        /* activity-accessibility-v1 */
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: -100px;
+            left: 12px;
+            z-index: 1000;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #111827;
+            color: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 12px;
+        }
+
+        .activity-main {
+            width: 100%;
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #b45309;
+            outline-offset: 4px;
+        }
+
+        .flip-btn {
+            background-color: #ede9fe;
+            border-color: #8b5cf6;
+            color: #4c1d95;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .nav-container .nav-btn {
+            min-width: 0;
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .legal-footer {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            padding: 18px 10px 2px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .legal-footer a {
+            color: var(--primary-hover);
+            font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+            }
+
+            .card,
+            .tts-btn,
+            .nav-btn {
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .nav-container { gap: 6px; }
+            .nav-container .nav-btn { padding: 10px 4px; font-size: 0.8rem; }
+            .nav-container .nav-btn svg { display: none; }
+        }
+
+        @media (forced-colors: active) {
+            .card,
+            .card-face,
+            .tts-btn,
+            .nav-btn {
+                border: 1px solid ButtonText;
+            }
+        }
     </style>
     <script>
         const words = [{"en": "MATERIAL", "pos": "Noun", "grammar": "noun.", "mean_he": "חומר", "mean_fr": "-", "ex_en": "We need to gather all the building material for the renovation.", "ex_he": "אנחנו צריכים לאסוף את כל חומרי הבניין לשיפוץ.", "ex_fr": "-", "synonyms": []}, {"en": "UNIVERSE", "pos": "Noun", "grammar": "noun.", "mean_he": "יקום", "mean_fr": "-", "ex_en": "Scientists are constantly discovering new things about the universe.", "ex_he": "מדענים מגלים כל הזמן דברים חדשים על היקום.", "ex_fr": "-", "synonyms": []}, {"en": "ESSAY", "pos": "Noun", "grammar": "noun.", "mean_he": "חיבור", "mean_fr": "-", "ex_en": "I have to submit my final essay by Friday morning.", "ex_he": "אני חייב להגיש את החיבור הסופי שלי עד יום שישי בבוקר.", "ex_fr": "-", "synonyms": []}, {"en": "FLU", "pos": "Noun", "grammar": "noun.", "mean_he": "שפעת", "mean_fr": "-", "ex_en": "Many students stayed home this week because of the flu.", "ex_he": "תלמידים רבים נשארו בבית השבוע בגלל השפעת.", "ex_fr": "-", "synonyms": []}, {"en": "IN TERMS OF", "pos": "Phrase", "grammar": "phrase.", "mean_he": "מבחינת", "mean_fr": "-", "ex_en": "We need to look at the project in terms of its long-term costs.", "ex_he": "אנחנו צריכים להסתכל על הפרויקט מבחינת העלויות לטווח ארוך שלו.", "ex_fr": "-", "synonyms": []}, {"en": "BESIDES", "pos": "Prep/Adv", "grammar": "prep/adv.", "mean_he": "מלבד / בנוסף", "mean_fr": "-", "ex_en": "I'm not ready to leave yet; besides, it's still raining outside.", "ex_he": "אני עדיין לא מוכן לצאת; חוץ מזה, עדיין יורד גשם בחוץ.", "ex_fr": "-", "synonyms": []}, {"en": "CLEAR", "pos": "Adjective", "grammar": "adjective.", "mean_he": "ברור", "mean_fr": "-", "ex_en": "He gave a very clear explanation of the new rules.", "ex_he": "הוא נתן הסבר מאוד ברור לכללים החדשים.", "ex_fr": "-", "synonyms": []}, {"en": "GROWTH", "pos": "Noun", "grammar": "noun.", "mean_he": "צמיחה", "mean_fr": "-", "ex_en": "The company is going through a period of rapid growth.", "ex_he": "החברה עוברת תקופה של צמיחה מהירה.", "ex_fr": "-", "synonyms": []}, {"en": "APPRECIATE", "pos": "Verb", "grammar": "verb.", "mean_he": "להעריך", "mean_fr": "-", "ex_en": "I really appreciate all the help you’ve given me lately.", "ex_he": "אני באמת מעריך את כל העזרה שנתת לי לאחרונה.", "ex_fr": "-", "synonyms": []}, {"en": "ALTERNATIVE", "pos": "Adj/Noun", "grammar": "adj/noun.", "mean_he": "חלופה", "mean_fr": "-", "ex_en": "We need to find an alternative way to solve this issue.", "ex_he": "אנחנו צריכים למצוא דרך חלופית לפתור את הבעיה הזו.", "ex_fr": "-", "synonyms": []}, {"en": "COMMON", "pos": "Adjective", "grammar": "adjective.", "mean_he": "נפוץ", "mean_fr": "-", "ex_en": "It's a common mistake that many people make.", "ex_he": "זו טעות נפוצה שאנשים רבים עושים.", "ex_fr": "-", "synonyms": []}, {"en": "MEAN", "pos": "Verb", "grammar": "verb.", "mean_he": "להתכוון", "mean_fr": "-", "ex_en": "I'm sorry, I didn't mean to hurt your feelings.", "ex_he": "אני מצטער, לא התכוונתי לפגוע ברגשותיך.", "ex_fr": "-", "synonyms": []}, {"en": "CHALLENGE", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "אתגר", "mean_fr": "-", "ex_en": "Winning the championship will be a real challenge for the team.", "ex_he": "הזכייה באליפות תהיה אתגר אמיתי עבור הקבוצה.", "ex_fr": "-", "synonyms": []}, {"en": "DEVELOP", "pos": "Verb", "grammar": "verb.", "mean_he": "לפתח", "mean_fr": "-", "ex_en": "The city plans to develop the waterfront into a park.", "ex_he": "העיר מתכננת לפתח את אזור קו המים לפארק.", "ex_fr": "-", "synonyms": []}, {"en": "EVIDENCE", "pos": "Noun", "grammar": "noun.", "mean_he": "ראיות", "mean_fr": "-", "ex_en": "There is no physical evidence to support his theory.", "ex_he": "אין ראיות פיזיות שיתמכו בתיאוריה שלו.", "ex_fr": "-", "synonyms": []}, {"en": "INTEREST", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "עניין", "mean_fr": "-", "ex_en": "She has a great deal of interest in ancient history.", "ex_he": "יש לה עניין רב בהיסטוריה עתיקה.", "ex_fr": "-", "synonyms": []}, {"en": "PREVENT", "pos": "Verb", "grammar": "verb.", "mean_he": "למנוע", "mean_fr": "-", "ex_en": "Regular exercise can help prevent many health problems.", "ex_he": "פעילות גופנית קבועה יכולה לעזור למנוע בעיות בריאות רבות.", "ex_fr": "-", "synonyms": []}, {"en": "SOURCE", "pos": "Noun", "grammar": "noun.", "mean_he": "מקור", "mean_fr": "-", "ex_en": "The reporter refused to name the source of her information.", "ex_he": "הכתב סירב לנקוב במקור המידע שלו.", "ex_fr": "-", "synonyms": []}, {"en": "TRADITION", "pos": "Noun", "grammar": "noun.", "mean_he": "מסורת", "mean_fr": "-", "ex_en": "It is a family tradition to eat together on Friday nights.", "ex_he": "זו מסורת משפחתית לאכול יחד בערבי שישי.", "ex_fr": "-", "synonyms": []}, {"en": "VARIOUS", "pos": "Adjective", "grammar": "adjective.", "mean_he": "מגוון / שונים", "mean_fr": "-", "ex_en": "The museum has various exhibits from different time periods.", "ex_he": "למוזיאון יש תערוכות שונות מתקופות זמן שונות.", "ex_fr": "-", "synonyms": []}, {"en": "ADVICE", "pos": "Noun", "grammar": "noun.", "mean_he": "עצה", "mean_fr": "-", "ex_en": "Can you give me some advice on which laptop to buy?", "ex_he": "תוכל לתת לי עצה איזה מחשב נייד לקנות?", "ex_fr": "-", "synonyms": []}, {"en": "CONCERN", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "דאגה", "mean_fr": "-", "ex_en": "The rise in local crime is a major concern for the residents.", "ex_he": "העלייה בפשיעה המקומית היא דאגה מרכזית עבור התושבים.", "ex_fr": "-", "synonyms": []}, {"en": "DESPITE", "pos": "Preposition", "grammar": "preposition.", "mean_he": "למרות", "mean_fr": "-", "ex_en": "We enjoyed the picnic despite the cold weather.", "ex_he": "נהנינו מהפיקניק למרות מזג האוויר הקר.", "ex_fr": "-", "synonyms": []}, {"en": "ENCOURAGE", "pos": "Verb", "grammar": "verb.", "mean_he": "לעודד", "mean_fr": "-", "ex_en": "My teachers always encourage me to do my best.", "ex_he": "המורים שלי תמיד מעודדים אותי לעשות את המיטב.", "ex_fr": "-", "synonyms": []}, {"en": "PRIVATE", "pos": "Adjective", "grammar": "adjective.", "mean_he": "פרטי", "mean_fr": "-", "ex_en": "The hotel has a private beach for its guests to enjoy.", "ex_he": "למלון יש חוף פרטי להנאת אורחיו.", "ex_fr": "-", "synonyms": []}, {"en": "CHANCE", "pos": "Noun", "grammar": "noun.", "mean_he": "סיכוי / הזדמנות", "mean_fr": "-", "ex_en": "This is a great chance for you to show your talent.", "ex_he": "זו הזדמנות מצוינת עבורך להראות את הכישרון שלך.", "ex_fr": "-", "synonyms": []}, {"en": "DELAYED", "pos": "Adjective", "grammar": "adjective.", "mean_he": "מעוכב", "mean_fr": "-", "ex_en": "Our flight was delayed for three hours due to the storm.", "ex_he": "הטיסה שלנו התעכבה בשלוש שעות עקב הסערה.", "ex_fr": "-", "synonyms": []}, {"en": "SIGNIFICANT", "pos": "Adjective", "grammar": "adjective.", "mean_he": "משמעותי", "mean_fr": "-", "ex_en": "There has been a significant increase in sales this month.", "ex_he": "חלה עלייה משמעותית במכירות החודש.", "ex_fr": "-", "synonyms": []}, {"en": "ANALYSIS", "pos": "Noun", "grammar": "noun.", "mean_he": "ניתוח", "mean_fr": "-", "ex_en": "The doctor is waiting for the results of the blood analysis.", "ex_he": "הרופא מחכה לתוצאות ניתוח הדם.", "ex_fr": "-", "synonyms": []}, {"en": "BENEFIT", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "תועלת / להפיק תועלת", "mean_fr": "-", "ex_en": "Regular exercise will benefit your health in many ways.", "ex_he": "פעילות גופנית קבועה תועיל לבריאותך בדרכים רבות.", "ex_fr": "-", "synonyms": []}, {"en": "CONSEQUENCE", "pos": "Noun", "grammar": "noun.", "mean_he": "השלכה / תוצאה", "mean_fr": "-", "ex_en": "You must be prepared to face the consequence of your actions.", "ex_he": "עליך להיות מוכן להתמודד עם ההשלכות של מעשיך.", "ex_fr": "-", "synonyms": []}, {"en": "DATA", "pos": "Noun", "grammar": "noun.", "mean_he": "נתונים", "mean_fr": "-", "ex_en": "We need more data before we can make a final decision.", "ex_he": "אנחנו צריכים עוד נתונים לפני שנוכל לקבל החלטה סופית.", "ex_fr": "-", "synonyms": []}, {"en": "ENVIRONMENT", "pos": "Noun", "grammar": "noun.", "mean_he": "סביבה", "mean_fr": "-", "ex_en": "We all need to do our part to protect the environment.", "ex_he": "כולנו צריכים לעשות את החלק שלנו כדי להגן על הסביבה.", "ex_fr": "-", "synonyms": []}, {"en": "FACTOR", "pos": "Noun", "grammar": "noun.", "mean_he": "גורם", "mean_fr": "-", "ex_en": "Price is a very important factor to consider when buying a car.", "ex_he": "מחיר הוא גורם חשוב מאוד שיש לקחת בחשבון בעת קניית מכונית.", "ex_fr": "-", "synonyms": []}, {"en": "GLOBAL", "pos": "Adjective", "grammar": "adjective.", "mean_he": "גלובלי / עולמי", "mean_fr": "-", "ex_en": "Climate change is a global problem that affects everyone.", "ex_he": "שינוי האקלים הוא בעיה עולמית שמשפיעה על כולם.", "ex_fr": "-", "synonyms": []}, {"en": "HYPOTHESIS", "pos": "Noun", "grammar": "noun.", "mean_he": "השערה", "mean_fr": "-", "ex_en": "The scientists are testing their hypothesis in the lab.", "ex_he": "המדענים בודקים את ההשערה שלהם במעבדה.", "ex_fr": "-", "synonyms": []}, {"en": "INDIVIDUAL", "pos": "Noun/Adjective", "grammar": "noun/adjective.", "mean_he": "אינדיבידואל / פרט", "mean_fr": "-", "ex_en": "Every individual has the right to express their own opinion.", "ex_he": "לכל אדם יש את הזכות להביע את דעתו שלו.", "ex_fr": "-", "synonyms": []}, {"en": "JOURNAL", "pos": "Noun", "grammar": "noun.", "mean_he": "יומן / כתב עת", "mean_fr": "-", "ex_en": "He kept a daily journal of his travels across Europe.", "ex_he": "הוא ניהל יומן יומי של מסעותיו ברחבי אירופה.", "ex_fr": "-", "synonyms": []}, {"en": "KNOWLEDGE", "pos": "Noun", "grammar": "noun.", "mean_he": "ידע", "mean_fr": "-", "ex_en": "She has a deep knowledge of international law and politics.", "ex_he": "יש לה ידע מעמיק במשפט בינלאומי ופוליטיקה.", "ex_fr": "-", "synonyms": []}, {"en": "LEGAL", "pos": "Adjective", "grammar": "adjective.", "mean_he": "חוקי", "mean_fr": "-", "ex_en": "You should seek legal advice before signing any contract.", "ex_he": "כדאי לבקש ייעוץ משפטי לפני חתימה על כל חוזה.", "ex_fr": "-", "synonyms": []}, {"en": "METHOD", "pos": "Noun", "grammar": "noun.", "mean_he": "שיטה", "mean_fr": "-", "ex_en": "What is the most effective method for learning a language?", "ex_he": "מהי השיטה היעילה ביותר ללימוד שפה?", "ex_fr": "-", "synonyms": []}, {"en": "NEGATIVE", "pos": "Adjective", "grammar": "adjective.", "mean_he": "שלילי", "mean_fr": "-", "ex_en": "Try not to focus on the negative aspects of the situation.", "ex_he": "השתדל לא להתמקד בהיבטים השליליים של המצב.", "ex_fr": "-", "synonyms": []}, {"en": "OBJECTIVE", "pos": "Noun/Adjective", "grammar": "noun/adjective.", "mean_he": "יעד / אובייקטיבי", "mean_fr": "-", "ex_en": "The main objective of the meeting is to reach an agreement.", "ex_he": "היעד המרכזי של הפגישה הוא להגיע להסכם.", "ex_fr": "-", "synonyms": []}, {"en": "PERCENT", "pos": "Noun/Adverb", "grammar": "noun/adverb.", "mean_he": "אחוז", "mean_fr": "-", "ex_en": "The price of petrol has increased by ten percent this year.", "ex_he": "מחיר הדלק עלה בעשרה אחוזים השנה.", "ex_fr": "-", "synonyms": []}, {"en": "PERIOD", "pos": "Noun", "grammar": "noun.", "mean_he": "תקופה", "mean_fr": "-", "ex_en": "The dinosaur era was a fascinating period in history.", "ex_he": "עידן הדינוזאורים היה תקופה מרתקת בהיסטוריה.", "ex_fr": "-", "synonyms": []}, {"en": "POLICY", "pos": "Noun", "grammar": "noun.", "mean_he": "מדיניות", "mean_fr": "-", "ex_en": "The company has a very strict policy against smoking in the office.", "ex_he": "לחברה יש מדיניות נוקשה מאוד נגד עישון במשרד.", "ex_fr": "-", "synonyms": []}, {"en": "RANGE", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "טווח / מגוון", "mean_fr": "-", "ex_en": "The shop sells a wide range of organic products.", "ex_he": "החנות מוכרת מגוון רחב של מוצרים אורגניים.", "ex_fr": "-", "synonyms": []}, {"en": "SECTOR", "pos": "Noun", "grammar": "noun.", "mean_he": "מגזר", "mean_fr": "-", "ex_en": "The government is investing more money in the technology sector.", "ex_he": "הממשלה משקיעה יותר כסף במגזר הטכנולוגיה.", "ex_fr": "-", "synonyms": []}, {"en": "THEORY", "pos": "Noun", "grammar": "noun.", "mean_he": "תיאוריה", "mean_fr": "-", "ex_en": "In theory, the plan sounds great, but will it work in practice?", "ex_he": "בתיאוריה, התוכנית נשמעת נהדר, אבל האם היא תעבוד בפועל?", "ex_fr": "-", "synonyms": []}, {"en": "CAPACITY", "pos": "Noun", "grammar": "noun.", "mean_he": "קיבולת / יכולת", "mean_fr": "-", "ex_en": "The stadium has a seating capacity of fifty thousand people.", "ex_he": "לאצטדיון יש קיבולת של חמישים אלף מקומות ישיבה.", "ex_fr": "-", "synonyms": []}, {"en": "CLAUSE", "pos": "Noun", "grammar": "noun.", "mean_he": "סעיף", "mean_fr": "-", "ex_en": "There is a specific clause in the contract regarding late payments.", "ex_he": "יש סעיף ספציפי בחוזה לגבי תשלומים מאוחרים.", "ex_fr": "-", "synonyms": []}, {"en": "CONFLICT", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "סכסוך / קונפליקט", "mean_fr": "-", "ex_en": "The two countries are trying to resolve their border conflict.", "ex_he": "שתי המדינות מנסות לפתור את סכסוך הגבולות ביניהן.", "ex_fr": "-", "synonyms": []}, {"en": "DECLINE", "pos": "Verb/Noun", "grammar": "verb/noun.", "mean_he": "ירידה / לסרב", "mean_fr": "-", "ex_en": "The price of gold has started to decline after reaching a peak.", "ex_he": "מחיר הזהב החל לרדת לאחר שהגיע לשיא.", "ex_fr": "-", "synonyms": []}, {"en": "ENTITY", "pos": "Noun", "grammar": "noun.", "mean_he": "ישות", "mean_fr": "-", "ex_en": "The corporation is a separate legal entity from its owners.", "ex_he": "התאגיד הוא ישות משפטית נפרדת מבעליו.", "ex_fr": "-", "synonyms": []}, {"en": "EXTERNAL", "pos": "Adjective", "grammar": "adjective.", "mean_he": "חיצוני", "mean_fr": "-", "ex_en": "The building needs some repairs to its external walls.", "ex_he": "הבניין זקוק לתיקונים בקירותיו החיצוניים.", "ex_fr": "-", "synonyms": []}, {"en": "GENERATE", "pos": "Verb", "grammar": "verb.", "mean_he": "לייצר", "mean_fr": "-", "ex_en": "The new wind farm will generate enough power for the whole town.", "ex_he": "חוות הרוח החדשה תייצר מספיק חשמל לכל העיירה.", "ex_fr": "-", "synonyms": []}, {"en": "IMAGE", "pos": "Noun", "grammar": "noun.", "mean_he": "תדמית / תמונה", "mean_fr": "-", "ex_en": "The company is trying to improve its public image.", "ex_he": "החברה מנסה לשפר את התדמית הציבורית שלה.", "ex_fr": "-", "synonyms": []}, {"en": "LIBERAL", "pos": "Adjective", "grammar": "adjective.", "mean_he": "ליברלי", "mean_fr": "-", "ex_en": "He has very liberal views when it comes to social issues.", "ex_he": "יש לו השקפות מאוד ליברליות בנוגע לנושאים חברתיים.", "ex_fr": "-", "synonyms": []}, {"en": "MARGIN", "pos": "Noun", "grammar": "noun.", "mean_he": "שוליים", "mean_fr": "-", "ex_en": "The team won the match by a very narrow margin.", "ex_he": "הקבוצה ניצחה במשחק בהפרש קטן מאוד.", "ex_fr": "-", "synonyms": []}, {"en": "NETWORK", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "רשת", "mean_fr": "-", "ex_en": "The computer network went down for several hours this morning.", "ex_he": "רשת המחשבים קרסה למספר שעות הבוקר.", "ex_fr": "-", "synonyms": []}, {"en": "PERSPECTIVE", "pos": "Noun", "grammar": "noun.", "mean_he": "פרספקטיבה / נקודת מבט", "mean_fr": "-", "ex_en": "Travel gives you a different perspective on life.", "ex_he": "נסיעות נותנות לך פרספקטיבה שונה על החיים.", "ex_fr": "-", "synonyms": []}, {"en": "PRECISE", "pos": "Adjective", "grammar": "adjective.", "mean_he": "מדויק", "mean_fr": "-", "ex_en": "I need the precise measurements before I can start the work.", "ex_he": "אני צריך את המידות המדויקות לפני שאתחיל בעבודה.", "ex_fr": "-", "synonyms": []}, {"en": "RATIO", "pos": "Noun", "grammar": "noun.", "mean_he": "יחס", "mean_fr": "-", "ex_en": "The ratio of students to teachers in this school is very low.", "ex_he": "היחס בין תלמידים למורים בבית הספר הזה נמוך מאוד.", "ex_fr": "-", "synonyms": []}, {"en": "REVENUE", "pos": "Noun", "grammar": "noun.", "mean_he": "הכנסה", "mean_fr": "-", "ex_en": "The company reported a significant increase in revenue this year.", "ex_he": "החברה דיווחה על עלייה משמעותית בהכנסות השנה.", "ex_fr": "-", "synonyms": []}, {"en": "STABLE", "pos": "Adjective", "grammar": "adjective.", "mean_he": "יציב", "mean_fr": "-", "ex_en": "The patient's condition is now stable after the surgery.", "ex_he": "מצב המטופל כעת יציב לאחר הניתוח.", "ex_fr": "-", "synonyms": []}, {"en": "TARGET", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "מטרה / יעד", "mean_fr": "-", "ex_en": "Our main target is to double our sales by next year.", "ex_he": "יעד המרכזי שלנו הוא להכפיל את המכירות עד השנה הבאה.", "ex_fr": "-", "synonyms": []}, {"en": "TRANSIT", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "מעבר", "mean_fr": "-", "ex_en": "The goods were damaged while they were in transit.", "ex_he": "הסחורות נפגעו בזמן המעבר.", "ex_fr": "-", "synonyms": []}, {"en": "VISION", "pos": "Noun", "grammar": "noun.", "mean_he": "חזון", "mean_fr": "-", "ex_en": "The CEO shared her vision for the future of the company.", "ex_he": "המנכ\"לית שיתפה את החזון שלה לעתיד החברה.", "ex_fr": "-", "synonyms": []}, {"en": "WELFARE", "pos": "Noun", "grammar": "noun.", "mean_he": "רווחה", "mean_fr": "-", "ex_en": "The government is responsible for the welfare of its citizens.", "ex_he": "הממשלה אחראית לרווחת אזרחיה.", "ex_fr": "-", "synonyms": []}, {"en": "ADAPT", "pos": "Verb", "grammar": "verb.", "mean_he": "להתאים / להסתגל", "mean_fr": "-", "ex_en": "It took her a while to adapt to the new school environment.", "ex_he": "לקח לה זמן להסתגל לסביבת בית הספר החדשה.", "ex_fr": "-", "synonyms": []}, {"en": "BOND", "pos": "Noun/Verb", "grammar": "noun/verb.", "mean_he": "קשר", "mean_fr": "-", "ex_en": "There is a very strong bond between the two sisters.", "ex_he": "יש קשר חזק מאוד בין שתי האחיות.", "ex_fr": "-", "synonyms": []}];
     </script>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <header>
-        <div class="title">Flashcards - Part 1</div>
+        <h1 class="title">Flashcards - Part A1</h1>
         <div class="counter" id="counter">1 / 1</div>
     </header>
 
+    <main class="activity-main" id="main-content">
     <div class="container" id="cardContainer">
-        <div class="card" id="flashcard" onclick="toggleCard()">
+        <div class="card" id="flashcard" role="group" aria-label="Flashcard" aria-describedby="cardInstructions" onclick="toggleCard()">
             <!-- Front Face -->
-            <div class="card-face">
+            <div class="card-face" id="cardFront" aria-hidden="false">
                 <div class="card-header-top">
                     <span class="pos-badge" id="posBadge">NOUN</span>
-                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
-                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <button type="button" class="tts-btn" id="ttsBtn" onclick="playAudio(event)" aria-label="Listen to the word" title="Listen to the word">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                     </button>
                 </div>
                 <div class="word-main-container">
@@ -317,11 +433,11 @@
             </div>
 
             <!-- Back Face -->
-            <div class="card-face card-back">
+            <div class="card-face card-back" id="cardBack" aria-hidden="true" inert>
                 <div class="translations-section">
                     <div class="trans-row">
                         <span class="lang-label">Hebrew</span>
-                        <span class="trans-he" id="transHe">-</span>
+                        <span class="trans-he" id="transHe" lang="he" dir="rtl">-</span>
                     </div>
                 </div>
                 <div class="synonyms-box" id="synonymsBox">
@@ -329,27 +445,39 @@
                 </div>
                 <div class="example-box">
                     <div class="example-en" id="exEn">-</div>
-                    <div class="example-trans he" id="exHe">-</div>
+                    <div class="example-trans he" id="exHe" lang="he" dir="rtl">-</div>
                 </div>
                 <div class="flip-hint" style="margin-top: 10px;">Tap to flip back</div>
             </div>
         </div>
+        <p class="sr-only" id="cardInstructions">Use Show answer to flip the card. Use Previous and Next to move between cards.</p>
+        <div class="sr-only" id="cardStatus" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <div class="nav-container">
-        <button class="nav-btn" onclick="prevCard()">
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    <div class="nav-container" role="group" aria-label="Flashcard controls">
+        <button type="button" class="nav-btn" onclick="prevCard()">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             Previous
         </button>
-        <button class="nav-btn" onclick="nextCard()">
+        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>
+        <button type="button" class="nav-btn" onclick="nextCard()">
             Next
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
     
     <div class="jump-container" style="margin-top: 15px; display: flex; gap: 10px;">
         <a href="A2.html" class="nav-btn" style="text-decoration: none; font-size: 0.85rem; padding: 8px 16px;">Go to Next Part</a>
     </div>
+    </main>
+
+    <footer class="legal-footer" aria-label="Site information">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="accessibility.html">Accessibility</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="copyright.html">Copyright</a>
+    </footer>
 
     <script>
         let currentIndex = 0;
@@ -369,7 +497,18 @@
             if (typeof words === 'undefined' || words.length === 0) return;
             const item = words[currentIndex];
             
-            document.getElementById('flashcard').classList.remove('is-flipped');
+            const card = document.getElementById('flashcard');
+            card.classList.remove('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', 'false');
+            cardBack.setAttribute('aria-hidden', 'true');
+            cardFront.inert = false;
+            cardBack.inert = true;
+            document.getElementById('ttsBtn').disabled = false;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', 'false');
+            flipButton.textContent = 'Show answer';
 
             document.getElementById('posBadge').innerText = item.pos || '';
             document.getElementById('wordEn').innerText = item.en || '';
@@ -388,18 +527,38 @@
             document.getElementById('exHe').innerText = item.ex_he || '';
 
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            announceCard('word');
             
             if (hasUserInteracted) {
                 speakText(item.en);
             }
         }
 
-        function toggleCard() {
+        function announceCard(side) {
+            const item = words[currentIndex];
+            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
+            document.getElementById('cardStatus').textContent =
+                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+        }
+
+        function toggleCard(event) {
+            if (event) event.stopPropagation();
             hasUserInteracted = true;
             const card = document.getElementById('flashcard');
-            card.classList.toggle('is-flipped');
-            
-            if (card.classList.contains('is-flipped')) {
+            const isFlipped = card.classList.toggle('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', String(isFlipped));
+            cardBack.setAttribute('aria-hidden', String(!isFlipped));
+            cardFront.inert = isFlipped;
+            cardBack.inert = !isFlipped;
+            document.getElementById('ttsBtn').disabled = isFlipped;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+            flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            announceCard(isFlipped ? 'answer' : 'word');
+
+            if (isFlipped) {
                 speakText(words[currentIndex].ex_en);
             }
         }
@@ -448,18 +607,18 @@
             }
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === 'ArrowLeft') prevCard();
-            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        document.addEventListener('keydown', (event) => {
+            if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                nextCard();
+            }
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevCard();
+            }
         });
 
-        document.body.addEventListener('click', () => {
-            if (!hasUserInteracted) {
-                hasUserInteracted = true;
-                speakText(words[currentIndex].en);
-            }
-        }, { once: true });
 
         window.onload = function() {
             updateCard();

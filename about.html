@@ -31,6 +31,8 @@
     --card:#f9fffbf2;
   }
   *{box-sizing:border-box}
+  .skip-link{position:fixed;top:-100px;left:12px;z-index:1000;padding:10px 14px;border-radius:9px;color:#fff;background:#111827;font-weight:850;text-decoration:none}
+  .skip-link:focus{top:12px}
   body{
     margin:0;
     min-height:100vh;
@@ -43,6 +45,7 @@
   }
   a{color:#1e6845}
   a:hover{color:#124d32}
+  a:focus-visible{outline:3px solid #8b3f00;outline-offset:4px}
   .wrap{width:min(900px,calc(100% - 28px));margin:0 auto;padding:30px 0 52px}
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
   .nav-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -57,7 +60,7 @@
     transition:transform .16s ease;
   }
   .button:hover{transform:translateY(-2px)}
-  .home-link{color:#fff;background:linear-gradient(145deg,#4ba875,#256b48);border:1px solid #368b5f;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 5px 0 #194d34,0 10px 18px rgba(29,89,58,.18)}
+  .home-link{color:#fff;background:linear-gradient(145deg,#2f7f55,#205d3f);border:1px solid #368b5f;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 5px 0 #194d34,0 10px 18px rgba(29,89,58,.18)}
   .home-link:hover{color:#fff}
   .guide-link{color:#174d35;background:linear-gradient(145deg,#effff4,#bce8cb);border:2px solid #45a36d;box-shadow:inset 0 1px 0 #fff,0 5px 0 #68b486,0 11px 20px rgba(29,89,58,.2)}
   .site-name{font-weight:800;color:#315d47;text-align:right}
@@ -77,7 +80,12 @@
   .guide-callout h2{margin-bottom:4px}
   .guide-callout p{line-height:1.5}
   .contact{display:inline-flex;margin-top:5px;padding:10px 14px;border:1px solid #b7dfc6;border-radius:12px;background:#e7f8ed;font-weight:800;text-decoration:none}
-  .footer{margin-top:28px;text-align:center;color:#285f43;line-height:1.6}
+  .policy-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+  .policy-link{display:flex;flex-direction:column;gap:5px;padding:15px;border:1px solid #abd8bc;border-radius:15px;background:#edf9f1;text-decoration:none}
+  .policy-link strong{color:#174d35}
+  .policy-link span{color:#4f715f;font-size:.88rem;line-height:1.45}
+  .footer{display:flex;justify-content:center;flex-wrap:wrap;gap:7px 15px;margin-top:28px;text-align:center;color:#285f43;line-height:1.6}
+  .footer a{font-weight:750}
   @media(max-width:650px){
     .wrap{padding-top:20px}
     .topbar{align-items:flex-start;flex-direction:column}
@@ -86,10 +94,13 @@
     .card{padding:23px 21px}
     .guide-callout{grid-template-columns:auto 1fr}
     .guide-callout .button{grid-column:1/-1;justify-self:start}
+    .policy-links{grid-template-columns:1fr}
   }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="wrap">
     <nav class="topbar" aria-label="Primary navigation">
       <div class="nav-links">
@@ -107,7 +118,7 @@
       </p>
     </header>
 
-    <main class="content">
+    <main class="content" id="main-content">
       <section class="card guide-callout">
         <div class="guide-icon" aria-hidden="true">📘</div>
         <div>
@@ -138,14 +149,27 @@
       </section>
 
       <section class="card">
+        <h2>Policies and accessibility</h2>
+        <p>Read how the site supports accessible use, protects privacy and permits credited non-commercial educational use.</p>
+        <div class="policy-links">
+          <a class="policy-link" href="accessibility.html"><strong>Accessibility</strong><span>Features, keyboard use, limitations and contact details.</span></a>
+          <a class="policy-link" href="privacy.html"><strong>Privacy</strong><span>No accounts, analytics, advertising or first-party tracking.</span></a>
+          <a class="policy-link" href="copyright.html"><strong>Copyright and educational use</strong><span>Free personal and classroom use with clear credit.</span></a>
+        </div>
+      </section>
+
+      <section class="card">
         <h2>Contact</h2>
         <p>Questions, corrections and professional feedback are welcome.</p>
         <a class="contact" href="mailto:simon.halevi@gmail.com">simon.halevi@gmail.com</a>
       </section>
     </main>
 
-    <footer class="footer">
-      Module E Bagrut Vocabulary · Created and presented by Teacher Simon Halevi
+    <footer class="footer" aria-label="Site information">
+      <span>Module E Bagrut Vocabulary · Created and presented by Teacher Simon Halevi</span>
+      <a href="accessibility.html">Accessibility</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="copyright.html">Copyright</a>
     </footer>
   </div>
 </body>

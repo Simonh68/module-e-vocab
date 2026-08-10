@@ -346,26 +346,142 @@
             pointer-events: none;
             user-select: none;
         }
+
+
+        /* activity-accessibility-v1 */
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: -100px;
+            left: 12px;
+            z-index: 1000;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #111827;
+            color: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 12px;
+        }
+
+        .activity-main {
+            width: 100%;
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #b45309;
+            outline-offset: 4px;
+        }
+
+        .flip-btn {
+            background-color: #ede9fe;
+            border-color: #8b5cf6;
+            color: #4c1d95;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .nav-container .nav-btn {
+            min-width: 0;
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .legal-footer {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            padding: 18px 10px 2px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .legal-footer a {
+            color: var(--primary-hover);
+            font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+            }
+
+            .card,
+            .tts-btn,
+            .nav-btn {
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .nav-container { gap: 6px; }
+            .nav-container .nav-btn { padding: 10px 4px; font-size: 0.8rem; }
+            .nav-container .nav-btn svg { display: none; }
+        }
+
+        @media (forced-colors: active) {
+            .card,
+            .card-face,
+            .tts-btn,
+            .nav-btn {
+                border: 1px solid ButtonText;
+            }
+        }
     </style>
     <script>
         const words = [{"en":"tournament","he":"טורניר","ex_en":"A chess tournament.","ex_he":"טורניר שחמט.","pos":"Noun","grammar":"noun","official_entry":"tournament","family_members":[],"mean_he":"טורניר","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a series of sports games that finds one winner","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"insult","he":"להעליב","ex_en":"Please do not insult me.","ex_he":"בבקשה אל תעליב אותי.","pos":"Verb","grammar":"verb","official_entry":"insult","family_members":[],"mean_he":"להעליב","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"say or do something rude to someone","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"garage","he":"מוסך","ex_en":"I parked the car in the garage.","ex_he":"החניתי את המכונית במוסך.","pos":"Noun","grammar":"noun","official_entry":"garage","family_members":[],"mean_he":"מוסך","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a place where cars are kept or repaired","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"engagement","he":"אירוסין / התחייבות","ex_en":"They announced their engagement.","ex_he":"הם הכריזו על האירוסין שלהם.","pos":"Noun","grammar":"noun","official_entry":"engagement","family_members":[{"word":"engaged","pos":"Adjective"}],"mean_he":"אירוסין; התחייבות","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a promise to marry; a promise to do something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"range","he":"לנוע בין","ex_en":"Prices range from ten to fifty dollars.","ex_he":"המחירים נעים בין עשרה לחמישים דולר.","pos":"Verb","grammar":"verb","official_entry":"range","family_members":[],"mean_he":"לנוע בין","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"go from one number, age or price to another","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"believe it or not","he":"תאמין או לא","ex_en":"Believe it or not, I won the prize.","ex_he":"תאמין או לא, זכיתי בפרס.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"believe it or not","family_members":[],"mean_he":"תאמין או לא","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"words showing that a surprising thing is true","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"fly","he":"לעוף / לטוס","ex_en":"Birds fly south in winter.","ex_he":"ציפורים עפות דרומה בחורף.","pos":"Verb","grammar":"verb","official_entry":"fly","family_members":[],"mean_he":"לעוף; לטוס","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"move through the air","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"jump","he":"קפיצה","ex_en":"He made a long jump over the water.","ex_he":"הוא ביצע קפיצה ארוכה מעל המים.","pos":"Noun","grammar":"noun","official_entry":"jump","family_members":[],"mean_he":"קפיצה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a movement up into the air","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"tail","he":"זנב","ex_en":"The dog wagged its tail.","ex_he":"הכלב כשכש בזנבו.","pos":"Noun","grammar":"noun","official_entry":"tail","family_members":[],"mean_he":"זנב","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the long back part of an animal’s body","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"rob","he":"לשדוד","ex_en":"They planned to rob a bank.","ex_he":"הם תכננו לשדוד בנק.","pos":"Verb","grammar":"verb","official_entry":"rob","family_members":[{"word":"robber","pos":"Noun"}],"mean_he":"לשדוד","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"steal from a person or place, sometimes after hurting someone","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"mate","he":"חבר / בן זוג (לחיים)","ex_en":"He is my best mate.","ex_he":"הוא החבר הכי טוב שלי.","pos":"Noun","grammar":"noun","official_entry":"mate","family_members":[],"mean_he":"חבר; בן זוג (לחיים)","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a friend or partner","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"sweep","he":"לטאטא","ex_en":"Sweep the floor.","ex_he":"טאטא את הרצפה.","pos":"Verb","grammar":"verb","official_entry":"sweep","family_members":[],"mean_he":"לטאטא","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"clean a floor with a brush","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"defeat","he":"להביס","ex_en":"Our team defeated the champions.","ex_he":"הקבוצה שלנו הביסה את האלופים.","pos":"Verb","grammar":"verb","official_entry":"defeat","family_members":[],"mean_he":"להביס","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"win against someone","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"triangle","he":"משולש","ex_en":"A shape with three sides is a triangle.","ex_he":"צורה עם שלוש צלעות היא משולש.","pos":"Noun","grammar":"noun","official_entry":"triangle","family_members":[],"mean_he":"משולש","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a shape with three sides","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"gentleman","he":"ג'נטלמן / אדון","ex_en":"He is a true gentleman.","ex_he":"הוא ג'נטלמן אמיתי.","pos":"Noun","grammar":"noun","official_entry":"gentleman","family_members":[],"mean_he":"ג'נטלמן; אדון","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a polite word for a man","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"refund","pos":"Verb","grammar":"verb","ex_en":"The shop refunded my money.","ex_he":"החנות החזירה לי את הכסף.","he":"להחזיר כסף","official_entry":"refund","family_members":[],"mean_he":"להחזיר כסף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"give money back","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"blow up","he":"לפוצץ / להתפוצץ","ex_en":"They tried to blow up the bridge.","ex_he":"הם ניסו לפוצץ את הגשר.","pos":"Verb","grammar":"verb","official_entry":"blow up (sth/sb) or blow (sth/sb) up","family_members":[],"mean_he":"לפוצץ; להתפוצץ","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"break suddenly with a loud noise; make something do this","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"regards","he":"דרישת שלום","ex_en":"Give my regards to your parents.","ex_he":"מסור דרישת שלום להוריך.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"regards","family_members":[],"mean_he":"דרישת שלום","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"good wishes written at the end of a letter","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"rainbow","he":"קשת בענן","ex_en":"A beautiful rainbow in the sky.","ex_he":"קשת יפה בענן.","pos":"Noun","grammar":"noun","official_entry":"rainbow","family_members":[],"mean_he":"קשת בענן","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"colours in the sky after rain","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"fasten","he":"להדק / לרכוס","ex_en":"Please fasten your seatbelt.","ex_he":"אנא הדק את חגורת הבטיחות.","pos":"Verb","grammar":"verb","official_entry":"fasten","family_members":[],"mean_he":"להדק; לרכוס","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"close or fix something so it cannot move or open","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"van","he":"ואן / מסחרית","ex_en":"He drives a delivery van.","ex_he":"הוא נוהג במסחרית משלוחים.","pos":"Noun","grammar":"noun","official_entry":"van","family_members":[],"mean_he":"ואן; מסחרית","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a road vehicle larger than a car and smaller than a truck","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"web","he":"קורי עכביש / רשת האינטרנט","ex_en":"A spider web.","ex_he":"קורי עכביש.","pos":"Noun","grammar":"noun","official_entry":"web","family_members":[],"mean_he":"קורי עכביש; רשת האינטרנט","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a net made by a spider; the internet","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"refund","pos":"Noun","grammar":"noun","ex_en":"I asked for a full refund.","ex_he":"ביקשתי החזר כספי מלא.","he":"החזר כספי","official_entry":"refund","family_members":[],"mean_he":"החזר כספי","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"money you get back from a shop","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"a little sth","he":"קצת משהו","ex_en":"I need a little something to eat.","ex_he":"אני צריך קצת משהו לאכול.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"a little sth","family_members":[],"mean_he":"קצת משהו","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a small amount of something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"make","he":"לעשות / להכין","ex_en":"I will make dinner tonight.","ex_he":"אני אכין ארוחת ערב הלילה.","pos":"Verb","grammar":"verb","official_entry":"make","family_members":[],"mean_he":"לעשות; להכין","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"create or produce something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"shore","he":"חוף","ex_en":"Walk along the sea shore.","ex_he":"ללכת לאורך חוף הים.","pos":"Noun","grammar":"noun","official_entry":"shore","family_members":[],"mean_he":"חוף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"land beside a sea or lake","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"grow tired/old/calm","he":"להפוך ליותר עייף/זקן/רגוע","ex_en":"I grow tired of this game.","ex_he":"אני מתחיל להתעייף מהמשחק הזה.","pos":"Verb","grammar":"verb","official_entry":"grow tired/old/calm, etc.","family_members":[],"mean_he":"להפוך ליותר עייף; זקן; רגוע","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"Boundary examples","support_text":"become less energetic, older or more peaceful","boundary_examples":"feel less energy; get more years; relax","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"suit","he":"חליפה","ex_en":"He wore a black suit.","ex_he":"הוא לבש חליפה שחורה.","pos":"Noun","grammar":"noun","official_entry":"suit","family_members":[],"mean_he":"חליפה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a jacket and trousers made to be worn together","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"bench","he":"ספסל","ex_en":"We sat on a park bench.","ex_he":"ישבנו על ספסל בפארק.","pos":"Noun","grammar":"noun","official_entry":"bench","family_members":[],"mean_he":"ספסל","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"a long seat","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"peak","he":"פסגה / שיא","ex_en":"The peak of the mountain.","ex_he":"פסגת ההר.","pos":"Noun","grammar":"noun","official_entry":"peak","family_members":[],"mean_he":"פסגה; שיא","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the highest point of a mountain or activity","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"loaf","he":"כיכר לחם","ex_en":"I bought a loaf of bread.","ex_he":"קניתי כיכר לחם.","pos":"Noun","grammar":"noun","official_entry":"loaf","family_members":[],"mean_he":"כיכר לחם","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a whole piece of bread before it is cut","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"dishonest","he":"לא ישר","ex_en":"It is dishonest to cheat on a test.","ex_he":"זה לא ישר לרמות במבחן.","pos":"Adjective","grammar":"adjective","official_entry":"dishonest","family_members":[],"mean_he":"לא ישר","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"not telling what is true; likely to lie or break rules","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"sit up/stand up straight","he":"לשבת/לעמוד זקוף","ex_en":"Stand up straight!","ex_he":"עמוד זקוף!","pos":"Verb","grammar":"verb","official_entry":"sit up/stand up straight","family_members":[],"mean_he":"לשבת; לעמוד זקוף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"keep your back straight while sitting or standing","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"shave","he":"להתגלח","ex_en":"He needs to shave his beard.","ex_he":"הוא צריך לגלח את זקנו.","pos":"Verb","grammar":"verb","official_entry":"shave","family_members":[],"mean_he":"להתגלח","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"remove hair from the face or body with a small metal tool","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"weapon","he":"נשק","ex_en":"A knife is a dangerous weapon.","ex_he":"סכין היא נשק מסוכן.","pos":"Noun","grammar":"noun","official_entry":"weapon","family_members":[],"mean_he":"נשק","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"an object used to hurt or kill","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"stay up","he":"להישאר ער","ex_en":"I stayed up late reading.","ex_he":"נשארתי ער עד מאוחר לקרוא.","pos":"Verb","grammar":"verb","official_entry":"stay up","family_members":[],"mean_he":"להישאר ער","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"not go to sleep","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"bunch","he":"צרור / אוסף","ex_en":"A bunch of flowers.","ex_he":"זר (צרור) פרחים.","pos":"Noun","grammar":"noun","official_entry":"bunch","family_members":[],"mean_he":"צרור; אוסף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a group of things of the same type","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"crash","he":"להתרסק / להתנגש","ex_en":"The car crashed into a tree.","ex_he":"המכונית התנגשה בעץ.","pos":"Verb","grammar":"verb","official_entry":"crash","family_members":[],"mean_he":"להתרסק; להתנגש","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"hit something hard in an accident","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"temple","he":"מקדש","ex_en":"An ancient Greek temple.","ex_he":"מקדש יווני עתיק.","pos":"Noun","grammar":"noun","official_entry":"temple","family_members":[],"mean_he":"מקדש","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a building where people speak to God; the flat part at the side of the head","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"spy","he":"לרגל","ex_en":"They tried to spy on the enemy.","ex_he":"הם ניסו לרגל אחרי האויב.","pos":"Verb","grammar":"verb","official_entry":"spy","family_members":[],"mean_he":"לרגל","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"watch or get information secretly","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"certificate","he":"תעודה / אישור","ex_en":"I received a certificate of participation.","ex_he":"קיבלתי תעודת השתתפות.","pos":"Noun","grammar":"noun","official_entry":"certificate","family_members":[],"mean_he":"תעודה; אישור","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a paper from a school or group showing that something is true or complete","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"force","he":"כוח","ex_en":"The police used force to enter.","ex_he":"המשטרה השתמשה בכוח כדי להיכנס.","pos":"Noun","grammar":"noun","official_entry":"force","family_members":[],"mean_he":"כוח","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"power used to push or pull","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"charge","he":"לחייב / לגבות","ex_en":"They charge ten dollars for entry.","ex_he":"הם גובים עשרה דולר עבור הכניסה.","pos":"Verb","grammar":"verb","official_entry":"charge","family_members":[],"mean_he":"לחייב; לגבות","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"ask someone to pay; put power into a battery","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"all is well","he":"הכל בסדר","ex_en":"Don’t worry, all is well.","ex_he":"אל תדאג, הכל בסדר.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"all is well","family_members":[],"mean_he":"הכל בסדר","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"everything is fine","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"Don’t ask me!","he":"אל תשאל אותי!","ex_en":"Don’t ask me! I have no idea.","ex_he":"אל תשאל אותי! אין לי מושג.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"Don't ask me!","family_members":[],"mean_he":"אל תשאל אותי","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"words used when you do not know or do not want to explain","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"jump","he":"לקפוץ","ex_en":"The frog can jump high.","ex_he":"הצפרדע יכולה לקפוץ גבוה.","pos":"Verb","grammar":"verb","official_entry":"jump","family_members":[],"mean_he":"לקפוץ","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"push yourself up into the air","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"scandal","he":"שערורייה","ex_en":"A political scandal.","ex_he":"שערורייה פוליטית.","pos":"Noun","grammar":"noun","official_entry":"scandal","family_members":[],"mean_he":"שערורייה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a very bad event that many people talk about","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"pavement","he":"מדרכה (באנגליה) / סלילה","ex_en":"Walk on the pavement.","ex_he":"ללכת על המדרכה.","pos":"Noun","grammar":"noun","official_entry":"pavement","family_members":[],"mean_he":"מדרכה (באנגליה); סלילה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a hard path beside a road; the hard top of the ground","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"mix up","he":"לבלבל / לערבב","ex_en":"Don’t mix up the dates.","ex_he":"אל תבלבל את התאריכים.","pos":"Verb","grammar":"verb","official_entry":"mix up sb/sth or mix sb/sth up","family_members":[],"mean_he":"לבלבל; לערבב","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"put things in the wrong order or understand one thing as another","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"customs","he":"מכס / מנהגים","ex_en":"We passed through airport customs.","ex_he":"עברנו דרך המכס בשדה התעופה.","pos":"Noun","grammar":"noun","official_entry":"customs","family_members":[],"mean_he":"מכס; מנהגים","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the place where goods are checked when one country ends and another begins; usual ways of doing things","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"artistic","he":"אמנותי","ex_en":"She has an artistic talent.","ex_he":"יש לה כישרון אמנותי.","pos":"Adjective","grammar":"adjective","official_entry":"artistic","family_members":[],"mean_he":"אמנותי","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"good at art; connected with art","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"elbow","he":"מרפק","ex_en":"I hit my elbow on the table.","ex_he":"קיבלתי מכה במרפק מהשולחן.","pos":"Noun","grammar":"noun","official_entry":"elbow","family_members":[],"mean_he":"מרפק","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the part in the middle of the arm that lets it move","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"propose","pos":"Verb","grammar":"verb","ex_en":"He proposed to her.","ex_he":"הוא הציע לה נישואין.","he":"להציע / להציע נישואין","official_entry":"propose","family_members":[{"word":"proposal","pos":"Noun"}],"mean_he":"להציע; להציע נישואין","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"suggest a plan; ask someone to marry you","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"verse","he":"בית בשיר / פסוק","ex_en":"The second verse of the song.","ex_he":"הבית השני של השיר.","pos":"Noun","grammar":"noun","official_entry":"verse","family_members":[],"mean_he":"בית בשיר; פסוק","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a group of lines in a song or special writing; a line from a book used when people speak to God","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"drop","he":"להפיל","ex_en":"Do not drop the glass.","ex_he":"אל תפיל את הכוס.","pos":"Verb","grammar":"verb","official_entry":"drop","family_members":[],"mean_he":"להפיל","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"let something fall","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"suit","he":"להתאים","ex_en":"This time will suit everyone.","ex_he":"השעה הזאת תתאים לכולם.","pos":"Verb","grammar":"verb","official_entry":"suit","family_members":[],"mean_he":"להתאים","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"be right or good for someone","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"pin","he":"לחבר בסיכה","ex_en":"Pin the note to the board.","ex_he":"חבר את הפתק ללוח בעזרת סיכה.","pos":"Verb","grammar":"verb","official_entry":"pin","family_members":[],"mean_he":"לחבר בסיכה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"hold something in place with a small pointed piece of metal","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"rubber","he":"גומי / מחק","ex_en":"Tires are made of rubber.","ex_he":"צמיגים עשויים מגומי.","pos":"Noun","grammar":"noun","official_entry":"rubber","family_members":[],"mean_he":"גומי; מחק","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a material that can change shape; a thing used to remove pencil marks","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"range","he":"טווח / מגוון","ex_en":"The shop sells a wide range of shoes.","ex_he":"החנות מוכרת מגוון רחב של נעליים.","pos":"Noun","grammar":"noun","official_entry":"range","family_members":[],"mean_he":"טווח; מגוון","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"Boundary examples","support_text":"a set of different things; the distance between two limits","boundary_examples":"ages 10–18; prices $5–$20; many colours","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"stick","he":"להדביק / להיצמד","ex_en":"Stick the picture to the wall.","ex_he":"הדבק את התמונה לקיר.","pos":"Verb","grammar":"verb","official_entry":"stick","family_members":[],"mean_he":"להדביק; להיצמד","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"join one thing to another; stay in one place","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"in tears","he":"בדמעות","ex_en":"She left the room in tears.","ex_he":"היא עזבה את החדר בדמעות.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"in tears","family_members":[],"mean_he":"בדמעות","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"crying","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"cave","he":"מערה","ex_en":"The bear slept in a dark cave.","ex_he":"הדוב ישן במערה חשוכה.","pos":"Noun","grammar":"noun","official_entry":"cave","family_members":[],"mean_he":"מערה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a large natural hole in the ground or side of a hill","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"cab","he":"מונית","ex_en":"We took a cab to the hotel.","ex_he":"לקחנו מונית למלון.","pos":"Noun","grammar":"noun","official_entry":"cab","family_members":[],"mean_he":"מונית","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"taxi","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"bargain","he":"מציאה","ex_en":"This shirt was a real bargain.","ex_he":"החולצה הזאת הייתה ממש מציאה.","pos":"Noun","grammar":"noun","official_entry":"bargain","family_members":[],"mean_he":"מציאה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"something bought at a very good low price","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"aggressive","he":"אגרסיבי / תוקפני","ex_en":"The dog was very aggressive.","ex_he":"הכלב היה מאוד תוקפני.","pos":"Adjective","grammar":"adjective","official_entry":"aggressive","family_members":[],"mean_he":"אגרסיבי; תוקפני","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"ready to fight, argue or hurt","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"hut","he":"בקתה / צריף","ex_en":"A small wooden hut.","ex_he":"בקתת עץ קטנה.","pos":"Noun","grammar":"noun","official_entry":"hut","family_members":[],"mean_he":"בקתה; צריף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a small simple house","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"squeeze","he":"לסחוט","ex_en":"Squeeze the lemon.","ex_he":"סחוט את הלימון.","pos":"Verb","grammar":"verb","official_entry":"squeeze","family_members":[],"mean_he":"לסחוט","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"push something hard from two sides","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"nut","he":"אגוז / מטורף","ex_en":"A bowl of mixed nuts.","ex_he":"קערה של אגוזים מעורבים.","pos":"Noun","grammar":"noun","official_entry":"nut","family_members":[{"word":"peanut","pos":"Noun"}],"mean_he":"אגוז; מטורף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"food inside a hard cover; a person who is not clever or acts in a strange way","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"naked","he":"עירום","ex_en":"The naked truth.","ex_he":"האמת העירומה.","pos":"Adjective","grammar":"adjective","official_entry":"naked","family_members":[],"mean_he":"עירום","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"not wearing clothes","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"for fun / for the fun of it","he":"בשביל הכיף","ex_en":"We played the game just for fun.","ex_he":"שיחקנו במשחק רק בשביל הכיף.","pos":"Phrase","grammar":"phrase / chunk","official_entry":"for fun or for the fun of it","family_members":[],"mean_he":"בשביל הכיף","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"because you enjoy it, not for work or money","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"ghost","he":"רוח רפאים","ex_en":"A ghost story.","ex_he":"סיפור רוחות.","pos":"Noun","grammar":"noun","official_entry":"ghost","family_members":[],"mean_he":"רוח רפאים","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a dead person that some people believe they can see","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"gate","he":"שער","ex_en":"Close the garden gate behind you.","ex_he":"סגור את שער הגינה אחריך.","pos":"Noun","grammar":"noun","official_entry":"gate","family_members":[],"mean_he":"שער","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a door in a wall or line around a garden","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"fly","he":"זבוב","ex_en":"A fly is buzzing in the room.","ex_he":"זבוב מזמזם בחדר.","pos":"Noun","grammar":"noun","official_entry":"fly","family_members":[],"mean_he":"זבוב","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a small insect with wings","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"deck","he":"סיפון / חפיסת קלפים","ex_en":"We stood on the ship’s deck.","ex_he":"עמדנו על סיפון הספינה.","pos":"Noun","grammar":"noun","official_entry":"deck","family_members":[],"mean_he":"סיפון; חפיסת קלפים","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the floor of a ship; a pack of playing cards","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"scratch","he":"לשרוט / לגרד","ex_en":"Do not scratch the car.","ex_he":"אל תשרוט את המכונית.","pos":"Verb","grammar":"verb","official_entry":"scratch","family_members":[],"mean_he":"לשרוט; לגרד","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"move your fingers over the skin; make a thin mark","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"stretch","he":"למתוח / להימתח","ex_en":"Stretch your legs.","ex_he":"מתח את הרגליים שלך.","pos":"Verb","grammar":"verb","official_entry":"stretch","family_members":[],"mean_he":"למתוח; להימתח","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"pull something to make it longer; move your body as far as you can","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"marriage","he":"נישואין","ex_en":"A happy marriage.","ex_he":"נישואים מאושרים.","pos":"Noun","grammar":"noun","official_entry":"marriage","family_members":[],"mean_he":"נישואין","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"when two people are married","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"strict","he":"נוקשה / מחמיר","ex_en":"A strict teacher.","ex_he":"מורה נוקשה.","pos":"Adjective","grammar":"adjective","official_entry":"strict","family_members":[],"mean_he":"נוקשה; מחמיר","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"making people follow rules carefully","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"not believe your eyes/ears","he":"לא להאמין למראה עינייך/למשמע אוזנייך","ex_en":"I could not believe my eyes.","ex_he":"לא יכולתי להאמין למראה עיניי.","pos":"Verb","grammar":"verb","official_entry":"not believe your eyes/ears","family_members":[],"mean_he":"לא להאמין למראה עינייך; למשמע אוזנייך","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"be very surprised by what you see or hear","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"crash","he":"התרסקות / תאונה","ex_en":"The loud crash woke us up.","ex_he":"קול ההתרסקות החזק העיר אותנו.","pos":"Noun","grammar":"noun","official_entry":"crash","family_members":[],"mean_he":"התרסקות; תאונה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a bad accident when things hit each other","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"at fault","he":"אשם","ex_en":"He was at fault for the accident.","ex_he":"הוא היה אשם בתאונה.","pos":"Adjective","grammar":"adjective","official_entry":"at fault","family_members":[],"mean_he":"אשם","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"having caused a mistake or problem","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"lightning","he":"ברק","ex_en":"A flash of lightning in the sky.","ex_he":"הבזק ברק בשמיים.","pos":"Noun","grammar":"noun","official_entry":"lightning","family_members":[],"mean_he":"ברק","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a very bright light in the sky during a storm","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"pill","he":"גלולה","ex_en":"Take this pill with water.","ex_he":"קח את הגלולה הזו עם מים.","pos":"Noun","grammar":"noun","official_entry":"pill","family_members":[],"mean_he":"גלולה","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a small piece of medicine you put in your mouth and take into your body","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"next door","he":"דלת ליד (שכן)","ex_en":"The boy next door.","ex_he":"הילד מהדלת ליד (השכן).","pos":"Phrase","grammar":"phrase / chunk","official_entry":"next door","family_members":[],"mean_he":"דלת ליד (שכן)","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"in the house or room beside yours","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"},{"en":"harbor","he":"נמל","ex_en":"The ships are in the harbor.","ex_he":"הספינות נמצאות בנמל.","pos":"Noun","grammar":"noun","official_entry":"harbor","family_members":[{"word":"harbour","pos":"Noun"}],"mean_he":"נמל","mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a safe water area where ships stay","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Pop/0files/english/Chativa-Elyona/Bagrut/LIST-D.xlsx"}];
     </script>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
 
     <header>
-        <div class="title">Flashcards - Part D3</div>
+        <h1 class="title">Flashcards - Part D3</h1>
         <div class="counter" id="counter">1 / 1</div>
     </header>
 
+    <main class="activity-main" id="main-content">
     <div class="container" id="cardContainer">
-        <div class="card" id="flashcard" onclick="toggleCard()">
+        <div class="card" id="flashcard" role="group" aria-label="Flashcard" aria-describedby="cardInstructions" onclick="toggleCard()">
             <!-- Front Face -->
-            <div class="card-face">
+            <div class="card-face" id="cardFront" aria-hidden="false">
                 <div class="card-header-top">
                     <span class="pos-badge" id="posBadge">WORD</span>
-                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
-                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <button type="button" class="tts-btn" id="ttsBtn" onclick="playAudio(event)" aria-label="Listen to the word" title="Listen to the word">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                     </button>
                 </div>
                 <div class="word-main-container">
@@ -377,11 +493,11 @@
             </div>
 
             <!-- Back Face -->
-            <div class="card-face card-back">
+            <div class="card-face card-back" id="cardBack" aria-hidden="true" inert>
                 <div class="translations-section">
                     <div class="trans-row">
                         <span class="lang-label">Hebrew</span>
-                        <span class="trans-he" id="transHe">-</span>
+                        <span class="trans-he" id="transHe" lang="he" dir="rtl">-</span>
                     </div>
                 </div>
                 <div class="synonyms-box" id="synonymsBox">
@@ -390,7 +506,7 @@
                 <div class="back-details-grid" id="backDetailsGrid">
                     <div class="example-box">
                         <div class="example-en" id="exEn">-</div>
-                        <div class="example-trans he" id="exHe">-</div>
+                        <div class="example-trans he" id="exHe" lang="he" dir="rtl">-</div>
                     </div>
                     <div class="family-box" id="familyBox">
                         <div class="family-title">Family Members</div>
@@ -401,16 +517,19 @@
                 <div class="watermark">By Simon Halevi</div>
             </div>
         </div>
+        <p class="sr-only" id="cardInstructions">Use Show answer to flip the card. Use Previous and Next to move between cards.</p>
+        <div class="sr-only" id="cardStatus" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <div class="nav-container">
-        <button class="nav-btn" onclick="prevCard()">
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    <div class="nav-container" role="group" aria-label="Flashcard controls">
+        <button type="button" class="nav-btn" onclick="prevCard()">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             Previous
         </button>
-        <button class="nav-btn" onclick="nextCard()">
+        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>
+        <button type="button" class="nav-btn" onclick="nextCard()">
             Next
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
 
@@ -418,6 +537,15 @@
     <div class="jump-container">
         <a href="D2.html" class="nav-btn">Go to Previous Part</a>
     </div>
+    </main>
+
+    <footer class="legal-footer" aria-label="Site information">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="accessibility.html">Accessibility</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="copyright.html">Copyright</a>
+    </footer>
 
     <script>
         let currentIndex = 0;
@@ -437,7 +565,18 @@
             if (typeof words === 'undefined' || words.length === 0) return;
             const item = words[currentIndex];
             
-            document.getElementById('flashcard').classList.remove('is-flipped');
+            const card = document.getElementById('flashcard');
+            card.classList.remove('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', 'false');
+            cardBack.setAttribute('aria-hidden', 'true');
+            cardFront.inert = false;
+            cardBack.inert = true;
+            document.getElementById('ttsBtn').disabled = false;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', 'false');
+            flipButton.textContent = 'Show answer';
 
             // Optional: fallback logic if pos exists
             let posText = item.pos || "WORD";
@@ -483,18 +622,38 @@
                 backDetailsGrid.classList.add('family-empty');
             }
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            announceCard('word');
             
             if (hasUserInteracted) {
                 speakText(item.en);
             }
         }
 
-        function toggleCard() {
+        function announceCard(side) {
+            const item = words[currentIndex];
+            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
+            document.getElementById('cardStatus').textContent =
+                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+        }
+
+        function toggleCard(event) {
+            if (event) event.stopPropagation();
             hasUserInteracted = true;
             const card = document.getElementById('flashcard');
-            card.classList.toggle('is-flipped');
-            
-            if (card.classList.contains('is-flipped')) {
+            const isFlipped = card.classList.toggle('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', String(isFlipped));
+            cardBack.setAttribute('aria-hidden', String(!isFlipped));
+            cardFront.inert = isFlipped;
+            cardBack.inert = !isFlipped;
+            document.getElementById('ttsBtn').disabled = isFlipped;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+            flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            announceCard(isFlipped ? 'answer' : 'word');
+
+            if (isFlipped) {
                 speakText(words[currentIndex].ex_en);
             }
         }
@@ -543,18 +702,18 @@
             }
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === 'ArrowLeft') prevCard();
-            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        document.addEventListener('keydown', (event) => {
+            if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                nextCard();
+            }
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevCard();
+            }
         });
 
-        document.body.addEventListener('click', () => {
-            if (!hasUserInteracted) {
-                hasUserInteracted = true;
-                speakText(words[currentIndex].en);
-            }
-        }, { once: true });
 
         window.onload = function() {
             updateCard();

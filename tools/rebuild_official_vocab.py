@@ -18,6 +18,8 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
+from accessibility import patch_activity_page
+
 import pandas as pd
 
 
@@ -710,6 +712,7 @@ def main() -> None:
     for group, records in groups.items():
         replace_words_array(REPO / f"{group}.html", records)
         patch_family_ui(REPO / f"{group}.html")
+        patch_activity_page(REPO / f"{group}.html")
     build_source_json(groups)
     print("Rebuilt groups:", ", ".join(f"{g}={len(v)}" for g, v in groups.items()))
 
