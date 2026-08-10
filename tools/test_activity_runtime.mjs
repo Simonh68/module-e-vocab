@@ -11,9 +11,6 @@ const activities = [
   ...["A", "B", "C", "D"].flatMap((letter) =>
     [1, 2, 3].map((number) => `${letter}${number}.html`),
   ),
-  "A1v2.html",
-  "A2v2.html",
-  "A3v2.html",
 ];
 
 class ClassList {

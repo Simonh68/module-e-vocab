@@ -9,8 +9,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 CURRENT_GROUPS = [f"{letter}{number}.html" for letter in "ABCD" for number in range(1, 4)]
-LEGACY_GROUPS = ["A1v2.html", "A2v2.html", "A3v2.html"]
-ACTIVITY_FILES = CURRENT_GROUPS + LEGACY_GROUPS
+ACTIVITY_FILES = CURRENT_GROUPS
 
 ACCESSIBILITY_CSS = r"""
 
