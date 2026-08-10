@@ -77,8 +77,9 @@ def main() -> None:
     )
     assert_true(
         "non-commercial classroom teaching" in policy_pages["copyright.html"]
-        and "created and edited by Teacher Simon Halevi" in policy_pages["copyright.html"],
-        "Copyright page is missing the selected educational-use permission and credit",
+        and "permission is limited to online use" in policy_pages["copyright.html"].lower()
+        and "does not permit downloading, copying, printing, distributing, modifying" in policy_pages["copyright.html"],
+        "Copyright page is missing the selected online-use-only permission",
     )
     source_files = {
         "LISTA12.12.21.xlsx": "List A",
