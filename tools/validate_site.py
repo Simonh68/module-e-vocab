@@ -143,7 +143,8 @@ def main() -> None:
             "side === 'answer' ? 'Answer shown' : 'Word shown'",
             "isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'",
             "function scheduleWordSpeech()",
-            "}, 1200);",
+            "}, 900);",
+            "function scheduleExampleSpeech()",
             "announceCard('word');\n            scheduleWordSpeech();",
             "event.key === 'ArrowRight'",
             "event.key === 'ArrowLeft'",
@@ -254,7 +255,7 @@ def main() -> None:
         assert_true('class="skip-link" href="#main-content"' in text, f"Skip link missing in {filename}")
         assert_true('class="activity-home" href="index.html"' in text, f"Home control missing in {filename}")
         assert_true('id="flipButton"' in text, f"Accessible flip control missing in {filename}")
-        assert_true("function scheduleWordSpeech()" in text and "}, 1200);" in text, f"Delayed speech missing in {filename}")
+        assert_true("function scheduleWordSpeech()" in text and "function scheduleExampleSpeech()" in text and "}, 900);" in text, f"Delayed speech missing in {filename}")
         assert_true("e.key === ' ' || e.key === 'Enter'" not in text, f"Keyboard conflict remains in {filename}")
         for policy in POLICY_FILES:
             assert_true(f'href="{policy}"' in text, f"{policy} footer link missing in {filename}")

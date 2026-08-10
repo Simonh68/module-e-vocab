@@ -541,7 +541,19 @@
                 if (automaticAudioEnabled && scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
                     speakText(words[currentIndex].en);
                 }
-            }, 1200);
+            }, 900);
+        }
+
+        function scheduleExampleSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                const example = words[currentIndex].ex_en;
+                if (automaticAudioEnabled && scheduledIndex === currentIndex && card.classList.contains('is-flipped') && example) {
+                    speakText(example);
+                }
+            }, 900);
         }
 
         function enableAutomaticAudio(event) {
@@ -553,7 +565,7 @@
             button.setAttribute('aria-pressed', 'true');
             button.textContent = 'Audio on';
             button.disabled = true;
-            announceStatus('Audio enabled. Automatic pronunciation will start in 1.2 seconds.');
+            announceStatus('Audio enabled. Automatic pronunciation will start in 0.9 seconds.');
             scheduleWordSpeech();
         }
 
@@ -627,15 +639,8 @@
         }
 
         function announceCard(side) {
-            const item = words[currentIndex];
             const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
-            const status = document.getElementById('cardStatus');
-            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;
-            status.textContent = '';
-            window.clearTimeout(announceCard.timer);
-            announceCard.timer = window.setTimeout(() => {
-                status.textContent = message;
-            }, 80);
+            announceStatus(`${sideText}.`);
         }
 
         function toggleCard(event) {
@@ -659,7 +664,7 @@
             );
             announceCard(isFlipped ? 'answer' : 'word');
             if (isFlipped) {
-                window.clearTimeout(scheduleWordSpeech.timer);
+                scheduleExampleSpeech();
             } else {
                 scheduleWordSpeech();
             }

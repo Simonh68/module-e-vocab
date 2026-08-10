@@ -210,8 +210,8 @@ def require_replace(text: str, old: str, new: str, path: Path, label: str) -> st
 def patch_activity_page(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
     if "activity-accessibility-v1" in text or "activity-accessibility-v2" in text:
-        text = text.replace("Automatic pronunciation will start in two seconds.", "Automatic pronunciation will start in 1.2 seconds.", 1)
-        text = text.replace("            }, 2000);\n        }\n\n        function enableAutomaticAudio", "            }, 1200);\n        }\n\n        function enableAutomaticAudio", 1)
+        text = text.replace("Automatic pronunciation will start in 1.2 seconds.", "Automatic pronunciation will start in 0.9 seconds.", 1)
+        text = text.replace("            }, 1200);\n        }\n\n        function enableAutomaticAudio", "            }, 900);\n        }\n\n        function enableAutomaticAudio", 1)
         text = text.replace("justify-content: flex-start;\n            margin-bottom: 6px;", "justify-content: space-between;\n            gap: 10px;\n            margin-bottom: 6px;", 1)
         text = text.replace("        .activity-home {", "        .activity-home,\n        .audio-start {", 1)
         if '.audio-start[aria-pressed="true"]' not in text:
@@ -247,7 +247,7 @@ def patch_activity_page(path: Path) -> None:
                 "            button.setAttribute('aria-pressed', 'true');\n"
                 "            button.textContent = 'Audio on';\n"
                 "            button.disabled = true;\n"
-                "            announceStatus('Audio enabled. Automatic pronunciation will start in 1.2 seconds.');\n"
+                "            announceStatus('Audio enabled. Automatic pronunciation will start in 0.9 seconds.');\n"
                 "            scheduleWordSpeech();\n"
                 "        }\n\n"
                 "        function updateCard() {",
@@ -263,6 +263,23 @@ def patch_activity_page(path: Path) -> None:
                 "            announceCard.timer = window.setTimeout(() => { status.textContent = message; }, 80);\n"
                 "        }\n\n"
                 "        function announceCard(side) {",
+                1,
+            )
+        if "function scheduleExampleSpeech()" not in text:
+            text = text.replace(
+                "        function enableAutomaticAudio(event) {",
+                "        function scheduleExampleSpeech() {\n"
+                "            window.clearTimeout(scheduleWordSpeech.timer);\n"
+                "            const scheduledIndex = currentIndex;\n"
+                "            scheduleWordSpeech.timer = window.setTimeout(() => {\n"
+                "                const card = document.getElementById('flashcard');\n"
+                "                const example = words[currentIndex].ex_en;\n"
+                "                if (automaticAudioEnabled && scheduledIndex === currentIndex && card.classList.contains('is-flipped') && example) {\n"
+                "                    speakText(example);\n"
+                "                }\n"
+                "            }, 900);\n"
+                "        }\n\n"
+                "        function enableAutomaticAudio(event) {",
                 1,
             )
             text = text.replace(
@@ -437,7 +454,7 @@ def patch_activity_page(path: Path) -> None:
                 if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
                     speakText(words[currentIndex].en);
                 }
-            }, 1200);
+            }, 900);
         }
 """
             text, count = re.subn(
@@ -464,15 +481,8 @@ def patch_activity_page(path: Path) -> None:
                 1,
             )
         accessible_toggle = r"""        function announceCard(side) {
-            const item = words[currentIndex];
             const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
-            const status = document.getElementById('cardStatus');
-            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;
-            status.textContent = '';
-            window.clearTimeout(announceCard.timer);
-            announceCard.timer = window.setTimeout(() => {
-                status.textContent = message;
-            }, 80);
+            announceStatus(`${sideText}.`);
         }
 
         function toggleCard(event) {
@@ -496,7 +506,7 @@ def patch_activity_page(path: Path) -> None:
             );
             announceCard(isFlipped ? 'answer' : 'word');
             if (isFlipped) {
-                window.clearTimeout(scheduleWordSpeech.timer);
+                scheduleExampleSpeech();
             } else {
                 scheduleWordSpeech();
             }
@@ -662,7 +672,7 @@ def patch_activity_page(path: Path) -> None:
                 if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
                     speakText(words[currentIndex].en);
                 }
-            }, 1200);
+            }, 900);
         }
 """
     text, count = re.subn(
@@ -676,15 +686,8 @@ def patch_activity_page(path: Path) -> None:
         raise RuntimeError(f"Could not add delayed speech in {path.name}")
 
     accessible_toggle = r"""        function announceCard(side) {
-            const item = words[currentIndex];
             const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
-            const status = document.getElementById('cardStatus');
-            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;
-            status.textContent = '';
-            window.clearTimeout(announceCard.timer);
-            announceCard.timer = window.setTimeout(() => {
-                status.textContent = message;
-            }, 80);
+            announceStatus(`${sideText}.`);
         }
 
         function toggleCard(event) {
@@ -708,7 +711,7 @@ def patch_activity_page(path: Path) -> None:
             );
             announceCard(isFlipped ? 'answer' : 'word');
             if (isFlipped) {
-                window.clearTimeout(scheduleWordSpeech.timer);
+                scheduleExampleSpeech();
             } else {
                 scheduleWordSpeech();
             }
