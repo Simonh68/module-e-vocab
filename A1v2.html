@@ -289,7 +289,7 @@
         }
 
 
-        /* activity-accessibility-v1 */
+        /* activity-accessibility-v2 */
         html {
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
@@ -509,7 +509,7 @@
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             Previous
         </button>
-        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>
+        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false" aria-label="Show answer for current word">Show answer</button>
         <button type="button" class="nav-btn" onclick="nextCard()">
             Next
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -559,6 +559,7 @@
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', 'false');
             flipButton.textContent = 'Show answer';
+            flipButton.setAttribute('aria-label', 'Show answer for current word');
 
             document.getElementById('posBadge').innerText = item.pos || '';
             document.getElementById('wordEn').innerText = item.en || '';
@@ -579,16 +580,18 @@
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
             announceCard('word');
             
-            if (hasUserInteracted) {
-                speakText(item.en);
-            }
         }
 
         function announceCard(side) {
             const item = words[currentIndex];
-            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
-            document.getElementById('cardStatus').textContent =
-                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+            const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
+            const status = document.getElementById('cardStatus');
+            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;
+            status.textContent = '';
+            window.clearTimeout(announceCard.timer);
+            announceCard.timer = window.setTimeout(() => {
+                status.textContent = message;
+            }, 80);
         }
 
         function toggleCard(event) {
@@ -606,11 +609,11 @@
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', String(isFlipped));
             flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            flipButton.setAttribute(
+                'aria-label',
+                isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
+            );
             announceCard(isFlipped ? 'answer' : 'word');
-
-            if (isFlipped) {
-                speakText(words[currentIndex].ex_en);
-            }
         }
 
         function nextCard() {

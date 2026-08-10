@@ -14,7 +14,7 @@ ACTIVITY_FILES = CURRENT_GROUPS + LEGACY_GROUPS
 
 ACCESSIBILITY_CSS = r"""
 
-        /* activity-accessibility-v1 */
+        /* activity-accessibility-v2 */
         html {
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
@@ -199,7 +199,7 @@ def require_replace(text: str, old: str, new: str, path: Path, label: str) -> st
 
 def patch_activity_page(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
-    if "activity-accessibility-v1" in text:
+    if "activity-accessibility-v1" in text or "activity-accessibility-v2" in text:
         if "activity-top-nav" not in text:
             text = text.replace(
                 "        .activity-main {",
@@ -337,6 +337,72 @@ def patch_activity_page(path: Path) -> None:
             "            document.getElementById('ttsBtn').disabled = isFlipped;",
             1,
         )
+        text = text.replace("activity-accessibility-v1", "activity-accessibility-v2", 1)
+        if 'aria-label="Show answer for current word"' not in text:
+            text = text.replace(
+                'aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>',
+                'aria-controls="cardFront cardBack" aria-pressed="false" '
+                'aria-label="Show answer for current word">Show answer</button>',
+                1,
+            )
+        if "flipButton.setAttribute('aria-label', 'Show answer for current word');" not in text:
+            text = text.replace(
+                "            flipButton.textContent = 'Show answer';",
+                "            flipButton.textContent = 'Show answer';\n"
+                "            flipButton.setAttribute('aria-label', 'Show answer for current word');",
+                1,
+            )
+        text = text.replace(
+            "            if (hasUserInteracted) {\n"
+            "                speakText(item.en);\n"
+            "            }\n",
+            "",
+            1,
+        )
+        accessible_toggle = r"""        function announceCard(side) {
+            const item = words[currentIndex];
+            const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
+            const status = document.getElementById('cardStatus');
+            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;
+            status.textContent = '';
+            window.clearTimeout(announceCard.timer);
+            announceCard.timer = window.setTimeout(() => {
+                status.textContent = message;
+            }, 80);
+        }
+
+        function toggleCard(event) {
+            if (event) event.stopPropagation();
+            hasUserInteracted = true;
+            const card = document.getElementById('flashcard');
+            const isFlipped = card.classList.toggle('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', String(isFlipped));
+            cardBack.setAttribute('aria-hidden', String(!isFlipped));
+            cardFront.inert = isFlipped;
+            cardBack.inert = !isFlipped;
+            document.getElementById('ttsBtn').disabled = isFlipped;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+            flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            flipButton.setAttribute(
+                'aria-label',
+                isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
+            );
+            announceCard(isFlipped ? 'answer' : 'word');
+        }
+
+"""
+        text, count = re.subn(
+            r"        function announceCard\(side\) \{.*?(?=        function nextCard\(\))",
+            accessible_toggle,
+            text,
+            count=1,
+            flags=re.S,
+        )
+        if count != 1:
+            raise RuntimeError(f"Could not upgrade card announcements in {path.name}")
         path.write_text(text, encoding="utf-8")
         return
 
@@ -426,7 +492,7 @@ def patch_activity_page(path: Path) -> None:
         text,
         '        </button>\n        <button type="button" class="nav-btn" onclick="nextCard()">',
         '        </button>\n'
-        '        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>\n'
+        '        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false" aria-label="Show answer for current word">Show answer</button>\n'
         '        <button type="button" class="nav-btn" onclick="nextCard()">',
         path,
         "flip button",
@@ -452,7 +518,8 @@ def patch_activity_page(path: Path) -> None:
             document.getElementById('ttsBtn').disabled = false;
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', 'false');
-            flipButton.textContent = 'Show answer';"""
+            flipButton.textContent = 'Show answer';
+            flipButton.setAttribute('aria-label', 'Show answer for current word');"""
     text = require_replace(
         text,
         "            document.getElementById('flashcard').classList.remove('is-flipped');",
@@ -469,11 +536,24 @@ def patch_activity_page(path: Path) -> None:
         "card announcement",
     )
 
+    text = text.replace(
+        "            if (hasUserInteracted) {\n"
+        "                speakText(item.en);\n"
+        "            }\n",
+        "",
+        1,
+    )
+
     accessible_toggle = r"""        function announceCard(side) {
             const item = words[currentIndex];
-            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
-            document.getElementById('cardStatus').textContent =
-                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+            const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
+            const status = document.getElementById('cardStatus');
+            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;
+            status.textContent = '';
+            window.clearTimeout(announceCard.timer);
+            announceCard.timer = window.setTimeout(() => {
+                status.textContent = message;
+            }, 80);
         }
 
         function toggleCard(event) {
@@ -491,11 +571,11 @@ def patch_activity_page(path: Path) -> None:
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', String(isFlipped));
             flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            flipButton.setAttribute(
+                'aria-label',
+                isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
+            );
             announceCard(isFlipped ? 'answer' : 'word');
-
-            if (isFlipped) {
-                speakText(words[currentIndex].ex_en);
-            }
         }
 
 """

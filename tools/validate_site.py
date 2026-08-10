@@ -50,6 +50,18 @@ def main() -> None:
         "Source-data corrections and editorial transparency" not in about,
         "Teacher Guide content still appears on the About page",
     )
+    future_resource_notice = (
+        "not currently available"
+        in guide
+        and "not part of the content unit submitted at this stage" in guide
+        and "compatible, complementary extension" in guide
+        and "not currently available" in about
+        and "not included in the content unit submitted at this stage" in about
+    )
+    assert_true(
+        future_resource_notice,
+        "Future teacher resources are not clearly separated from the submitted unit",
+    )
     assert_true((REPO / "site-policy.css").exists(), "Shared policy-page stylesheet is missing")
     for filename in POLICY_FILES:
         assert_true(f'href="{filename}"' in about, f"About link to {filename} is missing")
@@ -117,6 +129,7 @@ def main() -> None:
         assert_true(".toLowerCase()" in text, f"Lowercase family POS formatting missing in {group}.html")
         assert_true("familyBox.style.display = 'none'" in text, f"Empty-family hiding missing in {group}.html")
         accessibility_fragments = [
+            "activity-accessibility-v2",
             'class="skip-link" href="#main-content"',
             'class="activity-top-nav" aria-label="Activity navigation"',
             'class="activity-home" href="index.html"',
@@ -127,6 +140,8 @@ def main() -> None:
             'role="group" aria-label="Flashcard controls"',
             "cardFront.inert = isFlipped",
             "document.getElementById('ttsBtn').disabled = isFlipped",
+            "side === 'answer' ? 'Answer shown' : 'Word shown'",
+            "isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'",
             "event.key === 'ArrowRight'",
             "event.key === 'ArrowLeft'",
             "prefers-reduced-motion: reduce",
@@ -136,6 +151,11 @@ def main() -> None:
         assert_true(
             "e.key === ' ' || e.key === 'Enter'" not in text,
             f"Conflicting global Enter/Space handler remains in {group}.html",
+        )
+        assert_true(
+            "speakText(words[currentIndex].ex_en)" not in text
+            and "if (hasUserInteracted) {\n                speakText(item.en);" not in text,
+            f"Automatic speech conflicts with screen-reader announcements in {group}.html",
         )
         for filename in POLICY_FILES:
             assert_true(f'href="{filename}"' in text, f"{filename} footer link missing in {group}.html")
