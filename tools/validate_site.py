@@ -43,7 +43,7 @@ def main() -> None:
     assert_true('href="about.html"' in index, "About link is missing from index.html")
     assert_true("<h1>Teacher Guide</h1>" in guide, "Dedicated Teacher Guide page is missing")
     assert_true(
-        "<title>About | Module E Bagrut Vocabulary</title>" in about,
+        "<title>About | E-Vocab for Module E</title>" in about,
         "Dedicated About page is missing",
     )
     assert_true(
@@ -114,7 +114,7 @@ def main() -> None:
         path = REPO / f"{group}.html"
         text = path.read_text(encoding="utf-8")
         assert_true(
-            f"<title>Module E 2027 Vocabulary Flashcards - Part {group}</title>" in text,
+            f"<title>E-Vocab for Module E - Flashcards Part {group}</title>" in text,
             f"Incorrect title in {group}.html",
         )
         assert_true("favicon.svg?v=" in text, f"Cache-busted favicon missing in {group}.html")
