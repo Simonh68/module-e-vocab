@@ -60,6 +60,8 @@ def main() -> None:
             text.count("const familyBox = document.getElementById('familyBox');") == 1,
             f"Family JavaScript must appear exactly once in {group}.html",
         )
+        assert_true(".toUpperCase()" in text, f"Uppercase POS badge formatting missing in {group}.html")
+        assert_true(".toLowerCase()" in text, f"Lowercase family POS formatting missing in {group}.html")
         assert_true("familyBox.style.display = 'none'" in text, f"Empty-family hiding missing in {group}.html")
         records = vocab.read_html_records(path)
         records_by_group[group] = records
@@ -70,9 +72,34 @@ def main() -> None:
             assert_true(record.get("mean_he"), f"Missing Hebrew meaning in {group}: {record.get('en')}")
             assert_true(record.get("ex_en"), f"Missing English example in {group}: {record.get('en')}")
             assert_true(record.get("support_text"), f"Missing A2 support in {group}: {record.get('en')}")
+            assert_true(
+                record.get("grammar") == record.get("grammar", "").lower()
+                and not re.search(r"[.!?…;:]$", record.get("grammar", "")),
+                f"Inconsistent grammar label in {group}: {record.get('en')}",
+            )
+            assert_true(
+                " / " not in record["mean_he"] and not re.search(r"[.!?…;:]$", record["mean_he"]),
+                f"Inconsistent Hebrew punctuation in {group}: {record.get('en')}",
+            )
+            assert_true(
+                re.search(r"[.!?…][”\"]?$", record["ex_en"]) is not None,
+                f"English example lacks terminal punctuation in {group}: {record.get('en')}",
+            )
+            assert_true(
+                not re.search(r"[.!?…;:]$", record["support_text"]),
+                f"Support text has terminal punctuation in {group}: {record.get('en')}",
+            )
+            assert_true(
+                "'" not in record["en"] and "'" not in record["ex_en"],
+                f"Straight apostrophe remains in visible English in {group}: {record.get('en')}",
+            )
             family_pairs = [(item.get("word"), item.get("pos")) for item in record.get("family_members", [])]
             assert_true(all(word and pos for word, pos in family_pairs), f"Incomplete family item in {group}")
             assert_true(len(family_pairs) == len(set(family_pairs)), f"Duplicate family item in {group}")
+            assert_true(
+                all(pos.casefold() != "nan" and "'" not in word for word, pos in family_pairs),
+                f"Invalid family spelling or POS in {group}: {record.get('en')}",
+            )
 
     for letter in "ABCD":
         expected = {(vocab.key_text(card["display"]), card["pos"]) for card in official_cards[letter]}
@@ -110,11 +137,20 @@ def main() -> None:
                 f"Family mismatch: List {letter} {record['en']} {record['pos']}",
             )
 
+        display_by_key = {
+            vocab.key_text(card["display"]): card["display"] for card in official_cards[letter]
+        }
+        for record in records_by_list[letter]:
+            assert_true(
+                record["en"] == display_by_key[vocab.key_text(record["en"])],
+                f"Display capitalization mismatch: List {letter} {record['en']}",
+            )
+
     json_rows = json.loads((REPO / "data/vocabulary-master.json").read_text(encoding="utf-8"))
     assert_true(len(json_rows) == 982, f"Master JSON has {len(json_rows)} rows instead of 982")
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
-    print("PASS: 12 activity files, 982 cards, official A–D coverage, family data, titles, links and static assets validated.")
+    print("PASS: 12 activity files, 982 cards, official A–D coverage, natural capitalization, punctuation, family data, titles, links and static assets validated.")
 
 
 if __name__ == "__main__":
