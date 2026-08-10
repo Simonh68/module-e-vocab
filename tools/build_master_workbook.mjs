@@ -4,10 +4,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { SpreadsheetFile, Workbook } from "@oai/artifact-tool";
 
-const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repo = path.resolve(
+  process.env.MODULE_E_REPO_ROOT || path.join(path.dirname(fileURLToPath(import.meta.url)), ".."),
+);
 const sourcePath = path.join(repo, "data/vocabulary-master.json");
-const outputPath = path.join(repo, "Module_E_2027_Vocabulary_Master.xlsx");
-const previewDir = "/tmp/module-e-2027-workbook-preview";
+const outputPath = process.env.MODULE_E_OUTPUT_PATH || path.join(repo, "Module_E_2027_Vocabulary_Master.xlsx");
+const previewDir = process.env.MODULE_E_PREVIEW_DIR || "/tmp/module-e-2027-workbook-preview";
 const records = JSON.parse(await fs.readFile(sourcePath, "utf8"));
 
 const groups = [..."ABCD"].flatMap((letter) => [1, 2, 3].map((number) => `${letter}${number}`));
@@ -34,6 +36,7 @@ const correctedPos = new Set([
   "B|behind|Adverb",
   "B|deliver|Verb",
   "B|domestic|Adjective",
+  "C|hardware|Noun",
 ]);
 const familyCards = records.filter((record) => record.family_members?.length).length;
 const familyPairs = new Set(
@@ -125,6 +128,8 @@ const rules = [
   "• Lists A–D use the official Ministry workbooks as the primary-entry and POS source.",
   "• Entries with more than one POS appear as separate cards and separate rows.",
   "• Identical duplicate cards were removed; obvious source POS typos were corrected and marked.",
+  "• Verified source-data anomalies and editorial corrections are documented in the online Teacher Guide.",
+  "• Display text uses natural English capitalization, typographic punctuation and consistent Hebrew gloss separators.",
   "• Every card has a Hebrew meaning, a POS-specific English example and one A2 support route.",
   "• Family Members are informational only; they never create separate activity cards.",
   `• Family data appears on ${familyCards} cards and contains ${familyPairs} distinct Word + POS pairs.`,
@@ -161,7 +166,7 @@ summary.getRange(`A${checkRow + 1}:D${checkRow + 1}`).format = {
   fill: "#26734D",
   font: { bold: true, color: "#FFFFFF" },
 };
-summary.getRange(`A${checkRow + 2}:D${checkRow + 10}`).format = {
+summary.getRange(`A${checkRow + 2}:D${checkRow + 12}`).format = {
   font: { color: "#486F5D", size: 10 },
   wrapText: true,
 };
@@ -203,7 +208,7 @@ widths.forEach((width, index) => {
 
 await fs.mkdir(previewDir, { recursive: true });
 for (const [sheetName, range, scale] of [
-  ["Summary", `A1:D${checkRow + 10}`, 1.15],
+  ["Summary", `A1:D${checkRow + 12}`, 1.15],
   ["Vocabulary", "A1:P28", 0.65],
 ]) {
   const preview = await workbook.render({ sheetName, range, scale, format: "png" });

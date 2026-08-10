@@ -57,19 +57,19 @@ POS_NAMES = {
 }
 
 GRAMMAR = {
-    "Noun": "noun.",
-    "Verb": "verb.",
-    "Adjective": "adjective.",
-    "Adverb": "adverb.",
-    "Preposition": "preposition.",
-    "Conjunction": "conjunction.",
-    "Pronoun": "pronoun.",
-    "Auxiliary verb": "auxiliary verb.",
-    "Determiner": "determiner.",
-    "Exclamation": "exclamation.",
-    "Phrase": "phrase / chunk.",
-    "Phrasal verb": "phrasal verb.",
-    "Noun phrase": "noun phrase.",
+    "Noun": "noun",
+    "Verb": "verb",
+    "Adjective": "adjective",
+    "Adverb": "adverb",
+    "Preposition": "preposition",
+    "Conjunction": "conjunction",
+    "Pronoun": "pronoun",
+    "Auxiliary verb": "auxiliary verb",
+    "Determiner": "determiner",
+    "Exclamation": "exclamation",
+    "Phrase": "phrase / chunk",
+    "Phrasal verb": "phrasal verb",
+    "Noun phrase": "noun phrase",
 }
 
 # Shortened display forms follow the convention already used in Lists C and D.
@@ -185,6 +185,9 @@ FAMILY_POS_CORRECTIONS = {
     "traffic jam": "Noun phrase",
     "care for": "Phrasal verb",
     "speed limit": "Noun phrase",
+    "cyclist": "Noun",
+    "prayer": "Noun",
+    "harbour": "Noun",
 }
 
 CD_SUPPORT_FALLBACKS = {
@@ -208,13 +211,31 @@ def clean_text(value: object) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def smart_english_punctuation(value: object) -> str:
+    """Use typographic English punctuation without changing letter case."""
+    text = clean_text(value).replace("'", "’")
+    return re.sub(r'"([^"\n]+)"', r"“\1”", text)
+
+
+def normalize_fragment(value: object) -> str:
+    """Normalize a definition or label, which does not take terminal punctuation."""
+    return re.sub(r"[.!?…;:]+$", "", smart_english_punctuation(value)).strip()
+
+
+def normalize_hebrew_meaning(value: object) -> str:
+    """Use semicolons between glosses and no terminal punctuation."""
+    text = re.sub(r"\s*/\s*", "; ", clean_text(value))
+    text = re.sub(r"\s*;\s*", "; ", text)
+    return re.sub(r"[.!?…;:]+$", "", text).strip()
+
+
 def key_text(value: object) -> str:
     return clean_text(value).casefold()
 
 
 def display_entry(official_entry: str) -> str:
     key = key_text(official_entry)
-    return DISPLAY_ALIASES.get(key, clean_text(official_entry))
+    return smart_english_punctuation(DISPLAY_ALIASES.get(key, clean_text(official_entry)))
 
 
 def parse_pos(list_letter: str, entry: str, raw_pos: object) -> list[str]:
@@ -238,7 +259,8 @@ def parse_family(raw_words: object, raw_pos: object, entry: str) -> list[dict[st
     if not clean_text(raw_words):
         return []
     words = [clean_text(x) for x in re.split(r"[\r\n]+", str(raw_words)) if clean_text(x)]
-    poses = [clean_text(x) for x in re.split(r"[\r\n]+", str(raw_pos)) if clean_text(x)]
+    raw_pos_text = clean_text(raw_pos)
+    poses = [clean_text(x) for x in re.split(r"[\r\n]+", raw_pos_text) if clean_text(x)]
     if len(poses) == 1 and len(words) > 1 and "," not in poses[0]:
         poses *= len(words)
     family = []
@@ -248,7 +270,7 @@ def parse_family(raw_words: object, raw_pos: object, entry: str) -> list[dict[st
             continue
         raw_label = poses[index] if index < len(poses) else ""
         label = FAMILY_POS_CORRECTIONS.get(key_text(word), family_pos_label(raw_label))
-        family.append({"word": clean_text(word).upper(), "pos": label})
+        family.append({"word": smart_english_punctuation(word), "pos": label})
     return family
 
 
@@ -392,8 +414,10 @@ def attach_families_to_existing(
 ) -> None:
     family_by_display = defaultdict(list)
     official_by_display = defaultdict(list)
+    natural_display = {}
     for row in rows:
         display_key = key_text(row["display"])
+        natural_display[display_key] = row["display"]
         official_by_display[display_key].append(row["official_entry"])
         seen = {(x["word"], x["pos"]) for x in family_by_display[display_key]}
         for member in row["family_members"]:
@@ -407,6 +431,7 @@ def attach_families_to_existing(
             key = key_text(record["en"])
             if key not in official_by_display:
                 raise RuntimeError(f"No official {list_letter} row matched {record['en']} in {group}")
+            record["en"] = natural_display[key]
             record["official_entry"] = " | ".join(official_by_display[key])
             record["family_members"] = family_by_display[key]
 
@@ -425,21 +450,22 @@ def build_ab_groups(cards: list[dict], content: dict) -> dict[str, list[dict]]:
         ):
             missing_content.append(key)
             continue
-        route, synonyms = support_route(curated["support_text"])
+        support_text = normalize_fragment(curated["support_text"])
+        route, synonyms = support_route(support_text)
         record = {
-            "en": card["display"].upper(),
+            "en": card["display"],
             "pos": card["pos"],
-            "grammar": GRAMMAR.get(card["pos"], f"{card['pos'].lower()}."),
-            "mean_he": curated["hebrew_source"],
+            "grammar": GRAMMAR.get(card["pos"], card["pos"].lower()),
+            "mean_he": normalize_hebrew_meaning(curated["hebrew_source"]),
             "mean_fr": "-",
-            "ex_en": curated["example"],
+            "ex_en": smart_english_punctuation(curated["example"]),
             "ex_he": "",
             "ex_fr": "-",
             "synonyms": synonyms,
             "official_entry": " | ".join(card["official_entries"]),
             "family_members": card["family_members"],
             "support_type": route,
-            "support_text": curated["support_text"],
+            "support_text": support_text,
             "boundary_examples": "",
             "rec_prod": card["rec_prod"],
             "source_url": OFFICIAL_URLS[card["list"]],
@@ -571,7 +597,7 @@ def patch_family_ui(path: Path) -> None:
                     word.className = 'family-word';
                     pos.className = 'family-pos';
                     word.textContent = member.word;
-                    pos.textContent = ` — ${member.pos}`;
+                    pos.textContent = ` — ${String(member.pos || '').toLowerCase()}`;
                     listItem.append(word, pos);
                     familyList.appendChild(listItem);
                 });
@@ -591,6 +617,11 @@ def patch_family_ui(path: Path) -> None:
     text, count = dynamic_section.subn(family_js, text, count=1)
     if count != 1:
         raise RuntimeError(f"Could not normalize family JS in {path}")
+    text = text.replace(
+        "document.getElementById('posBadge').innerText = item.pos || '';",
+        "document.getElementById('posBadge').innerText = (item.pos || '').toUpperCase();",
+        1,
+    )
     path.write_text(text, encoding="utf-8")
 
 
@@ -653,15 +684,25 @@ def main() -> None:
         for number in range(1, 4):
             for record in groups[f"{letter}{number}"]:
                 current = pool[(key_text(record["en"]), record["pos"])]
-                record["mean_he"] = record.get("mean_he") or record.get("he", "")
-                record["mean_fr"] = record.get("mean_fr", "-")
-                record["ex_fr"] = record.get("ex_fr", "-")
-                record["synonyms"] = record.get("synonyms", [])
-                record["support_type"] = current.get("support_type", "A2 definition")
-                record["support_text"] = current.get("support_text", "") or CD_SUPPORT_FALLBACKS.get(
-                    (key_text(record["en"]), record["pos"]), ""
+                record["grammar"] = GRAMMAR.get(record["pos"], record["pos"].lower())
+                record["mean_he"] = normalize_hebrew_meaning(
+                    record.get("mean_he") or record.get("he", "")
                 )
-                record["boundary_examples"] = current.get("boundary_examples", "")
+                record["mean_fr"] = record.get("mean_fr", "-")
+                record["ex_en"] = smart_english_punctuation(record.get("ex_en", ""))
+                record["ex_fr"] = record.get("ex_fr", "-")
+                record["synonyms"] = [
+                    normalize_fragment(item) for item in record.get("synonyms", [])
+                ]
+                record["support_type"] = current.get("support_type", "A2 definition")
+                record["support_text"] = normalize_fragment(
+                    current.get("support_text", "") or CD_SUPPORT_FALLBACKS.get(
+                        (key_text(record["en"]), record["pos"]), ""
+                    )
+                )
+                record["boundary_examples"] = normalize_fragment(
+                    current.get("boundary_examples", "")
+                )
                 record["rec_prod"] = ""
                 record["source_url"] = OFFICIAL_URLS[letter]
 
