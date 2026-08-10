@@ -289,7 +289,7 @@
         }
 
 
-        /* activity-accessibility-v1 */
+        /* activity-accessibility-v2 */
         html {
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
@@ -320,12 +320,14 @@
             top: 8px;
             z-index: 40;
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 6px;
             pointer-events: none;
         }
 
-        .activity-home {
+        .activity-home,
+        .audio-start {
             min-height: 44px;
             display: inline-flex;
             align-items: center;
@@ -346,6 +348,12 @@
 
         .activity-home:hover {
             background: #eef2ff;
+        }
+
+        .audio-start[aria-pressed="true"] {
+            border-color: #86efac;
+            color: #166534;
+            background: #f0fdf4;
         }
 
         .activity-home svg {
@@ -457,6 +465,7 @@
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
             <span>Home</span>
         </a>
+        <button type="button" class="activity-home audio-start" id="audioStart" onclick="enableAutomaticAudio(event)" aria-pressed="false">Start audio</button>
     </nav>
 
     <header>
@@ -509,7 +518,7 @@
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             Previous
         </button>
-        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>
+        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false" aria-label="Show answer for current word">Show answer</button>
         <button type="button" class="nav-btn" onclick="nextCard()">
             Next
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -532,6 +541,7 @@
     <script>
         let currentIndex = 0;
         let hasUserInteracted = false;
+        let automaticAudioEnabled = false;
 
         function speakText(text) {
             if ('speechSynthesis' in window) {
@@ -541,6 +551,42 @@
                 utterance.rate = 0.9;
                 window.speechSynthesis.speak(utterance);
             }
+        }
+
+        function scheduleWordSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                if (automaticAudioEnabled && scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
+                    speakText(words[currentIndex].en);
+                }
+            }, 900);
+        }
+
+        function scheduleExampleSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                const example = words[currentIndex].ex_en;
+                if (automaticAudioEnabled && scheduledIndex === currentIndex && card.classList.contains('is-flipped') && example) {
+                    speakText(example);
+                }
+            }, 900);
+        }
+
+        function enableAutomaticAudio(event) {
+            if (event) event.stopPropagation();
+            automaticAudioEnabled = true;
+            hasUserInteracted = true;
+            if ('speechSynthesis' in window) window.speechSynthesis.resume();
+            const button = document.getElementById('audioStart');
+            button.setAttribute('aria-pressed', 'true');
+            button.textContent = 'Audio on';
+            button.disabled = true;
+            announceStatus('Audio enabled. Automatic pronunciation will start in 0.9 seconds.');
+            scheduleWordSpeech();
         }
 
         function updateCard() {
@@ -559,6 +605,7 @@
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', 'false');
             flipButton.textContent = 'Show answer';
+            flipButton.setAttribute('aria-label', 'Show answer for current word');
 
             document.getElementById('posBadge').innerText = item.pos || '';
             document.getElementById('wordEn').innerText = item.en || '';
@@ -578,17 +625,20 @@
 
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
             announceCard('word');
+            scheduleWordSpeech();
             
-            if (hasUserInteracted) {
-                speakText(item.en);
-            }
+        }
+
+        function announceStatus(message) {
+            const status = document.getElementById('cardStatus');
+            status.textContent = '';
+            window.clearTimeout(announceCard.timer);
+            announceCard.timer = window.setTimeout(() => { status.textContent = message; }, 80);
         }
 
         function announceCard(side) {
-            const item = words[currentIndex];
-            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
-            document.getElementById('cardStatus').textContent =
-                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+            const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
+            announceStatus(`${sideText}.`);
         }
 
         function toggleCard(event) {
@@ -606,10 +656,15 @@
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', String(isFlipped));
             flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            flipButton.setAttribute(
+                'aria-label',
+                isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
+            );
             announceCard(isFlipped ? 'answer' : 'word');
-
             if (isFlipped) {
-                speakText(words[currentIndex].ex_en);
+                scheduleExampleSpeech();
+            } else {
+                scheduleWordSpeech();
             }
         }
 
@@ -628,7 +683,13 @@
         }
 
         function playAudio(event) {
+            window.clearTimeout(scheduleWordSpeech.timer);
             hasUserInteracted = true;
+            automaticAudioEnabled = true;
+            const audioStart = document.getElementById('audioStart');
+            audioStart.setAttribute('aria-pressed', 'true');
+            audioStart.textContent = 'Audio on';
+            audioStart.disabled = true;
             if (event) event.stopPropagation();
             if (typeof words === 'undefined') return;
             speakText(words[currentIndex].en);

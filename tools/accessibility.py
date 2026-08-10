@@ -14,7 +14,7 @@ ACTIVITY_FILES = CURRENT_GROUPS + LEGACY_GROUPS
 
 ACCESSIBILITY_CSS = r"""
 
-        /* activity-accessibility-v1 */
+        /* activity-accessibility-v2 */
         html {
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
@@ -45,12 +45,14 @@ ACCESSIBILITY_CSS = r"""
             top: 8px;
             z-index: 40;
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 6px;
             pointer-events: none;
         }
 
-        .activity-home {
+        .activity-home,
+        .audio-start {
             min-height: 44px;
             display: inline-flex;
             align-items: center;
@@ -71,6 +73,12 @@ ACCESSIBILITY_CSS = r"""
 
         .activity-home:hover {
             background: #eef2ff;
+        }
+
+        .audio-start[aria-pressed="true"] {
+            border-color: #86efac;
+            color: #166534;
+            background: #f0fdf4;
         }
 
         .activity-home svg {
@@ -164,6 +172,7 @@ ACCESSIBILITY_CSS = r"""
             .card,
             .card-face,
             .activity-home,
+            .audio-start,
             .tts-btn,
             .nav-btn {
                 border: 1px solid ButtonText;
@@ -186,6 +195,7 @@ HOME_NAV = """    <nav class="activity-top-nav" aria-label="Activity navigation"
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
             <span>Home</span>
         </a>
+        <button type="button" class="activity-home audio-start" id="audioStart" onclick="enableAutomaticAudio(event)" aria-pressed="false">Start audio</button>
     </nav>
 
 """
@@ -199,7 +209,89 @@ def require_replace(text: str, old: str, new: str, path: Path, label: str) -> st
 
 def patch_activity_page(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
-    if "activity-accessibility-v1" in text:
+    if "activity-accessibility-v1" in text or "activity-accessibility-v2" in text:
+        text = text.replace("Automatic pronunciation will start in 1.2 seconds.", "Automatic pronunciation will start in 0.9 seconds.", 1)
+        text = text.replace("            }, 1200);\n        }\n\n        function enableAutomaticAudio", "            }, 900);\n        }\n\n        function enableAutomaticAudio", 1)
+        text = text.replace("justify-content: flex-start;\n            margin-bottom: 6px;", "justify-content: space-between;\n            gap: 10px;\n            margin-bottom: 6px;", 1)
+        text = text.replace("        .activity-home {", "        .activity-home,\n        .audio-start {", 1)
+        if '.audio-start[aria-pressed="true"]' not in text:
+            text = text.replace(
+                "        .activity-home:hover {\n            background: #eef2ff;\n        }",
+                "        .activity-home:hover {\n            background: #eef2ff;\n        }\n\n"
+                "        .audio-start[aria-pressed=\"true\"] {\n"
+                "            border-color: #86efac;\n            color: #166534;\n            background: #f0fdf4;\n        }",
+                1,
+            )
+        if 'id="audioStart"' not in text:
+            text = text.replace(
+                "        </a>\n    </nav>",
+                "        </a>\n        <button type=\"button\" class=\"activity-home audio-start\" id=\"audioStart\" onclick=\"enableAutomaticAudio(event)\" aria-pressed=\"false\">Start audio</button>\n    </nav>",
+                1,
+            )
+        if "let automaticAudioEnabled = false;" not in text:
+            text = text.replace("        let hasUserInteracted = false;", "        let hasUserInteracted = false;\n        let automaticAudioEnabled = false;", 1)
+        text = text.replace(
+            "                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {",
+            "                if (automaticAudioEnabled && scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {",
+            1,
+        )
+        if "function enableAutomaticAudio(event)" not in text:
+            text = text.replace(
+                "        function updateCard() {",
+                "        function enableAutomaticAudio(event) {\n"
+                "            if (event) event.stopPropagation();\n"
+                "            automaticAudioEnabled = true;\n"
+                "            hasUserInteracted = true;\n"
+                "            if ('speechSynthesis' in window) window.speechSynthesis.resume();\n"
+                "            const button = document.getElementById('audioStart');\n"
+                "            button.setAttribute('aria-pressed', 'true');\n"
+                "            button.textContent = 'Audio on';\n"
+                "            button.disabled = true;\n"
+                "            announceStatus('Audio enabled. Automatic pronunciation will start in 0.9 seconds.');\n"
+                "            scheduleWordSpeech();\n"
+                "        }\n\n"
+                "        function updateCard() {",
+                1,
+            )
+        if "function announceStatus(message)" not in text:
+            text = text.replace(
+                "        function announceCard(side) {",
+                "        function announceStatus(message) {\n"
+                "            const status = document.getElementById('cardStatus');\n"
+                "            status.textContent = '';\n"
+                "            window.clearTimeout(announceCard.timer);\n"
+                "            announceCard.timer = window.setTimeout(() => { status.textContent = message; }, 80);\n"
+                "        }\n\n"
+                "        function announceCard(side) {",
+                1,
+            )
+        if "function scheduleExampleSpeech()" not in text:
+            text = text.replace(
+                "        function enableAutomaticAudio(event) {",
+                "        function scheduleExampleSpeech() {\n"
+                "            window.clearTimeout(scheduleWordSpeech.timer);\n"
+                "            const scheduledIndex = currentIndex;\n"
+                "            scheduleWordSpeech.timer = window.setTimeout(() => {\n"
+                "                const card = document.getElementById('flashcard');\n"
+                "                const example = words[currentIndex].ex_en;\n"
+                "                if (automaticAudioEnabled && scheduledIndex === currentIndex && card.classList.contains('is-flipped') && example) {\n"
+                "                    speakText(example);\n"
+                "                }\n"
+                "            }, 900);\n"
+                "        }\n\n"
+                "        function enableAutomaticAudio(event) {",
+                1,
+            )
+            text = text.replace(
+                "            const status = document.getElementById('cardStatus');\n            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;\n            status.textContent = '';\n            window.clearTimeout(announceCard.timer);\n            announceCard.timer = window.setTimeout(() => {\n                status.textContent = message;\n            }, 80);",
+                "            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;\n            announceStatus(message);",
+                1,
+            )
+        text = text.replace(
+            "            hasUserInteracted = true;\n            if (event) event.stopPropagation();\n            if (typeof words === 'undefined') return;",
+            "            hasUserInteracted = true;\n            automaticAudioEnabled = true;\n            const audioStart = document.getElementById('audioStart');\n            audioStart.setAttribute('aria-pressed', 'true');\n            audioStart.textContent = 'Audio on';\n            audioStart.disabled = true;\n            if (event) event.stopPropagation();\n            if (typeof words === 'undefined') return;",
+            1,
+        )
         if "activity-top-nav" not in text:
             text = text.replace(
                 "        .activity-main {",
@@ -337,6 +429,99 @@ def patch_activity_page(path: Path) -> None:
             "            document.getElementById('ttsBtn').disabled = isFlipped;",
             1,
         )
+        text = text.replace("activity-accessibility-v1", "activity-accessibility-v2", 1)
+        if 'aria-label="Show answer for current word"' not in text:
+            text = text.replace(
+                'aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>',
+                'aria-controls="cardFront cardBack" aria-pressed="false" '
+                'aria-label="Show answer for current word">Show answer</button>',
+                1,
+            )
+        if "flipButton.setAttribute('aria-label', 'Show answer for current word');" not in text:
+            text = text.replace(
+                "            flipButton.textContent = 'Show answer';",
+                "            flipButton.textContent = 'Show answer';\n"
+                "            flipButton.setAttribute('aria-label', 'Show answer for current word');",
+                1,
+            )
+        if "function scheduleWordSpeech()" not in text:
+            delayed_speech = r"""
+        function scheduleWordSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
+                    speakText(words[currentIndex].en);
+                }
+            }, 900);
+        }
+"""
+            text, count = re.subn(
+                r"(        function speakText\(text\) \{.*?^        \}\n)",
+                r"\1" + delayed_speech,
+                text,
+                count=1,
+                flags=re.S | re.M,
+            )
+            if count != 1:
+                raise RuntimeError(f"Could not add delayed speech in {path.name}")
+        if "            announceCard('word');\n            scheduleWordSpeech();" not in text:
+            text = text.replace(
+                "            announceCard('word');",
+                "            announceCard('word');\n"
+                "            scheduleWordSpeech();",
+                1,
+            )
+        if "function playAudio(event) {\n            window.clearTimeout(scheduleWordSpeech.timer);" not in text:
+            text = text.replace(
+                "        function playAudio(event) {",
+                "        function playAudio(event) {\n"
+                "            window.clearTimeout(scheduleWordSpeech.timer);",
+                1,
+            )
+        accessible_toggle = r"""        function announceCard(side) {
+            const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
+            announceStatus(`${sideText}.`);
+        }
+
+        function toggleCard(event) {
+            if (event) event.stopPropagation();
+            hasUserInteracted = true;
+            const card = document.getElementById('flashcard');
+            const isFlipped = card.classList.toggle('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', String(isFlipped));
+            cardBack.setAttribute('aria-hidden', String(!isFlipped));
+            cardFront.inert = isFlipped;
+            cardBack.inert = !isFlipped;
+            document.getElementById('ttsBtn').disabled = isFlipped;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+            flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            flipButton.setAttribute(
+                'aria-label',
+                isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
+            );
+            announceCard(isFlipped ? 'answer' : 'word');
+            if (isFlipped) {
+                scheduleExampleSpeech();
+            } else {
+                scheduleWordSpeech();
+            }
+        }
+
+"""
+        text, count = re.subn(
+            r"        function announceCard\(side\) \{.*?(?=        function nextCard\(\))",
+            accessible_toggle,
+            text,
+            count=1,
+            flags=re.S,
+        )
+        if count != 1:
+            raise RuntimeError(f"Could not upgrade card announcements in {path.name}")
         path.write_text(text, encoding="utf-8")
         return
 
@@ -426,7 +611,7 @@ def patch_activity_page(path: Path) -> None:
         text,
         '        </button>\n        <button type="button" class="nav-btn" onclick="nextCard()">',
         '        </button>\n'
-        '        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>\n'
+        '        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false" aria-label="Show answer for current word">Show answer</button>\n'
         '        <button type="button" class="nav-btn" onclick="nextCard()">',
         path,
         "flip button",
@@ -452,7 +637,8 @@ def patch_activity_page(path: Path) -> None:
             document.getElementById('ttsBtn').disabled = false;
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', 'false');
-            flipButton.textContent = 'Show answer';"""
+            flipButton.textContent = 'Show answer';
+            flipButton.setAttribute('aria-label', 'Show answer for current word');"""
     text = require_replace(
         text,
         "            document.getElementById('flashcard').classList.remove('is-flipped');",
@@ -469,11 +655,39 @@ def patch_activity_page(path: Path) -> None:
         "card announcement",
     )
 
+    text = text.replace(
+        "            if (hasUserInteracted) {\n"
+        "                speakText(item.en);\n"
+        "            }\n",
+        "            scheduleWordSpeech();\n",
+        1,
+    )
+
+    delayed_speech = r"""
+        function scheduleWordSpeech() {
+            window.clearTimeout(scheduleWordSpeech.timer);
+            const scheduledIndex = currentIndex;
+            scheduleWordSpeech.timer = window.setTimeout(() => {
+                const card = document.getElementById('flashcard');
+                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
+                    speakText(words[currentIndex].en);
+                }
+            }, 900);
+        }
+"""
+    text, count = re.subn(
+        r"(        function speakText\(text\) \{.*?^        \}\n)",
+        r"\1" + delayed_speech,
+        text,
+        count=1,
+        flags=re.S | re.M,
+    )
+    if count != 1:
+        raise RuntimeError(f"Could not add delayed speech in {path.name}")
+
     accessible_toggle = r"""        function announceCard(side) {
-            const item = words[currentIndex];
-            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
-            document.getElementById('cardStatus').textContent =
-                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+            const sideText = side === 'answer' ? 'Answer shown' : 'Word shown';
+            announceStatus(`${sideText}.`);
         }
 
         function toggleCard(event) {
@@ -491,10 +705,15 @@ def patch_activity_page(path: Path) -> None:
             const flipButton = document.getElementById('flipButton');
             flipButton.setAttribute('aria-pressed', String(isFlipped));
             flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            flipButton.setAttribute(
+                'aria-label',
+                isFlipped ? 'Answer shown. Show word' : 'Word shown. Show answer'
+            );
             announceCard(isFlipped ? 'answer' : 'word');
-
             if (isFlipped) {
-                speakText(words[currentIndex].ex_en);
+                scheduleExampleSpeech();
+            } else {
+                scheduleWordSpeech();
             }
         }
 
@@ -508,6 +727,13 @@ def patch_activity_page(path: Path) -> None:
     )
     if count != 1:
         raise RuntimeError(f"Could not patch toggleCard in {path.name}")
+
+    text = text.replace(
+        "        function playAudio(event) {",
+        "        function playAudio(event) {\n"
+        "            window.clearTimeout(scheduleWordSpeech.timer);",
+        1,
+    )
 
     keyboard_handler = r"""        document.addEventListener('keydown', (event) => {
             if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
