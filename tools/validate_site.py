@@ -20,11 +20,22 @@ EXPECTED_COUNTS = {
     "C1": 83, "C2": 83, "C3": 83,
     "D1": 85, "D2": 85, "D3": 85,
 }
+VALID_FAMILY_POS = set(vocab.POS_NAMES.values()) | {
+    "Phrase", "Phrasal verb", "Noun phrase",
+}
 
 
 def assert_true(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
+
+
+def assert_valid_family_pos(pos: str, context: str) -> None:
+    labels = [label.strip() for label in pos.split(",")]
+    assert_true(
+        bool(labels) and all(label in VALID_FAMILY_POS for label in labels),
+        f"Invalid family POS in {context}: {pos}",
+    )
 
 
 def main() -> None:
@@ -104,6 +115,12 @@ def main() -> None:
     )
 
     official_rows = {letter: vocab.load_official_rows(letter) for letter in "ABCD"}
+    for letter, rows in official_rows.items():
+        for row in rows:
+            for member in row["family_members"]:
+                assert_valid_family_pos(
+                    member["pos"], f"Ministry List {letter} {row['official_entry']} / {member['word']}"
+                )
     official_cards = {
         letter: vocab.merge_official_cards(official_rows[letter]) for letter in "ABCD"
     }
@@ -199,6 +216,8 @@ def main() -> None:
                 all(pos.casefold() != "nan" and "'" not in word for word, pos in family_pairs),
                 f"Invalid family spelling or POS in {group}: {record.get('en')}",
             )
+            for word, pos in family_pairs:
+                assert_valid_family_pos(pos, f"{group} {record.get('en')} / {word}")
 
     for letter in "ABCD":
         expected = {(vocab.key_text(card["display"]), card["pos"]) for card in official_cards[letter]}
@@ -249,6 +268,11 @@ def main() -> None:
     assert_true(len(json_rows) == 982, f"Master JSON has {len(json_rows)} rows instead of 982")
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
+    for row in json_rows:
+        for member in row.get("family_members", []):
+            assert_valid_family_pos(
+                member["pos"], f"master JSON {row['group']} {row['en']} / {member['word']}"
+            )
 
     all_html = {path.name: path.read_text(encoding="utf-8") for path in REPO.glob("*.html")}
     for filename, text in all_html.items():
