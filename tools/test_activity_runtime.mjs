@@ -131,6 +131,7 @@ function loadActivity(filename) {
 
   const ids = [
     "backDetailsGrid",
+    "audioStart",
     "cardBack",
     "cardFront",
     "cardStatus",
@@ -169,6 +170,7 @@ function loadActivity(filename) {
   };
   const clock = makeClock();
   const speech = [];
+  let resumeCalls = 0;
   class SpeechSynthesisUtterance {
     constructor(text) {
       this.text = text;
@@ -182,6 +184,7 @@ function loadActivity(filename) {
     setTimeout: clock.setTimeout,
     speechSynthesis: {
       cancel() {},
+      resume() { resumeCalls += 1; },
       speak(utterance) {
         speech.push({ at: clock.now, text: utterance.text });
       },
@@ -199,7 +202,7 @@ function loadActivity(filename) {
   vm.runInContext(runtime, sandbox, { filename });
   assert.equal(typeof window.onload, "function", `${filename}: onload is not registered`);
 
-  return { clock, documentListeners, elements, html, sandbox, speech, words, window };
+  return { clock, documentListeners, elements, html, resumeCalls: () => resumeCalls, sandbox, speech, words, window };
 }
 
 function event(key = "") {
@@ -218,15 +221,23 @@ function event(key = "") {
 
 function testActivity(filename) {
   const state = loadActivity(filename);
-  const { clock, documentListeners, elements, html, sandbox, speech, words, window } = state;
+  const { clock, documentListeners, elements, html, resumeCalls, sandbox, speech, words, window } = state;
 
   window.onload();
   assert.equal(elements.counter.innerText, `1 / ${words.length}`, `${filename}: first counter`);
   assert.equal(speech.length, 0, `${filename}: first word spoke immediately`);
-  clock.advance(2999);
-  assert.equal(speech.length, 0, `${filename}: first word spoke before 3 seconds`);
+  clock.advance(3000);
+  assert.equal(speech.length, 0, `${filename}: first word spoke before audio was enabled`);
+  sandbox.enableAutomaticAudio(event());
+  assert.equal(resumeCalls(), 1, `${filename}: audio engine was not resumed from the user action`);
+  assert.equal(elements.audioStart.getAttribute("aria-pressed"), "true", `${filename}: audio state`);
+  assert.equal(elements.audioStart.disabled, true, `${filename}: Start audio remained enabled`);
+  clock.advance(80);
+  assert.match(elements.cardStatus.textContent, /^Audio enabled\./, `${filename}: audio status`);
+  clock.advance(2919);
+  assert.equal(speech.length, 0, `${filename}: first word spoke before 3 seconds after enabling audio`);
   clock.advance(1);
-  assert.deepEqual(speech.at(-1), { at: 3000, text: words[0].en }, `${filename}: first word`);
+  assert.deepEqual(speech.at(-1), { at: 6000, text: words[0].en }, `${filename}: first word`);
 
   sandbox.nextCard();
   assert.equal(elements.counter.innerText, `2 / ${words.length}`, `${filename}: Next counter`);
@@ -288,6 +299,7 @@ function testActivity(filename) {
 
   assert.match(html, /class="activity-home" href="index\.html"[^>]+aria-label="Return to Module E vocabulary home"/, `${filename}: Home semantics`);
   assert.match(html, /id="cardStatus" role="status" aria-live="polite" aria-atomic="true"/, `${filename}: live region`);
+  assert.match(html, /id="audioStart"[^>]+aria-pressed="false"[^>]*>Start audio<\/button>/, `${filename}: Start audio control`);
   assert.match(html, /button:focus-visible,[\s\S]*a:focus-visible/, `${filename}: focus style`);
   assert.match(html, /@media \(prefers-reduced-motion: reduce\)/, `${filename}: reduced motion`);
   assert.match(html, /<html\b[^>]*\blang="en"[^>]*>/, `${filename}: page language`);
@@ -296,5 +308,5 @@ function testActivity(filename) {
 for (const filename of activities) testActivity(filename);
 
 console.log(
-  `PASS: ${activities.length} activities simulated: first-card and Next pronunciation at 3000 ms, stale-timer cancellation, flip cancellation, live announcements, Listen, keyboard, Home, focus, reduced motion and language.`,
+  `PASS: ${activities.length} activities simulated: explicit audio enablement, first-card and Next pronunciation at 3000 ms after enablement, stale-timer cancellation, flip cancellation, live announcements, Listen, keyboard, Home, focus, reduced motion and language.`,
 );

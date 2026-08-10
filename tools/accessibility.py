@@ -45,12 +45,14 @@ ACCESSIBILITY_CSS = r"""
             top: 8px;
             z-index: 40;
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 6px;
             pointer-events: none;
         }
 
-        .activity-home {
+        .activity-home,
+        .audio-start {
             min-height: 44px;
             display: inline-flex;
             align-items: center;
@@ -71,6 +73,12 @@ ACCESSIBILITY_CSS = r"""
 
         .activity-home:hover {
             background: #eef2ff;
+        }
+
+        .audio-start[aria-pressed="true"] {
+            border-color: #86efac;
+            color: #166534;
+            background: #f0fdf4;
         }
 
         .activity-home svg {
@@ -164,6 +172,7 @@ ACCESSIBILITY_CSS = r"""
             .card,
             .card-face,
             .activity-home,
+            .audio-start,
             .tts-btn,
             .nav-btn {
                 border: 1px solid ButtonText;
@@ -186,6 +195,7 @@ HOME_NAV = """    <nav class="activity-top-nav" aria-label="Activity navigation"
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
             <span>Home</span>
         </a>
+        <button type="button" class="activity-home audio-start" id="audioStart" onclick="enableAutomaticAudio(event)" aria-pressed="false">Start audio</button>
     </nav>
 
 """
@@ -200,6 +210,69 @@ def require_replace(text: str, old: str, new: str, path: Path, label: str) -> st
 def patch_activity_page(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
     if "activity-accessibility-v1" in text or "activity-accessibility-v2" in text:
+        text = text.replace("justify-content: flex-start;\n            margin-bottom: 6px;", "justify-content: space-between;\n            gap: 10px;\n            margin-bottom: 6px;", 1)
+        text = text.replace("        .activity-home {", "        .activity-home,\n        .audio-start {", 1)
+        if '.audio-start[aria-pressed="true"]' not in text:
+            text = text.replace(
+                "        .activity-home:hover {\n            background: #eef2ff;\n        }",
+                "        .activity-home:hover {\n            background: #eef2ff;\n        }\n\n"
+                "        .audio-start[aria-pressed=\"true\"] {\n"
+                "            border-color: #86efac;\n            color: #166534;\n            background: #f0fdf4;\n        }",
+                1,
+            )
+        if 'id="audioStart"' not in text:
+            text = text.replace(
+                "        </a>\n    </nav>",
+                "        </a>\n        <button type=\"button\" class=\"activity-home audio-start\" id=\"audioStart\" onclick=\"enableAutomaticAudio(event)\" aria-pressed=\"false\">Start audio</button>\n    </nav>",
+                1,
+            )
+        if "let automaticAudioEnabled = false;" not in text:
+            text = text.replace("        let hasUserInteracted = false;", "        let hasUserInteracted = false;\n        let automaticAudioEnabled = false;", 1)
+        text = text.replace(
+            "                if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {",
+            "                if (automaticAudioEnabled && scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {",
+            1,
+        )
+        if "function enableAutomaticAudio(event)" not in text:
+            text = text.replace(
+                "        function updateCard() {",
+                "        function enableAutomaticAudio(event) {\n"
+                "            if (event) event.stopPropagation();\n"
+                "            automaticAudioEnabled = true;\n"
+                "            hasUserInteracted = true;\n"
+                "            if ('speechSynthesis' in window) window.speechSynthesis.resume();\n"
+                "            const button = document.getElementById('audioStart');\n"
+                "            button.setAttribute('aria-pressed', 'true');\n"
+                "            button.textContent = 'Audio on';\n"
+                "            button.disabled = true;\n"
+                "            announceStatus('Audio enabled. Automatic pronunciation will start in three seconds.');\n"
+                "            scheduleWordSpeech();\n"
+                "        }\n\n"
+                "        function updateCard() {",
+                1,
+            )
+        if "function announceStatus(message)" not in text:
+            text = text.replace(
+                "        function announceCard(side) {",
+                "        function announceStatus(message) {\n"
+                "            const status = document.getElementById('cardStatus');\n"
+                "            status.textContent = '';\n"
+                "            window.clearTimeout(announceCard.timer);\n"
+                "            announceCard.timer = window.setTimeout(() => { status.textContent = message; }, 80);\n"
+                "        }\n\n"
+                "        function announceCard(side) {",
+                1,
+            )
+            text = text.replace(
+                "            const status = document.getElementById('cardStatus');\n            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;\n            status.textContent = '';\n            window.clearTimeout(announceCard.timer);\n            announceCard.timer = window.setTimeout(() => {\n                status.textContent = message;\n            }, 80);",
+                "            const message = `${sideText}. Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}.`;\n            announceStatus(message);",
+                1,
+            )
+        text = text.replace(
+            "            hasUserInteracted = true;\n            if (event) event.stopPropagation();\n            if (typeof words === 'undefined') return;",
+            "            hasUserInteracted = true;\n            automaticAudioEnabled = true;\n            const audioStart = document.getElementById('audioStart');\n            audioStart.setAttribute('aria-pressed', 'true');\n            audioStart.textContent = 'Audio on';\n            audioStart.disabled = true;\n            if (event) event.stopPropagation();\n            if (typeof words === 'undefined') return;",
+            1,
+        )
         if "activity-top-nav" not in text:
             text = text.replace(
                 "        .activity-main {",
