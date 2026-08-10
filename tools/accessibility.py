@@ -210,8 +210,8 @@ def require_replace(text: str, old: str, new: str, path: Path, label: str) -> st
 def patch_activity_page(path: Path) -> None:
     text = path.read_text(encoding="utf-8")
     if "activity-accessibility-v1" in text or "activity-accessibility-v2" in text:
-        text = text.replace("Automatic pronunciation will start in three seconds.", "Automatic pronunciation will start in two seconds.", 1)
-        text = text.replace("            }, 3000);\n        }\n\n        function enableAutomaticAudio", "            }, 2000);\n        }\n\n        function enableAutomaticAudio", 1)
+        text = text.replace("Automatic pronunciation will start in two seconds.", "Automatic pronunciation will start in 1.2 seconds.", 1)
+        text = text.replace("            }, 2000);\n        }\n\n        function enableAutomaticAudio", "            }, 1200);\n        }\n\n        function enableAutomaticAudio", 1)
         text = text.replace("justify-content: flex-start;\n            margin-bottom: 6px;", "justify-content: space-between;\n            gap: 10px;\n            margin-bottom: 6px;", 1)
         text = text.replace("        .activity-home {", "        .activity-home,\n        .audio-start {", 1)
         if '.audio-start[aria-pressed="true"]' not in text:
@@ -247,7 +247,7 @@ def patch_activity_page(path: Path) -> None:
                 "            button.setAttribute('aria-pressed', 'true');\n"
                 "            button.textContent = 'Audio on';\n"
                 "            button.disabled = true;\n"
-                "            announceStatus('Audio enabled. Automatic pronunciation will start in two seconds.');\n"
+                "            announceStatus('Audio enabled. Automatic pronunciation will start in 1.2 seconds.');\n"
                 "            scheduleWordSpeech();\n"
                 "        }\n\n"
                 "        function updateCard() {",
@@ -437,7 +437,7 @@ def patch_activity_page(path: Path) -> None:
                 if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
                     speakText(words[currentIndex].en);
                 }
-            }, 2000);
+            }, 1200);
         }
 """
             text, count = re.subn(
@@ -662,7 +662,7 @@ def patch_activity_page(path: Path) -> None:
                 if (scheduledIndex === currentIndex && !card.classList.contains('is-flipped')) {
                     speakText(words[currentIndex].en);
                 }
-            }, 2000);
+            }, 1200);
         }
 """
     text, count = re.subn(
