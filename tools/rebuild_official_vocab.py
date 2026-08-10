@@ -552,11 +552,10 @@ def patch_family_ui(path: Path) -> None:
     elif 'id="familyBox"' not in text:
         raise RuntimeError(f"Could not add family markup to {path}")
 
-    marker = """            document.getElementById('exEn').innerText = item.ex_en || '';
-            document.getElementById('exHe').innerText = item.ex_he || '';
-"""
     family_js = """            document.getElementById('exEn').innerText = item.ex_en || '';
-            document.getElementById('exHe').innerText = item.ex_he || '';
+            const exHe = document.getElementById('exHe');
+            exHe.innerText = item.ex_he || '';
+            exHe.style.display = item.ex_he ? 'block' : 'none';
 
             const familyBox = document.getElementById('familyBox');
             const familyList = document.getElementById('familyList');
@@ -581,18 +580,17 @@ def patch_family_ui(path: Path) -> None:
                 backDetailsGrid.classList.add('family-empty');
             }
 """
-    if marker in text:
-        text = text.replace(marker, family_js, 1)
-    elif "const familyBox = document.getElementById('familyBox');" not in text:
-        raise RuntimeError(f"Could not add family JS to {path}")
-    if "exHe.style.display" not in text:
-        text = text.replace(
-            "            document.getElementById('exHe').innerText = item.ex_he || '';",
-            "            const exHe = document.getElementById('exHe');\n"
-            "            exHe.innerText = item.ex_he || '';\n"
-            "            exHe.style.display = item.ex_he ? 'block' : 'none';",
-            1,
-        )
+    # Replace the whole dynamic back-card section every time. This keeps the
+    # generator idempotent and removes stale or accidentally duplicated blocks.
+    dynamic_section = re.compile(
+        r"            document\.getElementById\('exEn'\)\.innerText = item\.ex_en \|\| '';\n"
+        r".*?"
+        r"(?=            document\.getElementById\('counter'\)\.innerText =)",
+        re.S,
+    )
+    text, count = dynamic_section.subn(family_js, text, count=1)
+    if count != 1:
+        raise RuntimeError(f"Could not normalize family JS in {path}")
     path.write_text(text, encoding="utf-8")
 
 

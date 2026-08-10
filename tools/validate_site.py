@@ -52,7 +52,14 @@ def main() -> None:
             f"Incorrect title in {group}.html",
         )
         assert_true("favicon.svg?v=" in text, f"Cache-busted favicon missing in {group}.html")
-        assert_true('id="familyBox"' in text, f"Family box missing in {group}.html")
+        assert_true(
+            text.count('id="familyBox"') == 1,
+            f"Family box must appear exactly once in {group}.html",
+        )
+        assert_true(
+            text.count("const familyBox = document.getElementById('familyBox');") == 1,
+            f"Family JavaScript must appear exactly once in {group}.html",
+        )
         assert_true("familyBox.style.display = 'none'" in text, f"Empty-family hiding missing in {group}.html")
         records = vocab.read_html_records(path)
         records_by_group[group] = records

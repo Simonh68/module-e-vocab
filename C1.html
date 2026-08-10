@@ -458,29 +458,6 @@
                 familyBox.style.display = 'none';
                 backDetailsGrid.classList.add('family-empty');
             }
-
-            const familyBox = document.getElementById('familyBox');
-            const familyList = document.getElementById('familyList');
-            const backDetailsGrid = document.getElementById('backDetailsGrid');
-            familyList.replaceChildren();
-            if (item.family_members && item.family_members.length > 0) {
-                familyBox.style.display = 'block';
-                backDetailsGrid.classList.remove('family-empty');
-                item.family_members.forEach(member => {
-                    const listItem = document.createElement('li');
-                    const word = document.createElement('span');
-                    const pos = document.createElement('span');
-                    word.className = 'family-word';
-                    pos.className = 'family-pos';
-                    word.textContent = member.word;
-                    pos.textContent = ` — ${member.pos}`;
-                    listItem.append(word, pos);
-                    familyList.appendChild(listItem);
-                });
-            } else {
-                familyBox.style.display = 'none';
-                backDetailsGrid.classList.add('family-empty');
-            }
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
             
             if (hasUserInteracted) {
