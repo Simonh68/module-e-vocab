@@ -138,14 +138,44 @@
   .teacher-credit{
     font-weight:700;
   }
-  .guide-link{
+  .about-link{
     margin-left:auto;
-    color:#fff;
-    padding:9px 13px;
+    color:#245d40;
+    padding:8px 12px;
     border-radius:12px;
+    background:linear-gradient(145deg,#ffffff,#e3f6ea);
+    border:1px solid #a9d4b9;
+    box-shadow:inset 0 1px 0 #fff,0 4px 0 #9bcbaa;
+  }
+  .teacher-guide-callout{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:16px;
+    width:100%;
+    margin:0 0 25px;
+    padding:18px 21px;
+    color:#174d35;
+    background:linear-gradient(145deg,rgba(241,255,246,.98),rgba(185,234,202,.96));
+    border:2px solid #54aa76;
+    border-radius:22px;
+    box-shadow:inset 0 2px 0 #fff,0 7px 0 #5eae7d,0 18px 34px rgba(38,105,70,.2);
+    transform:translateY(-2px);
+  }
+  .teacher-guide-callout:hover{
+    color:#174d35;
+    transform:translateY(-6px);
+    box-shadow:inset 0 2px 0 #fff,0 9px 0 #529c70,0 24px 38px rgba(38,105,70,.24);
+  }
+  .guide-icon{font-size:2.25rem;filter:drop-shadow(0 3px 2px rgba(27,91,58,.16))}
+  .guide-copy strong{display:block;font-size:1.24rem;margin-bottom:3px}
+  .guide-copy span{display:block;color:#37694f;font-weight:650;line-height:1.4}
+  .guide-action{
+    padding:10px 14px;
+    border-radius:13px;
+    color:#fff;
     background:linear-gradient(145deg,#4ba875,#256b48);
-    border:1px solid #368b5f;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.28), 0 4px 0 #194d34, 0 8px 14px rgba(29,89,58,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 0 #194d34;
   }
 
   .lists{
@@ -296,7 +326,9 @@
     .hero{padding:23px 20px 22px;}
     .hero-meta{align-items:flex-start;gap:9px;}
     .hero-meta > *{width:100%;}
-    .guide-link{margin:3px 0 0;width:auto;}
+    .about-link{margin:3px 0 0;width:auto;}
+    .teacher-guide-callout{grid-template-columns:auto 1fr;padding:17px;}
+    .guide-action{grid-column:1/-1;justify-self:start;}
     .lists{grid-template-columns:1fr;}
     .list-card{padding:18px;}
   }
@@ -318,9 +350,18 @@
       <div class="hero-meta" aria-label="Site information">
         <span class="device-support">💻 📱 Responsive web app for computers, tablets and phones</span>
         <span class="teacher-credit">Presented by Teacher Simon Halevi</span>
-        <a class="guide-link" href="about.html">About &amp; Teacher Guide →</a>
+        <a class="about-link" href="about.html">About →</a>
       </div>
     </header>
+
+    <a class="teacher-guide-callout" href="teacher-guide.html" aria-label="Open the Teacher Guide">
+      <span class="guide-icon" aria-hidden="true">📘</span>
+      <span class="guide-copy">
+        <strong>Teacher Guide</strong>
+        <span>Curriculum alignment, teaching method, source audit and official A–D files.</span>
+      </span>
+      <span class="guide-action">Open guide →</span>
+    </a>
 
     <main class="lists">
       <section class="list-card list-a">
