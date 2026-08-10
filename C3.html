@@ -264,24 +264,190 @@
             font-size: 0.85rem;
             padding: 8px 16px;
         }
+
+
+        /* activity-accessibility-v1 */
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: -100px;
+            left: 12px;
+            z-index: 1000;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #111827;
+            color: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 12px;
+        }
+
+        .activity-top-nav {
+            width: 100%;
+            max-width: 480px;
+            min-height: 44px;
+            position: sticky;
+            top: 8px;
+            z-index: 40;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 6px;
+            pointer-events: none;
+        }
+
+        .activity-home {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 8px 13px;
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            color: var(--primary-hover);
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 3px 10px rgba(30, 41, 59, 0.14);
+            font-size: 0.85rem;
+            font-weight: 750;
+            line-height: 1;
+            text-decoration: none;
+            pointer-events: auto;
+        }
+
+        .activity-home:hover {
+            background: #eef2ff;
+        }
+
+        .activity-home svg {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 auto;
+        }
+
+        .activity-main {
+            width: 100%;
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #b45309;
+            outline-offset: 4px;
+        }
+
+        .flip-btn {
+            background-color: #ede9fe;
+            border-color: #8b5cf6;
+            color: #4c1d95;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .nav-container .nav-btn {
+            min-width: 0;
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .legal-footer {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            padding: 18px 10px 2px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .legal-footer a {
+            color: var(--primary-hover);
+            font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+            }
+
+            .card,
+            .tts-btn,
+            .nav-btn {
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .nav-container { gap: 6px; }
+            .nav-container .nav-btn { padding: 10px 4px; font-size: 0.8rem; }
+            .nav-container .nav-btn svg { display: none; }
+        }
+
+        @media (forced-colors: active) {
+            .card,
+            .card-face,
+            .activity-home,
+            .tts-btn,
+            .nav-btn {
+                border: 1px solid ButtonText;
+            }
+        }
     </style>
     <script>
         const words = [{"en":"marvelous","pos":"Adjective","grammar":"adjective","mean_he":"נפלא","ex_en":"That is a marvelous idea.","ex_he":"זה רעיון נפלא.","official_entry":"marvelous","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"very good; wonderful","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"shelter","pos":"Verb","grammar":"verb","mean_he":"לתת מחסה","ex_en":"The trees sheltered us from the sun.","ex_he":"העצים נתנו לנו מחסה מהשמש.","official_entry":"shelter","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"protect someone or give a safe place","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"pause","pos":"Noun","grammar":"noun","mean_he":"הפסקה","ex_en":"There was a short pause in the conversation.","ex_he":"הייתה הפסקה קצרה בשיחה.","official_entry":"pause","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a short stop","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"mark","pos":"Verb","grammar":"verb","mean_he":"לסמן; לבדוק","ex_en":"Please mark the correct answer.","ex_he":"אנא סמן את התשובה הנכונה.","official_entry":"mark","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"write a sign on something; give a score to work","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"frozen","pos":"Adjective","grammar":"adjective","mean_he":"קפוא","ex_en":"I bought frozen vegetables.","ex_he":"קניתי ירקות קפואים.","official_entry":"frozen","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"made into ice; very cold","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"chase","pos":"Verb","grammar":"verb","mean_he":"לרדוף","ex_en":"The dog chased the cat.","ex_he":"הכלב רדף אחרי החתול.","official_entry":"chase","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"run after someone or something to catch it","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"server","pos":"Noun","grammar":"noun","mean_he":"שרת","ex_en":"The computer server is down.","ex_he":"שרת המחשב קרס.","official_entry":"server","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a computer that gives information to other computers","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"struggle","pos":"Verb","grammar":"verb","mean_he":"להיאבק; להתקשות","ex_en":"He struggled to carry the heavy box.","ex_he":"הוא התקשה לשאת את הקופסה הכבדה.","official_entry":"struggle","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"fight or try very hard","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"strike","pos":"Noun","grammar":"noun","mean_he":"שביתה; מכה","ex_en":"The workers went on strike.","ex_he":"העובדים יצאו לשביתה.","official_entry":"strike","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a time workers stop work; a hit","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"dozen","pos":"Noun","grammar":"noun","mean_he":"תריסר (12)","ex_en":"I bought a dozen eggs.","ex_he":"קניתי תריסר ביצים.","official_entry":"dozen","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a group of twelve","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"cycle","pos":"Verb","grammar":"verb","mean_he":"לרכוב על אופניים","ex_en":"I cycle to school every morning.","ex_he":"אני רוכב על אופניים לבית הספר בכל בוקר.","official_entry":"cycle","family_members":[{"word":"cyclist","pos":"Noun"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"ride a bicycle","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"barrier","pos":"Noun","grammar":"noun","mean_he":"מחסום","ex_en":"A physical barrier.","ex_he":"מחסום פיזי.","official_entry":"barrier","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"something that stops people or things from going through","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"quarrel","pos":"Verb","grammar":"verb","mean_he":"לריב","ex_en":"The children often quarrel about toys.","ex_he":"הילדים רבים לעיתים קרובות על צעצועים.","official_entry":"quarrel","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"argue in an angry way","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"suspect","pos":"Noun","grammar":"noun","mean_he":"חשוד","ex_en":"The police questioned the suspect.","ex_he":"המשטרה חקרה את החשוד.","official_entry":"suspect","family_members":[{"word":"suspicion","pos":"N Adj"},{"word":"suspicious","pos":"N Adj"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a person thought to have done a crime","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"miss","pos":"Noun","grammar":"noun","mean_he":"החטאה; פספוס","ex_en":"It was a near miss.","ex_he":"זה היה כמעט פספוס.","official_entry":"miss","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a time when you do not hit or catch something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"thief","pos":"Noun","grammar":"noun","mean_he":"גנב","ex_en":"The thief ran away quickly.","ex_he":"הגנב ברח במהירות.","official_entry":"thief","family_members":[{"word":"theft","pos":"Noun"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a person who steals","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"do a good job","pos":"Phrase","grammar":"phrase / chunk","mean_he":"לעשות עבודה טובה","ex_en":"You did a good job.","ex_he":"עשית עבודה טובה.","official_entry":"do a good/excellent, etc. job","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"do work well","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"membership","pos":"Noun","grammar":"noun","mean_he":"חברות (בארגון)","ex_en":"I renewed my gym membership.","ex_he":"חידשתי את החברות שלי במכון הכושר.","official_entry":"membership","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"being part of a group; all the people in a group","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"turn into","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להפוך ל","ex_en":"The frog turned into a prince.","ex_he":"הצפרדע הפכה לנסיך.","official_entry":"turn (sb/sth) into sb/sth","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"become or change into something different","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"speed","pos":"Noun","grammar":"noun","mean_he":"מהירות","ex_en":"High speed train.","ex_he":"רכבת במהירות גבוהה.","official_entry":"speed","family_members":[{"word":"speed limit","pos":"Noun phrase"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"how fast something moves or happens","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"free","pos":"Adverb","grammar":"adverb","mean_he":"בחינם","ex_en":"Children under five travel free.","ex_he":"ילדים מתחת לגיל חמש נוסעים בחינם.","official_entry":"free","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"without paying","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"race","pos":"Noun","grammar":"noun","mean_he":"גזע; מירוץ","ex_en":"The human race.","ex_he":"הגזע האנושי.","official_entry":"race","family_members":[{"word":"racial","pos":"Adjective"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a competition to see who is fastest; a large group of people with the same history","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"liquid","pos":"Adjective","grammar":"adjective","mean_he":"נוזלי","ex_en":"The medicine is in liquid form.","ex_he":"התרופה היא בצורה נוזלית.","official_entry":"liquid","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"able to move like water","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"spread","pos":"Noun","grammar":"noun","mean_he":"ממרח; התפשטות","ex_en":"This cheese spread tastes good on bread.","ex_he":"ממרח הגבינה הזה טעים על לחם.","official_entry":"spread","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"food put on bread; the act of moving over a larger area","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"brilliant","pos":"Adjective","grammar":"adjective","mean_he":"מבריק; גאוני","ex_en":"A brilliant idea.","ex_he":"רעיון מבריק.","official_entry":"brilliant","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"very clever or very good; giving a lot of light","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"powder","pos":"Noun","grammar":"noun","mean_he":"אבקה","ex_en":"She used baby powder.","ex_he":"היא השתמשה באבקת תינוקות.","official_entry":"powder","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"Boundary examples","support_text":"a dry substance made of very small particles","boundary_examples":"sugar; salt; dry soap in very small pieces","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"enter","pos":"Verb","grammar":"verb","mean_he":"להזין; להיכנס","ex_en":"Enter the details in the system.","ex_he":"הזן את הפרטים במערכת.","official_entry":"enter","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"go into a place; put information into a computer","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"offense","pos":"Noun","grammar":"noun","mean_he":"עבירה; פגיעה","ex_en":"A serious criminal offense.","ex_he":"עבירה פלילית חמורה.","official_entry":"offense","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"an act that breaks a law or rule; an action that hurts feelings","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"trade","pos":"Noun","grammar":"noun","mean_he":"סחר; מקצוע","ex_en":"International trade is important.","ex_he":"סחר בינלאומי הוא חשוב.","official_entry":"trade","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"buying and selling; a skilled job","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"follow","pos":"Verb","grammar":"verb","mean_he":"להבין; לעקוב","ex_en":"Do you follow my explanation?","ex_he":"אתה מבין את ההסבר שלי?","official_entry":"follow","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"go after; understand; do what someone says","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"sound angry","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להישמע כועס","ex_en":"You sound angry on the phone.","ex_he":"אתה נשמע כועס בטלפון.","official_entry":"sound angry / happy / rude, etc.","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"seem angry from the voice","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"clinic","pos":"Noun","grammar":"noun","mean_he":"מרפאה","ex_en":"A dental clinic.","ex_he":"מרפאת שיניים.","official_entry":"clinic","family_members":[{"word":"clinical","pos":"Adjective"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a place for medical care, smaller than a hospital","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"struggle","pos":"Noun","grammar":"noun","mean_he":"מאבק","ex_en":"Learning to walk again was a struggle.","ex_he":"ללמוד ללכת שוב היה מאבק.","official_entry":"struggle","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a hard fight or a hard time trying","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"smart","pos":"Adjective","grammar":"adjective","mean_he":"חכם","ex_en":"She is a smart student.","ex_he":"היא תלמידה חכמה.","official_entry":"smart","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"clever","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"tip","pos":"Noun","grammar":"noun","mean_he":"טיפ; עצה","ex_en":"He gave me a good tip.","ex_he":"הוא נתן לי עצה טובה.","official_entry":"tip","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a useful piece of advice; extra money for service; a pointed end","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"dramatic","pos":"Adjective","grammar":"adjective","mean_he":"דרמטי","ex_en":"A dramatic change in weather.","ex_he":"שינוי דרמטי במזג האוויר.","official_entry":"dramatic","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"very fast and great; exciting like a play","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"modest","pos":"Adjective","grammar":"adjective","mean_he":"צנוע","ex_en":"A modest person.","ex_he":"אדם צנוע.","official_entry":"modest","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"not saying you are better than others; not large","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"tribe","pos":"Noun","grammar":"noun","mean_he":"שבט","ex_en":"An ancient tribe lived here.","ex_he":"שבט עתיק חי כאן.","official_entry":"tribe","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a group of people with the same language and way of life","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"super","pos":"Adjective","grammar":"adjective","mean_he":"מעולה; סופר","ex_en":"The car is super fast.","ex_he":"המכונית סופר מהירה.","official_entry":"super","family_members":[{"word":"superb","pos":"Adjective"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"very good","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"term","pos":"Noun","grammar":"noun","mean_he":"מונח; תקופה","ex_en":"It is a legal term.","ex_he":"זהו מונח משפטי.","official_entry":"term","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a word or phrase with a special meaning; a period of time","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"assure","pos":"Verb","grammar":"verb","mean_he":"להבטיח","ex_en":"I assure you it is safe.","ex_he":"אני מבטיח לך שזה בטוח.","official_entry":"assure","family_members":[{"word":"assurance","pos":"Noun"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"tell someone that something is certainly true","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"beat","pos":"Noun","grammar":"noun","mean_he":"קצב; פעימה","ex_en":"A fast heart beat.","ex_he":"פעימת לב מהירה.","official_entry":"beat","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a regular sound or movement in music or the heart","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"costume","pos":"Noun","grammar":"noun","mean_he":"תחפושת","ex_en":"A scary Halloween costume.","ex_he":"תחפושת מפחידה לליל כל הקדושים.","official_entry":"costume","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"clothes worn to look like another person","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"weird","pos":"Adjective","grammar":"adjective","mean_he":"מוזר","ex_en":"I heard a weird noise.","ex_he":"שמעתי רעש מוזר.","official_entry":"weird","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"strange","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"collector","pos":"Noun","grammar":"noun","mean_he":"אספן","ex_en":"He is a famous stamp collector.","ex_he":"הוא אספן בולים מפורסם.","official_entry":"collector","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a person who keeps many things as a job or for fun","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"spirit","pos":"Noun","grammar":"noun","mean_he":"רוח; מורל","ex_en":"We have great team spirit.","ex_he":"יש לנו מורל קבוצתי נהדר.","official_entry":"spirit","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the general feeling in a person or group","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"attraction","pos":"Noun","grammar":"noun","mean_he":"אטרקציה; משיכה","ex_en":"A tourist attraction.","ex_he":"אטרקציה תיירותית.","official_entry":"attraction","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"something interesting that people visit; a feeling that brings people together","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"pour","pos":"Verb","grammar":"verb","mean_he":"למזוג","ex_en":"Please pour the water.","ex_he":"אנא מזוג את המים.","official_entry":"pour","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"make water or another drink move from one place to another","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"trick","pos":"Noun","grammar":"noun","mean_he":"תעלול; טריק","ex_en":"The magician showed us a clever trick.","ex_he":"הקוסם הראה לנו תעלול חכם.","official_entry":"trick","family_members":[{"word":"tricky","pos":"Adjective"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a clever action that makes someone believe something false","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"mark","pos":"Noun","grammar":"noun","mean_he":"סימן; ציון","ex_en":"Do not leave a mark on the wall.","ex_he":"אל תשאיר סימן על הקיר.","official_entry":"mark","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a written sign; a score for work","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"coach","pos":"Verb","grammar":"verb","mean_he":"לאמן","ex_en":"She coaches the school team.","ex_he":"היא מאמנת את נבחרת בית הספר.","official_entry":"coach","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"train a team or person","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"suspect","pos":"Verb","grammar":"verb","mean_he":"לחשוד","ex_en":"The police suspect him of stealing the car.","ex_he":"המשטרה חושדת בו שגנב את המכונית.","official_entry":"suspect","family_members":[{"word":"suspicion","pos":"N Adj"},{"word":"suspicious","pos":"N Adj"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"think something is probably true or wrong","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"maker","pos":"Noun","grammar":"noun","mean_he":"יצרן; יוצר","ex_en":"A famous car maker.","ex_he":"יצרן רכבים מפורסם.","official_entry":"maker","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a person or company that makes something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"Yours sincerely","pos":"Phrase","grammar":"phrase / chunk","mean_he":"בברכה (במכתב)","ex_en":"Yours sincerely, Anna.","ex_he":"בברכה, אנה.","official_entry":"Yours sincerely","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"words used at the end of a formal letter","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"Who cares?","pos":"Phrase","grammar":"phrase / chunk","mean_he":"למי אכפת","ex_en":"It’s broken, but who cares?","ex_he":"זה שבור, אבל למי אכפת?","official_entry":"Who cares?","family_members":[{"word":"care for","pos":"Phrasal verb"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"words showing that something is not important","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"quit","pos":"Verb","grammar":"verb","mean_he":"לפרוש; לעזוב","ex_en":"I decided to quit my job.","ex_he":"החלטתי לעזוב את העבודה שלי.","official_entry":"quit","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"stop a job or activity","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"wise","pos":"Adjective","grammar":"adjective","mean_he":"חכם","ex_en":"He is a very wise man.","ex_he":"הוא אדם מאוד חכם.","official_entry":"wise","family_members":[{"word":"wisdom","pos":"Noun"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"able to make good decisions","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"shaming","pos":"Noun","grammar":"noun","mean_he":"ביוש; שיימינג","ex_en":"Stop online shaming.","ex_he":"עצרו את השיימינג ברשת.","official_entry":"shaming","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the public act of making someone feel bad about who they are","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"bend","pos":"Verb","grammar":"verb","mean_he":"לכופף; להתכופף","ex_en":"Bend your knees when you jump.","ex_he":"כופף את הברכיים כשאתה קופץ.","official_entry":"bend","family_members":[{"word":"bent","pos":"Adjective"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"make or become not straight","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"subway","pos":"Noun","grammar":"noun","mean_he":"רכבת תחתית","ex_en":"Take the subway to work.","ex_he":"קח את הרכבת התחתית לעבודה.","official_entry":"subway","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"an underground train","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"cash","pos":"Verb","grammar":"verb","mean_he":"לפדות","ex_en":"I need to cash this check.","ex_he":"אני צריך לפדות את הצ'ק הזה.","official_entry":"cash","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"change a cheque into money","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"melt","pos":"Verb","grammar":"verb","mean_he":"להמיס; להינמס","ex_en":"The ice cream will melt.","ex_he":"הגלידה תינמס.","official_entry":"melt","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"become or make something become like water through heat","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"tight","pos":"Adjective","grammar":"adjective","mean_he":"הדוק; צמוד","ex_en":"These pants are too tight.","ex_he":"המכנסיים האלה צמודים מדי.","official_entry":"tight","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"fitting very close; with little space","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"tired of doing","pos":"Phrase","grammar":"phrase / chunk","mean_he":"נמאס מ","ex_en":"I’m tired of waiting.","ex_he":"נמאס לי לחכות.","official_entry":"tired of doing sth","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"no longer enjoying an activity because you did too much of it","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"remain calm","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להישאר רגוע","ex_en":"Remain calm during the exam.","ex_he":"הישאר רגוע במהלך המבחן.","official_entry":"remain calm/open, etc","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"stay relaxed; do not worry","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"table","pos":"Noun","grammar":"noun","mean_he":"טבלה","ex_en":"Read the table of numbers.","ex_he":"קרא את טבלת המספרים.","official_entry":"table","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"information in lines going across and down","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"get in touch","pos":"Phrase","grammar":"phrase / chunk","mean_he":"ליצור קשר","ex_en":"Let’s get in touch soon.","ex_he":"בוא ניצור קשר בקרוב.","official_entry":"get in touch","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"contact someone","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"peaceful","pos":"Adjective","grammar":"adjective","mean_he":"שליו","ex_en":"It was a peaceful day.","ex_he":"זה היה יום שליו.","official_entry":"peaceful","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"quiet and without fighting or war","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"via","pos":"Preposition","grammar":"preposition","mean_he":"דרך; באמצעות","ex_en":"We flew to New York via Paris.","ex_he":"טסנו לניו יורק דרך פריז.","official_entry":"via","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"by way of; using","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"take sb’s place","pos":"Phrase","grammar":"phrase / chunk","mean_he":"לתפוס את המקום של","ex_en":"He will take my place.","ex_he":"הוא יתפוס את מקומי.","official_entry":"take sb's place","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"do the job or be in the position of another person","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"touch","pos":"Noun","grammar":"noun","mean_he":"מגע; לגעת","ex_en":"Keep in touch with us.","ex_he":"שמור על קשר (מגע) איתנו.","official_entry":"touch","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"the act of putting a hand or finger on something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"trick","pos":"Verb","grammar":"verb","mean_he":"להערים; לרמות","ex_en":"They tricked him into paying too much.","ex_he":"הם הערימו עליו וגרמו לו לשלם יותר מדי.","official_entry":"trick","family_members":[{"word":"tricky","pos":"Adjective"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"make someone believe something false","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"tiring","pos":"Adjective","grammar":"adjective","mean_he":"מעייף","ex_en":"It was a very tiring day.","ex_he":"זה היה יום מאוד מעייף.","official_entry":"tiring","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"making someone feel tired","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"spread","pos":"Verb","grammar":"verb","mean_he":"למרוח; להתפשט","ex_en":"Spread the butter on the bread.","ex_he":"מרח את החמאה על הלחם.","official_entry":"spread","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"move over a larger area; put food on bread","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"quarrel","pos":"Noun","grammar":"noun","mean_he":"ריב","ex_en":"The brothers had a quarrel.","ex_he":"האחים רבו זה עם זה.","official_entry":"quarrel","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"an angry argument","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"bold","pos":"Adjective","grammar":"adjective","mean_he":"מודגש; נועז","ex_en":"That was a bold decision.","ex_he":"זו הייתה החלטה נועזת.","official_entry":"bold","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"brave; dark and thick in print","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"give up","pos":"Verb","grammar":"verb","mean_he":"לוותר","ex_en":"Never give up on your dreams.","ex_he":"לעולם אל תוותר על החלומות שלך.","official_entry":"give up sth or give sth up","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"stop trying or stop doing something","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"give in","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להיכנע","ex_en":"Never give in to pressure.","ex_he":"לעולם אל תיכנע ללחץ.","official_entry":"give in/up","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"stop fighting and accept what another person wants","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"switch","pos":"Noun","grammar":"noun","mean_he":"מתג","ex_en":"Turn off the light switch.","ex_he":"כבה את מתג האור.","official_entry":"switch","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"a small part used to turn electricity on or off","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"cover","pos":"Verb","grammar":"verb","mean_he":"לסקר; לכסות","ex_en":"Journalists cover the news.","ex_he":"עיתונאים מסקרים את החדשות.","official_entry":"cover","family_members":[{"word":"coverage","pos":"Noun"}],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"put something over another thing; report a story","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"let in","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להכניס","ex_en":"Let the dog in.","ex_he":"הכנס את הכלב.","official_entry":"let sb/sth in / past / through, etc","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"allow someone or something to enter","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"loan","pos":"Verb","grammar":"verb","mean_he":"להשאיל","ex_en":"The museum loaned the painting to another gallery.","ex_he":"המוזיאון השאיל את הציור לגלריה אחרת.","official_entry":"loan","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 synonym(s)","support_text":"lend","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"},{"en":"spill","pos":"Verb","grammar":"verb","mean_he":"לשפוך","ex_en":"Don’t spill the water.","ex_he":"אל תשפוך את המים.","official_entry":"spill","family_members":[],"mean_fr":"-","ex_fr":"-","synonyms":[],"support_type":"A2 definition","support_text":"let water or another drink fall out by accident","boundary_examples":"","rec_prod":"","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTC12.12.21.xlsx"}];
     </script>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <nav class="activity-top-nav" aria-label="Activity navigation">
+        <a class="activity-home" href="index.html" aria-label="Return to Module E vocabulary home">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
+            <span>Home</span>
+        </a>
+    </nav>
+
     <header>
-        <div class="title">Flashcards - Part C3</div>
+        <h1 class="title">Flashcards - Part C3</h1>
         <div class="counter" id="counter">1 / 1</div>
     </header>
 
+    <main class="activity-main" id="main-content">
     <div class="container" id="cardContainer">
-        <div class="card" id="flashcard" onclick="toggleCard()">
-            <div class="card-face">
+        <div class="card" id="flashcard" role="group" aria-label="Flashcard" aria-describedby="cardInstructions" onclick="toggleCard()">
+            <div class="card-face" id="cardFront" aria-hidden="false">
                 <div class="card-header-top">
                     <span class="pos-badge" id="posBadge">NOUN</span>
-                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
-                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <button type="button" class="tts-btn" id="ttsBtn" onclick="playAudio(event)" aria-label="Listen to the word" title="Listen to the word">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                     </button>
                 </div>
                 <div class="word-main-container">
@@ -291,11 +457,11 @@
                 <div class="flip-hint">Tap card to flip ↺</div>
             </div>
 
-            <div class="card-face card-back">
+            <div class="card-face card-back" id="cardBack" aria-hidden="true" inert>
                 <div class="translations-section">
                     <div class="trans-row">
                         <span class="lang-label">Hebrew</span>
-                        <span class="trans-he" id="transHe">-</span>
+                        <span class="trans-he" id="transHe" lang="he" dir="rtl">-</span>
                     </div>
                 </div>
                 <div class="synonyms-box" id="synonymsBox">
@@ -304,7 +470,7 @@
                 <div class="back-details-grid" id="backDetailsGrid">
                     <div class="example-box">
                         <div class="example-en" id="exEn">-</div>
-                        <div class="example-trans he" id="exHe">-</div>
+                        <div class="example-trans he" id="exHe" lang="he" dir="rtl">-</div>
                     </div>
                     <div class="family-box" id="familyBox">
                         <div class="family-title">Family Members</div>
@@ -314,22 +480,34 @@
                 <div class="flip-hint" style="margin-top: 10px;">Tap to flip back</div>
             </div>
         </div>
+        <p class="sr-only" id="cardInstructions">Use Show answer to flip the card. Use Previous and Next to move between cards.</p>
+        <div class="sr-only" id="cardStatus" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <div class="nav-container">
-        <button class="nav-btn" onclick="prevCard()">
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    <div class="nav-container" role="group" aria-label="Flashcard controls">
+        <button type="button" class="nav-btn" onclick="prevCard()">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             Previous
         </button>
-        <button class="nav-btn" onclick="nextCard()">
+        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>
+        <button type="button" class="nav-btn" onclick="nextCard()">
             Next
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
 
     <div class="jump-container">
         <a href="C2.html" class="nav-btn">Go to Previous Part</a>
     </div>
+    </main>
+
+    <footer class="legal-footer" aria-label="Site information">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="accessibility.html">Accessibility</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="copyright.html">Copyright</a>
+    </footer>
 
     <script>
         let currentIndex = 0;
@@ -349,7 +527,18 @@
             if (typeof words === 'undefined' || words.length === 0) return;
             const item = words[currentIndex];
             
-            document.getElementById('flashcard').classList.remove('is-flipped');
+            const card = document.getElementById('flashcard');
+            card.classList.remove('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', 'false');
+            cardBack.setAttribute('aria-hidden', 'true');
+            cardFront.inert = false;
+            cardBack.inert = true;
+            document.getElementById('ttsBtn').disabled = false;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', 'false');
+            flipButton.textContent = 'Show answer';
             document.getElementById('posBadge').innerText = (item.pos || '').toUpperCase();
             document.getElementById('wordEn').innerText = item.en || '';
             document.getElementById('wordGrammar').innerText = item.grammar || '';
@@ -390,17 +579,38 @@
                 backDetailsGrid.classList.add('family-empty');
             }
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            announceCard('word');
             
             if (hasUserInteracted) {
                 speakText(item.en);
             }
         }
 
-        function toggleCard() {
+        function announceCard(side) {
+            const item = words[currentIndex];
+            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
+            document.getElementById('cardStatus').textContent =
+                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+        }
+
+        function toggleCard(event) {
+            if (event) event.stopPropagation();
             hasUserInteracted = true;
             const card = document.getElementById('flashcard');
-            card.classList.toggle('is-flipped');
-            if (card.classList.contains('is-flipped')) {
+            const isFlipped = card.classList.toggle('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', String(isFlipped));
+            cardBack.setAttribute('aria-hidden', String(!isFlipped));
+            cardFront.inert = isFlipped;
+            cardBack.inert = !isFlipped;
+            document.getElementById('ttsBtn').disabled = isFlipped;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+            flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            announceCard(isFlipped ? 'answer' : 'word');
+
+            if (isFlipped) {
                 speakText(words[currentIndex].ex_en);
             }
         }
@@ -442,18 +652,18 @@
             if (touchEndX > touchStartX + threshold) prevCard();
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === 'ArrowLeft') prevCard();
-            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        document.addEventListener('keydown', (event) => {
+            if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                nextCard();
+            }
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevCard();
+            }
         });
 
-        document.body.addEventListener('click', () => {
-            if (!hasUserInteracted) {
-                hasUserInteracted = true;
-                speakText(words[currentIndex].en);
-            }
-        }, { once: true });
 
         window.onload = updateCard;
     </script>

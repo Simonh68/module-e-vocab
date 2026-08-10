@@ -13,6 +13,8 @@ import rebuild_official_vocab as vocab
 
 REPO = Path(__file__).resolve().parents[1]
 GROUPS = [f"{letter}{number}" for letter in "ABCD" for number in range(1, 4)]
+LEGACY_ACTIVITY_FILES = ["A1v2.html", "A2v2.html", "A3v2.html"]
+POLICY_FILES = ["accessibility.html", "privacy.html", "copyright.html"]
 EXPECTED_COUNTS = {
     "A1": 80, "A2": 80, "A3": 79,
     "B1": 80, "B2": 80, "B3": 79,
@@ -31,6 +33,9 @@ def main() -> None:
     index = (REPO / "index.html").read_text(encoding="utf-8")
     guide = (REPO / "teacher-guide.html").read_text(encoding="utf-8")
     about = (REPO / "about.html").read_text(encoding="utf-8")
+    policy_pages = {
+        filename: (REPO / filename).read_text(encoding="utf-8") for filename in POLICY_FILES
+    }
     assert_true(
         'class="teacher-guide-callout" href="teacher-guide.html"' in index,
         "Prominent Teacher Guide link is missing from index.html",
@@ -44,6 +49,24 @@ def main() -> None:
     assert_true(
         "Source-data corrections and editorial transparency" not in about,
         "Teacher Guide content still appears on the About page",
+    )
+    assert_true((REPO / "site-policy.css").exists(), "Shared policy-page stylesheet is missing")
+    for filename in POLICY_FILES:
+        assert_true(f'href="{filename}"' in about, f"About link to {filename} is missing")
+        assert_true(f'href="{filename}"' in index, f"Homepage link to {filename} is missing")
+        assert_true(f'href="{filename}"' in guide, f"Teacher Guide link to {filename} is missing")
+    assert_true(
+        "A formal certification by an external accessibility specialist is not claimed" in policy_pages["accessibility.html"],
+        "Accessibility statement overclaims formal certification",
+    )
+    assert_true(
+        "does not use registration, login forms, contact forms, advertising, analytics" in policy_pages["privacy.html"],
+        "Privacy policy does not state the site's data-minimizing design",
+    )
+    assert_true(
+        "non-commercial classroom teaching" in policy_pages["copyright.html"]
+        and "created and edited by Teacher Simon Halevi" in policy_pages["copyright.html"],
+        "Copyright page is missing the selected educational-use permission and credit",
     )
     source_files = {
         "LISTA12.12.21.xlsx": "List A",
@@ -93,6 +116,29 @@ def main() -> None:
         assert_true(".toUpperCase()" in text, f"Uppercase POS badge formatting missing in {group}.html")
         assert_true(".toLowerCase()" in text, f"Lowercase family POS formatting missing in {group}.html")
         assert_true("familyBox.style.display = 'none'" in text, f"Empty-family hiding missing in {group}.html")
+        accessibility_fragments = [
+            'class="skip-link" href="#main-content"',
+            'class="activity-top-nav" aria-label="Activity navigation"',
+            'class="activity-home" href="index.html"',
+            'class="activity-main" id="main-content"',
+            'id="flipButton"',
+            'id="cardStatus" role="status" aria-live="polite"',
+            'id="cardBack" aria-hidden="true" inert',
+            'role="group" aria-label="Flashcard controls"',
+            "cardFront.inert = isFlipped",
+            "document.getElementById('ttsBtn').disabled = isFlipped",
+            "event.key === 'ArrowRight'",
+            "event.key === 'ArrowLeft'",
+            "prefers-reduced-motion: reduce",
+        ]
+        for fragment in accessibility_fragments:
+            assert_true(fragment in text, f"Accessibility feature missing in {group}.html: {fragment}")
+        assert_true(
+            "e.key === ' ' || e.key === 'Enter'" not in text,
+            f"Conflicting global Enter/Space handler remains in {group}.html",
+        )
+        for filename in POLICY_FILES:
+            assert_true(f'href="{filename}"' in text, f"{filename} footer link missing in {group}.html")
         records = vocab.read_html_records(path)
         records_by_group[group] = records
         records_by_list[group[0]].extend(records)
@@ -180,7 +226,33 @@ def main() -> None:
     assert_true(len(json_rows) == 982, f"Master JSON has {len(json_rows)} rows instead of 982")
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
-    print("PASS: 12 activities, 982 cards, separate About and Teacher Guide pages, archived A–D sources, official coverage, capitalization, punctuation, links and static assets validated.")
+
+    for filename in LEGACY_ACTIVITY_FILES:
+        text = (REPO / filename).read_text(encoding="utf-8")
+        assert_true('class="skip-link" href="#main-content"' in text, f"Skip link missing in {filename}")
+        assert_true('class="activity-home" href="index.html"' in text, f"Home control missing in {filename}")
+        assert_true('id="flipButton"' in text, f"Accessible flip control missing in {filename}")
+        assert_true("e.key === ' ' || e.key === 'Enter'" not in text, f"Keyboard conflict remains in {filename}")
+        for policy in POLICY_FILES:
+            assert_true(f'href="{policy}"' in text, f"{policy} footer link missing in {filename}")
+
+    all_html = {path.name: path.read_text(encoding="utf-8") for path in REPO.glob("*.html")}
+    for filename, text in all_html.items():
+        assert_true("document.cookie" not in text, f"Cookie-writing code found in {filename}")
+        assert_true("localStorage" not in text, f"Local storage code found in {filename}")
+        assert_true("<form" not in text.lower(), f"Unexpected form found in {filename}")
+        assert_true(
+            re.search(r'<script[^>]+src=["\']https?://', text, re.I) is None,
+            f"Unexpected external script found in {filename}",
+        )
+        for href in re.findall(r'href=["\']([^"\']+)["\']', text, re.I):
+            if href.startswith(("http://", "https://", "mailto:", "#")):
+                continue
+            local_path = href.split("#", 1)[0].split("?", 1)[0]
+            if local_path:
+                assert_true((REPO / local_path).exists(), f"Broken local link in {filename}: {href}")
+
+    print("PASS: 12 activities, 982 cards, legacy pages, policies, accessibility controls, privacy checks, archived A–D sources, official coverage, capitalization, punctuation, links and static assets validated.")
 
 
 if __name__ == "__main__":

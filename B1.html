@@ -337,26 +337,192 @@
             font-size: 0.85rem;
             padding: 8px 16px;
         }
+
+
+        /* activity-accessibility-v1 */
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: -100px;
+            left: 12px;
+            z-index: 1000;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #111827;
+            color: #ffffff;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .skip-link:focus {
+            top: 12px;
+        }
+
+        .activity-top-nav {
+            width: 100%;
+            max-width: 480px;
+            min-height: 44px;
+            position: sticky;
+            top: 8px;
+            z-index: 40;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 6px;
+            pointer-events: none;
+        }
+
+        .activity-home {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 8px 13px;
+            border: 1px solid #c7d2fe;
+            border-radius: 12px;
+            color: var(--primary-hover);
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 3px 10px rgba(30, 41, 59, 0.14);
+            font-size: 0.85rem;
+            font-weight: 750;
+            line-height: 1;
+            text-decoration: none;
+            pointer-events: auto;
+        }
+
+        .activity-home:hover {
+            background: #eef2ff;
+        }
+
+        .activity-home svg {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 auto;
+        }
+
+        .activity-main {
+            width: 100%;
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sr-only {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        button:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #b45309;
+            outline-offset: 4px;
+        }
+
+        .flip-btn {
+            background-color: #ede9fe;
+            border-color: #8b5cf6;
+            color: #4c1d95;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .nav-container .nav-btn {
+            min-width: 0;
+            justify-content: center;
+            padding: 12px 10px;
+        }
+
+        .legal-footer {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            padding: 18px 10px 2px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .legal-footer a {
+            color: var(--primary-hover);
+            font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+            }
+
+            .card,
+            .tts-btn,
+            .nav-btn {
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .nav-container { gap: 6px; }
+            .nav-container .nav-btn { padding: 10px 4px; font-size: 0.8rem; }
+            .nav-container .nav-btn svg { display: none; }
+        }
+
+        @media (forced-colors: active) {
+            .card,
+            .card-face,
+            .activity-home,
+            .tts-btn,
+            .nav-btn {
+                border: 1px solid ButtonText;
+            }
+        }
     </style>
     <script>
         const words = [{"en":"involvement","pos":"Noun","grammar":"noun","mean_he":"מְעֹרָבוּת","mean_fr":"-","ex_en":"Parent involvement can help a school succeed.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"involvement","family_members":[{"word":"involved","pos":"Adj V"},{"word":"involve","pos":"Adj V"}],"support_type":"A2 definition","support_text":"the act of taking part in something","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"import","pos":"Verb","grammar":"verb","mean_he":"יִבֵּא","mean_fr":"-","ex_en":"The shop imports coffee from Brazil.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"import","family_members":[],"support_type":"A2 definition","support_text":"bring goods into a country for sale","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"take part","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להשתתף","mean_fr":"-","ex_en":"Every student can take part in the competition.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"take part","family_members":[],"support_type":"A2 definition","support_text":"join and be involved in an activity","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"journalist","pos":"Noun","grammar":"noun","mean_he":"עִתּוֹנַאי; ז'וּרְנָלִיסְט","mean_fr":"-","ex_en":"The journalist interviewed the mayor.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"journalist","family_members":[],"support_type":"A2 definition","support_text":"a person who reports news","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"try","pos":"Noun","grammar":"noun","mean_he":"נִסָּיוֹן; מַאֲמָץ","mean_fr":"-","ex_en":"Give the question another try.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"try","family_members":[],"support_type":"A2 definition","support_text":"an attempt to do something","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"promote","pos":"Verb","grammar":"verb","mean_he":"קִדֵּם; הֶעֱלָה","mean_fr":"-","ex_en":"The campaign promotes healthy eating.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"promote","family_members":[{"word":"promotion","pos":"Noun"}],"support_type":"A2 definition","support_text":"support, advertise or move someone to a higher job","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"not until","pos":"Phrase","grammar":"phrase / chunk","mean_he":"רק לאחר; לא לפני","mean_fr":"-","ex_en":"We did not leave until the rain stopped.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"not until","family_members":[],"support_type":"A2 definition","support_text":"only after a particular time or event","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"role","pos":"Noun","grammar":"noun","mean_he":"תַּפְקִיד","mean_fr":"-","ex_en":"Parents play an important role in education.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"role","family_members":[],"support_type":"A2 definition","support_text":"a function, duty or acting part","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"exception","pos":"Noun","grammar":"noun","mean_he":"יוֹצֵא מִן הַכְּלָל; חָרִיג","mean_fr":"-","ex_en":"Everyone arrived on time, with one exception.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"exception","family_members":[],"support_type":"A2 definition","support_text":"a person or thing not included in a general rule","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"reason","pos":"Noun","grammar":"noun","mean_he":"סִבָּה; נִמּוּק; הִגָּיוֹן","mean_fr":"-","ex_en":"What was the reason for the change?","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"reason","family_members":[],"support_type":"A2 definition","support_text":"a cause or explanation for an action or event","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"underneath","pos":"Adverb","grammar":"adverb","mean_he":"מתחת; מלמטה","mean_fr":"-","ex_en":"The box is heavy, but there is a handle underneath.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"underneath","family_members":[],"support_type":"A2 definition","support_text":"in or to a lower position","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"above","pos":"Adjective","grammar":"adjective","mean_he":"הנזכר לעיל; שלמעלה","mean_fr":"-","ex_en":"Read the above instructions carefully.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"above","family_members":[],"support_type":"A2 definition","support_text":"written or mentioned earlier on the page","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"indoors","pos":"Adverb","grammar":"adverb","mean_he":"בתוך מבנה; פנימה","mean_fr":"-","ex_en":"It was raining, so we stayed indoors.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"indoors","family_members":[],"support_type":"A2 definition","support_text":"inside a building","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"expedition","pos":"Noun","grammar":"noun","mean_he":"משלחת; מסע מאורגן","mean_fr":"-","ex_en":"The team went on an expedition to study the forest.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"expedition","family_members":[],"support_type":"A2 definition","support_text":"an organized journey for a special purpose","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"interrupt","pos":"Verb","grammar":"verb","mean_he":"להפריע; לקטוע","mean_fr":"-","ex_en":"Please do not interrupt while she is answering.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"interrupt","family_members":[{"word":"interruption","pos":"Noun"}],"support_type":"A2 definition","support_text":"stop someone briefly while they are speaking or working","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"the heart of","pos":"Phrase","grammar":"phrase / chunk","mean_he":"לב העניין; המרכז של","mean_fr":"-","ex_en":"Trust is at the heart of a good friendship.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"the heart of sth","family_members":[],"support_type":"A2 definition","support_text":"the central or most important part of something","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"remark","pos":"Noun","grammar":"noun","mean_he":"הֶעָרָה","mean_fr":"-","ex_en":"His final remark made everyone laugh.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"remark","family_members":[],"support_type":"A2 definition","support_text":"a spoken or written comment","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"place","pos":"Noun","grammar":"noun","mean_he":"מָקוֹם; מֶרְחָב; מַעֲמָד","mean_fr":"-","ex_en":"This quiet place is perfect for reading.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"place","family_members":[],"support_type":"A2 definition","support_text":"a particular area, position or point","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"block","pos":"Verb","grammar":"verb","mean_he":"חָסַם; עָצַר","mean_fr":"-","ex_en":"A fallen tree blocked the road.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"block","family_members":[],"support_type":"A2 definition","support_text":"stop movement or prevent progress","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"acquire","pos":"Verb","grammar":"verb","mean_he":"רָכַשׁ; הִשִּׂיג","mean_fr":"-","ex_en":"Students acquire new skills through practice.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"acquire","family_members":[{"word":"acquisition","pos":"Noun"}],"support_type":"A2 definition","support_text":"get or learn something","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"fit","pos":"Adjective","grammar":"adjective","mean_he":"בכושר","mean_fr":"-","ex_en":"She exercises every day to stay fit.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"fit","family_members":[{"word":"fitness","pos":"Noun"}],"support_type":"A2 definition","support_text":"healthy; suitable for a purpose","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"relax","pos":"Verb","grammar":"verb","mean_he":"נִרְגַּע; הִרְפָּה; רִפָּה","mean_fr":"-","ex_en":"I like to relax by reading.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"relax","family_members":[{"word":"relaxed","pos":"Adjective"}],"support_type":"A2 definition","support_text":"rest and become less worried","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"the main thing","pos":"Phrase","grammar":"phrase / chunk","mean_he":"הדבר העיקרי","mean_fr":"-","ex_en":"The main thing is that everyone is safe.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"the main thing","family_members":[],"support_type":"A2 definition","support_text":"the most important fact, idea or goal","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"anxious","pos":"Adjective","grammar":"adjective","mean_he":"חָרֵד; לָהוּט","mean_fr":"-","ex_en":"She felt anxious before the interview.","ex_he":"","ex_fr":"-","synonyms":["worried or nervous"],"official_entry":"anxious","family_members":[{"word":"anxiety","pos":"Noun"}],"support_type":"A2 synonym(s)","support_text":"worried or nervous","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"impression","pos":"Noun","grammar":"noun","mean_he":"רֹשֶׁם; הִתְרַשְּׁמוּת; הַטְבָּעָה","mean_fr":"-","ex_en":"The school made a good impression on the visitors.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"impression","family_members":[],"support_type":"A2 definition","support_text":"an idea or feeling formed about someone or something","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"prime","pos":"Adjective","grammar":"adjective","mean_he":"רָאשִׁי; מְשֻׁבָּח; מֻבְחָר","mean_fr":"-","ex_en":"Safety is our prime concern.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"prime","family_members":[{"word":"primary","pos":"Adjective"}],"support_type":"A2 definition","support_text":"main or most important","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"expense","pos":"Noun","grammar":"noun","mean_he":"הוֹצָאָה; מְחִיר","mean_fr":"-","ex_en":"The hotel was our largest expense.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"expense","family_members":[{"word":"at the expense of","pos":"Phrase"}],"support_type":"A2 definition","support_text":"money needed or spent","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"jam","pos":"Noun","grammar":"noun","mean_he":"פקק; ריבה","mean_fr":"-","ex_en":"A traffic jam delayed the bus.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"jam","family_members":[{"word":"traffic jam","pos":"Noun phrase"}],"support_type":"A2 definition","support_text":"a situation where movement is blocked; sweet fruit spread","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"copy","pos":"Noun","grammar":"noun","mean_he":"הֶעְתֵּק; קוֹפִּי","mean_fr":"-","ex_en":"Please keep a copy of the form.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"copy","family_members":[],"support_type":"A2 definition","support_text":"something made to be the same as another","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"turn","pos":"Noun","grammar":"noun","mean_he":"סִיבוּב; פְּנִיָּה; תּוֹר","mean_fr":"-","ex_en":"It is your turn to answer.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"turn","family_members":[],"support_type":"A2 definition","support_text":"a change of direction; a person’s time to act","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"register","pos":"Verb","grammar":"verb","mean_he":"רָשַׁם; נִרְשַׁם","mean_fr":"-","ex_en":"You must register before the course begins.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"register","family_members":[{"word":"registration","pos":"Noun"}],"support_type":"A2 definition","support_text":"put a name or information on an official list","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"room","pos":"Noun","grammar":"noun","mean_he":"חֶדֶר; מָקוֹם; מִרְוָח","mean_fr":"-","ex_en":"There is enough room for one more chair.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"room","family_members":[],"support_type":"A2 definition","support_text":"a part of a building; available space","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"unexpected","pos":"Adjective","grammar":"adjective","mean_he":"בִּלְתִּי צָפוּי","mean_fr":"-","ex_en":"An unexpected guest arrived at dinner time.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"unexpected","family_members":[],"support_type":"A2 definition","support_text":"not planned or believed likely to happen","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"immigration","pos":"Noun","grammar":"noun","mean_he":"הֲגִירָה נִכְנֶסֶת; אִימִיגְרַצְיָה","mean_fr":"-","ex_en":"The museum tells the story of immigration to Israel.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"immigration","family_members":[{"word":"immigrant","pos":"Noun"}],"support_type":"A2 definition","support_text":"the movement of people into another country to live","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"age","pos":"Noun","grammar":"noun","mean_he":"גִּיל; תְּקוּפָה","mean_fr":"-","ex_en":"Children can join the course at the age of twelve.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"age","family_members":[{"word":"aged","pos":"Adjective"}],"support_type":"A2 definition","support_text":"the number of years someone has lived","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"issue","pos":"Noun","grammar":"noun","mean_he":"נוֹשֵׂא; סוּגְיָה; גִּלָּיוֹן","mean_fr":"-","ex_en":"The class discussed the issue of online safety.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"issue","family_members":[],"support_type":"A2 definition","support_text":"an important subject or problem","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"scene","pos":"Noun","grammar":"noun","mean_he":"סְצֶנָה; מַעֲרָכָה; זירת ההתרחשות","mean_fr":"-","ex_en":"The final scene of the film was moving.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"scene","family_members":[{"word":"scenery","pos":"Noun"}],"support_type":"A2 definition","support_text":"a part of a play or film; the place of an event","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"genuine","pos":"Adjective","grammar":"adjective","mean_he":"אוֹרְגִּינָלִי; מְקוֹרִי; אוֹתֶנְטִי","mean_fr":"-","ex_en":"Her concern for the children was genuine.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"genuine","family_members":[],"support_type":"A2 definition","support_text":"real, honest or truly felt","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"use up","pos":"Phrase","grammar":"phrase / chunk","mean_he":"לנצל עד תום; לגמור","mean_fr":"-","ex_en":"We used up all the paper.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"use up sth or use sth up","family_members":[],"support_type":"A2 definition","support_text":"use all of something so that none remains","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"interaction","pos":"Noun","grammar":"noun","mean_he":"אִינְטֶרְאַקְצְיָה; גּוֹמְלִין","mean_fr":"-","ex_en":"Group work encourages interaction between students.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"interaction","family_members":[{"word":"interact","pos":"Verb"}],"support_type":"A2 definition","support_text":"communication or activity between people or things","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"lecture","pos":"Verb","grammar":"verb","mean_he":"הִרְצָה","mean_fr":"-","ex_en":"She lectures on modern history at the university.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"lecture","family_members":[],"support_type":"A2 definition","support_text":"give a formal educational talk","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"point","pos":"Verb","grammar":"verb","mean_he":"הִצְבִּיעַ; כִּוֵּן; חִדֵּד","mean_fr":"-","ex_en":"She pointed to the correct answer.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"point","family_members":[],"support_type":"A2 definition","support_text":"show a direction with a finger or object","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"rough","pos":"Adjective","grammar":"adjective","mean_he":"קָשֶׁה; מְחֻסְפָּס; גָּלְמִי","mean_fr":"-","ex_en":"The sea was rough during the storm.","ex_he":"","ex_fr":"-","synonyms":["not smooth","difficult or violent"],"official_entry":"rough","family_members":[{"word":"roughly","pos":"Adverb"}],"support_type":"A2 synonym(s)","support_text":"not smooth; difficult or violent","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"open","pos":"Verb","grammar":"verb","mean_he":"פָּתַח; נִפְתַּח","mean_fr":"-","ex_en":"Please open the window.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"open","family_members":[{"word":"opening","pos":"Noun"}],"support_type":"A2 definition","support_text":"make something no longer closed; begin operating","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"fetch","pos":"Verb","grammar":"verb","mean_he":"להביא; ללכת להביא","mean_fr":"-","ex_en":"Could you fetch a glass of water for me?","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"fetch","family_members":[],"support_type":"A2 definition","support_text":"go to get someone or something and bring them back","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"society","pos":"Noun","grammar":"noun","mean_he":"חֶבְרָה; אֲגֻדָּה","mean_fr":"-","ex_en":"Technology has changed modern society.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"society","family_members":[{"word":"social","pos":"Adjective"}],"support_type":"A2 definition","support_text":"people living together in an organized community","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"remark","pos":"Verb","grammar":"verb","mean_he":"להעיר; לציין","mean_fr":"-","ex_en":"She remarked that the room was unusually quiet.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"remark","family_members":[],"support_type":"A2 definition","support_text":"say or write a comment","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"final","pos":"Noun","grammar":"noun","mean_he":"גמר; שלב אחרון","mean_fr":"-","ex_en":"Our team reached the final.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"final","family_members":[{"word":"semi-final","pos":"Noun"}],"support_type":"A2 definition","support_text":"the last game, test or stage in a series","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"rescue","pos":"Noun","grammar":"noun","mean_he":"הַצָּלָה","mean_fr":"-","ex_en":"The rescue took several hours.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"rescue","family_members":[],"support_type":"A2 definition","support_text":"an act of saving someone from danger","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"service","pos":"Noun","grammar":"noun","mean_he":"שֵׁרוּת; טֶקֶס; דְּרָשָׁה","mean_fr":"-","ex_en":"The hotel offers a free bus service.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"service","family_members":[{"word":"serve","pos":"Verb"}],"support_type":"A2 definition","support_text":"work or help provided for people","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"import","pos":"Noun","grammar":"noun","mean_he":"יְבוּא; אִימְפּוֹרְט; חֲשִׁיבוּת","mean_fr":"-","ex_en":"Oil is a major import for many countries.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"import","family_members":[],"support_type":"A2 definition","support_text":"goods brought into a country for sale","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"survive","pos":"Verb","grammar":"verb","mean_he":"שָׂרַד","mean_fr":"-","ex_en":"Few plants can survive without water.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"survive","family_members":[{"word":"survival","pos":"N N"},{"word":"survivor","pos":"N N"}],"support_type":"A2 definition","support_text":"continue to live or exist after danger","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"patient","pos":"Adjective","grammar":"adjective","mean_he":"סַבְלָנִי; סַבְלָן","mean_fr":"-","ex_en":"Please be patient while the page loads.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"patient","family_members":[{"word":"patience","pos":"Noun"}],"support_type":"A2 definition","support_text":"able to wait calmly","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"infection","pos":"Noun","grammar":"noun","mean_he":"זִהוּם; אִינְפֶקְצְיָה","mean_fr":"-","ex_en":"The doctor gave her medicine for the infection.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"infection","family_members":[],"support_type":"A2 definition","support_text":"an illness caused by harmful organisms","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"set","pos":"Verb","grammar":"verb","mean_he":"הִנִּיחַ; שָׂם; קִבֵּעַ","mean_fr":"-","ex_en":"We set a date for the next meeting.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"set","family_members":[],"support_type":"A2 definition","support_text":"put in a place; decide or fix a time or level","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"rule","pos":"Noun","grammar":"noun","mean_he":"חֹק; הוֹרָאָה; שִׁלְטוֹן","mean_fr":"-","ex_en":"The school has a rule against running indoors.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"rule","family_members":[{"word":"ruler","pos":"Noun"}],"support_type":"A2 definition","support_text":"an official instruction about what is allowed","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"declare","pos":"Verb","grammar":"verb","mean_he":"הִצְהִיר; הִכְרִיז","mean_fr":"-","ex_en":"The judge declared the winner.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"declare","family_members":[{"word":"declaration","pos":"Noun"}],"support_type":"A2 definition","support_text":"announce something clearly or officially","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"preference","pos":"Noun","grammar":"noun","mean_he":"הַעֲדָפָה; עֲדִיפוּת","mean_fr":"-","ex_en":"She expressed a preference for the morning class.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"preference","family_members":[],"support_type":"A2 definition","support_text":"a greater liking for one choice","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"support","pos":"Verb","grammar":"verb","mean_he":"תָּמַךְ; סִיֵּעַ; פִּרְנֵס","mean_fr":"-","ex_en":"Her family supported her decision.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"support","family_members":[{"word":"supporter","pos":"Noun"}],"support_type":"A2 definition","support_text":"help, agree with or hold up","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"domestic","pos":"Adjective","grammar":"adjective","mean_he":"בֵּיתִי; פְּנִימִי; מְקוֹמִי","mean_fr":"-","ex_en":"Domestic flights are often shorter than international ones.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"domestic","family_members":[],"support_type":"A2 definition","support_text":"connected with one country or with the home","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"retire","pos":"Verb","grammar":"verb","mean_he":"לפרוש; לצאת לגמלאות","mean_fr":"-","ex_en":"She plans to retire next year.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"retire","family_members":[{"word":"retired","pos":"Adj N"},{"word":"retirement","pos":"Adj N"}],"support_type":"A2 definition","support_text":"stop working because of age or after a long career","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"judgment","pos":"Noun","grammar":"noun","mean_he":"שיקול דעת; שיפוט; החלטה","mean_fr":"-","ex_en":"Good judgment is important in an emergency.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"judgment","family_members":[],"support_type":"A2 definition","support_text":"an opinion or decision after careful thought","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"element","pos":"Noun","grammar":"noun","mean_he":"יְסוֹד; אֶלֶמֶנְט; רְכִיב","mean_fr":"-","ex_en":"Trust is an essential element of friendship.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"element","family_members":[],"support_type":"A2 definition","support_text":"a basic or important part","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"demanding","pos":"Adjective","grammar":"adjective","mean_he":"תּוֹבְעָנִי","mean_fr":"-","ex_en":"Teaching can be a demanding job.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"demanding","family_members":[],"support_type":"A2 definition","support_text":"needing a lot of time, effort or skill","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"be situated in/on/by","pos":"Phrase","grammar":"phrase / chunk","mean_he":"להימצא; להיות ממוקם","mean_fr":"-","ex_en":"The hotel is situated by the sea.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"be situated in/on/by, etc","family_members":[],"support_type":"A2 definition","support_text":"be in a particular place","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"it looks like/as if/as though","pos":"Phrase","grammar":"phrase / chunk","mean_he":"נראה ש־; כאילו","mean_fr":"-","ex_en":"It looks as if the rain will stop soon.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"it looks like/as if/as though","family_members":[],"support_type":"A2 definition","support_text":"used to say how a situation seems","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"understand","pos":"Verb","grammar":"verb","mean_he":"הֵבִין","mean_fr":"-","ex_en":"I understand the instructions now.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"understand","family_members":[{"word":"understanding","pos":"Noun, Adjective"}],"support_type":"A2 definition","support_text":"know the meaning or reason","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"reflect","pos":"Verb","grammar":"verb","mean_he":"שִׁקֵּף; החזיר אור; הִרְהֵר","mean_fr":"-","ex_en":"The results reflect the students’ hard work.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"reflect","family_members":[{"word":"reflection","pos":"Noun"}],"support_type":"A2 definition","support_text":"show an image; show or think deeply about something","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"competitive","pos":"Adjective","grammar":"adjective","mean_he":"תַּחֲרוּתִי","mean_fr":"-","ex_en":"The two teams played a competitive match.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"competitive","family_members":[{"word":"competitor","pos":"Noun"}],"support_type":"A2 definition","support_text":"wanting to win; involving people trying to win","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"welcome","pos":"Verb","grammar":"verb","mean_he":"לקבל בברכה; לברך לשלום","mean_fr":"-","ex_en":"Students welcomed the new teacher.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"welcome","family_members":[],"support_type":"A2 definition","support_text":"greet someone with pleasure","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"deliver","pos":"Verb","grammar":"verb","mean_he":"שָׁלַח; מָסַר; הֶעֱבִיר","mean_fr":"-","ex_en":"The company will deliver the package tomorrow.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"deliver","family_members":[],"support_type":"A2 definition","support_text":"take something to a person or place; give a speech","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"present","pos":"Verb","grammar":"verb","mean_he":"הִצִּיג; הֶעֱנִיק; הִנְכִּיחַ","mean_fr":"-","ex_en":"Each group will present its project tomorrow.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"present","family_members":[],"support_type":"A2 definition","support_text":"show, give or formally introduce something","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"mystery","pos":"Noun","grammar":"noun","mean_he":"מִסְתּוֹרִין; תַּעֲלוּמָה","mean_fr":"-","ex_en":"The cause of the noise remains a mystery.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"mystery","family_members":[{"word":"mysterious","pos":"Adjective"}],"support_type":"A2 definition","support_text":"something difficult or impossible to explain","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"appropriate","pos":"Adjective","grammar":"adjective","mean_he":"הוֹלֵם; מַתְאִים","mean_fr":"-","ex_en":"Wear appropriate shoes for the long walk.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"appropriate","family_members":[],"support_type":"A2 definition","support_text":"right or suitable for a situation","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"rescue","pos":"Verb","grammar":"verb","mean_he":"הִצִּיל; הוֹשִׁיעַ","mean_fr":"-","ex_en":"Firefighters rescued the family.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"rescue","family_members":[],"support_type":"A2 definition","support_text":"save someone from danger","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"justice","pos":"Noun","grammar":"noun","mean_he":"צדק; משפט הוגן","mean_fr":"-","ex_en":"The family continued to fight for justice.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"justice","family_members":[{"word":"just","pos":"Adjective"}],"support_type":"A2 definition","support_text":"fair treatment according to law or moral rules","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"underneath","pos":"Preposition","grammar":"preposition","mean_he":"מתחת ל־","mean_fr":"-","ex_en":"The keys were underneath the book.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"underneath","family_members":[],"support_type":"A2 definition","support_text":"directly below someone or something","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"exchange","pos":"Verb","grammar":"verb","mean_he":"הֵמִיר; הֶחְלִיף","mean_fr":"-","ex_en":"The students exchanged ideas after the talk.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"exchange","family_members":[],"support_type":"A2 definition","support_text":"give one thing and receive another","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"rule","pos":"Verb","grammar":"verb","mean_he":"מָשַׁל; שָׁלַט; פָּסַק","mean_fr":"-","ex_en":"The queen ruled the country for many years.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"rule","family_members":[{"word":"ruler","pos":"Noun"}],"support_type":"A2 definition","support_text":"control or govern a country or group","boundary_examples":"","rec_prod":"Rec","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"},{"en":"replace","pos":"Verb","grammar":"verb","mean_he":"הֶחְלִיף","mean_fr":"-","ex_en":"We need to replace the broken chair.","ex_he":"","ex_fr":"-","synonyms":[],"official_entry":"replace","family_members":[{"word":"replacement","pos":"Noun"}],"support_type":"A2 definition","support_text":"put one person or thing instead of another","boundary_examples":"","rec_prod":"Prod","source_url":"https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/4Lists/LISTB12.12.21.xlsx"}];
     </script>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <nav class="activity-top-nav" aria-label="Activity navigation">
+        <a class="activity-home" href="index.html" aria-label="Return to Module E vocabulary home">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5"></path><path d="M9.5 20v-6h5v6"></path></svg>
+            <span>Home</span>
+        </a>
+    </nav>
 
     <header>
-        <div class="title">Flashcards - Part B1</div>
+        <h1 class="title">Flashcards - Part B1</h1>
         <div class="counter" id="counter">1 / 1</div>
     </header>
 
+    <main class="activity-main" id="main-content">
     <div class="container" id="cardContainer">
-        <div class="card" id="flashcard" onclick="toggleCard()">
+        <div class="card" id="flashcard" role="group" aria-label="Flashcard" aria-describedby="cardInstructions" onclick="toggleCard()">
             <!-- Front Face -->
-            <div class="card-face">
+            <div class="card-face" id="cardFront" aria-hidden="false">
                 <div class="card-header-top">
                     <span class="pos-badge" id="posBadge">NOUN</span>
-                    <button class="tts-btn" id="ttsBtn" onclick="playAudio(event)" title="Listen">
-                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <button type="button" class="tts-btn" id="ttsBtn" onclick="playAudio(event)" aria-label="Listen to the word" title="Listen to the word">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                     </button>
                 </div>
                 <div class="word-main-container">
@@ -367,11 +533,11 @@
             </div>
 
             <!-- Back Face -->
-            <div class="card-face card-back">
+            <div class="card-face card-back" id="cardBack" aria-hidden="true" inert>
                 <div class="translations-section">
                     <div class="trans-row">
                         <span class="lang-label">Hebrew</span>
-                        <span class="trans-he" id="transHe">-</span>
+                        <span class="trans-he" id="transHe" lang="he" dir="rtl">-</span>
                     </div>
                 </div>
                 <div class="synonyms-box" id="synonymsBox">
@@ -380,7 +546,7 @@
                 <div class="back-details-grid" id="backDetailsGrid">
                     <div class="example-box">
                         <div class="example-en" id="exEn">-</div>
-                        <div class="example-trans he" id="exHe">-</div>
+                        <div class="example-trans he" id="exHe" lang="he" dir="rtl">-</div>
                     </div>
                     <div class="family-box" id="familyBox">
                         <div class="family-title">Family Members</div>
@@ -390,16 +556,19 @@
                 <div class="flip-hint" style="margin-top: 10px;">Tap to flip back</div>
             </div>
         </div>
+        <p class="sr-only" id="cardInstructions">Use Show answer to flip the card. Use Previous and Next to move between cards.</p>
+        <div class="sr-only" id="cardStatus" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <div class="nav-container">
-        <button class="nav-btn" onclick="prevCard()">
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    <div class="nav-container" role="group" aria-label="Flashcard controls">
+        <button type="button" class="nav-btn" onclick="prevCard()">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             Previous
         </button>
-        <button class="nav-btn" onclick="nextCard()">
+        <button type="button" class="nav-btn flip-btn" id="flipButton" onclick="toggleCard(event)" aria-controls="cardFront cardBack" aria-pressed="false">Show answer</button>
+        <button type="button" class="nav-btn" onclick="nextCard()">
             Next
-            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
     </div>
 
@@ -407,6 +576,15 @@
     <div class="jump-container">
         <a href="B2.html" class="nav-btn">Go to Next Part</a>
     </div>
+    </main>
+
+    <footer class="legal-footer" aria-label="Site information">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="accessibility.html">Accessibility</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="copyright.html">Copyright</a>
+    </footer>
 
     <script>
         let currentIndex = 0;
@@ -426,7 +604,18 @@
             if (typeof words === 'undefined' || words.length === 0) return;
             const item = words[currentIndex];
             
-            document.getElementById('flashcard').classList.remove('is-flipped');
+            const card = document.getElementById('flashcard');
+            card.classList.remove('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', 'false');
+            cardBack.setAttribute('aria-hidden', 'true');
+            cardFront.inert = false;
+            cardBack.inert = true;
+            document.getElementById('ttsBtn').disabled = false;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', 'false');
+            flipButton.textContent = 'Show answer';
 
             document.getElementById('posBadge').innerText = (item.pos || '').toUpperCase();
             document.getElementById('wordEn').innerText = item.en || '';
@@ -469,18 +658,38 @@
                 backDetailsGrid.classList.add('family-empty');
             }
             document.getElementById('counter').innerText = `${currentIndex + 1} / ${words.length}`;
+            announceCard('word');
             
             if (hasUserInteracted) {
                 speakText(item.en);
             }
         }
 
-        function toggleCard() {
+        function announceCard(side) {
+            const item = words[currentIndex];
+            const sideText = side === 'answer' ? 'Answer side' : 'Word side';
+            document.getElementById('cardStatus').textContent =
+                `Card ${currentIndex + 1} of ${words.length}. ${item.en}, ${item.pos}. ${sideText}.`;
+        }
+
+        function toggleCard(event) {
+            if (event) event.stopPropagation();
             hasUserInteracted = true;
             const card = document.getElementById('flashcard');
-            card.classList.toggle('is-flipped');
-            
-            if (card.classList.contains('is-flipped')) {
+            const isFlipped = card.classList.toggle('is-flipped');
+            const cardFront = document.getElementById('cardFront');
+            const cardBack = document.getElementById('cardBack');
+            cardFront.setAttribute('aria-hidden', String(isFlipped));
+            cardBack.setAttribute('aria-hidden', String(!isFlipped));
+            cardFront.inert = isFlipped;
+            cardBack.inert = !isFlipped;
+            document.getElementById('ttsBtn').disabled = isFlipped;
+            const flipButton = document.getElementById('flipButton');
+            flipButton.setAttribute('aria-pressed', String(isFlipped));
+            flipButton.textContent = isFlipped ? 'Show word' : 'Show answer';
+            announceCard(isFlipped ? 'answer' : 'word');
+
+            if (isFlipped) {
                 speakText(words[currentIndex].ex_en);
             }
         }
@@ -529,18 +738,18 @@
             }
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === 'ArrowLeft') prevCard();
-            if (e.key === ' ' || e.key === 'Enter') toggleCard();
+        document.addEventListener('keydown', (event) => {
+            if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                nextCard();
+            }
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevCard();
+            }
         });
 
-        document.body.addEventListener('click', () => {
-            if (!hasUserInteracted) {
-                hasUserInteracted = true;
-                speakText(words[currentIndex].en);
-            }
-        }, { once: true });
 
         window.onload = function() {
             updateCard();
