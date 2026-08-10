@@ -834,11 +834,11 @@
     "family_members": [
       {
         "word": "developing",
-        "pos": "Adj Adj"
+        "pos": "Adjective"
       },
       {
         "word": "developed",
-        "pos": "Adj Adj"
+        "pos": "Adjective"
       }
     ],
     "support_type": "A2 definition",
@@ -1288,11 +1288,11 @@
     "family_members": [
       {
         "word": "investor",
-        "pos": "N N"
+        "pos": "Noun"
       },
       {
         "word": "investment",
-        "pos": "N N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -1417,11 +1417,11 @@
     "family_members": [
       {
         "word": "concerned",
-        "pos": "Adj Prep"
+        "pos": "Adjective"
       },
       {
         "word": "concerning",
-        "pos": "Adj Prep"
+        "pos": "Preposition"
       },
       {
         "word": "concerned with sth",
@@ -1883,11 +1883,11 @@
     "family_members": [
       {
         "word": "significantly",
-        "pos": "Adv N"
+        "pos": "Adverb"
       },
       {
         "word": "significance",
-        "pos": "Adv N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -2513,11 +2513,11 @@
     "family_members": [
       {
         "word": "specifically",
-        "pos": "Adv V"
+        "pos": "Adverb"
       },
       {
         "word": "specify",
-        "pos": "Adv V"
+        "pos": "Verb"
       }
     ],
     "support_type": "A2 synonym(s)",
@@ -2622,11 +2622,11 @@
     "family_members": [
       {
         "word": "psychological",
-        "pos": "Adj N"
+        "pos": "Adjective"
       },
       {
         "word": "psychologist",
-        "pos": "Adj N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -2653,11 +2653,11 @@
     "family_members": [
       {
         "word": "participant",
-        "pos": "N N"
+        "pos": "Noun"
       },
       {
         "word": "participation",
-        "pos": "N N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 synonym(s)",
@@ -2747,11 +2747,11 @@
     "family_members": [
       {
         "word": "existence",
-        "pos": "N Adj"
+        "pos": "Noun"
       },
       {
         "word": "existing",
-        "pos": "N Adj"
+        "pos": "Adjective"
       }
     ],
     "support_type": "A2 definition",
@@ -3166,11 +3166,11 @@
     "family_members": [
       {
         "word": "educated",
-        "pos": "Adj N"
+        "pos": "Adjective"
       },
       {
         "word": "educator",
-        "pos": "Adj N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -3979,11 +3979,11 @@
     "family_members": [
       {
         "word": "investigation",
-        "pos": "N N"
+        "pos": "Noun"
       },
       {
         "word": "investigator",
-        "pos": "N N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -4346,11 +4346,11 @@
     "family_members": [
       {
         "word": "analyze",
-        "pos": "V N"
+        "pos": "Verb"
       },
       {
         "word": "analyst",
-        "pos": "V N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -4437,11 +4437,11 @@
     "family_members": [
       {
         "word": "regardless",
-        "pos": "Adv Prep"
+        "pos": "Adverb"
       },
       {
         "word": "regarding",
-        "pos": "Adv Prep"
+        "pos": "Preposition"
       }
     ],
     "support_type": "A2 definition",
@@ -4794,11 +4794,11 @@
     "family_members": [
       {
         "word": "criticize",
-        "pos": "V N"
+        "pos": "Verb"
       },
       {
         "word": "criticism",
-        "pos": "V N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -4893,11 +4893,11 @@
     "family_members": [
       {
         "word": "unity",
-        "pos": "N V"
+        "pos": "Noun"
       },
       {
         "word": "unite",
-        "pos": "N V"
+        "pos": "Verb"
       }
     ],
     "support_type": "A2 definition",
@@ -5027,7 +5027,7 @@
     "family_members": [
       {
         "word": "efficiency",
-        "pos": "N Adj"
+        "pos": "Noun"
       },
       {
         "word": "efficiently",
@@ -5118,11 +5118,11 @@
     "family_members": [
       {
         "word": "regardless",
-        "pos": "Adv Prep"
+        "pos": "Adverb"
       },
       {
         "word": "regarding",
-        "pos": "Adv Prep"
+        "pos": "Preposition"
       }
     ],
     "support_type": "A2 synonym(s)",
@@ -5287,11 +5287,11 @@
     "family_members": [
       {
         "word": "involved",
-        "pos": "Adj V"
+        "pos": "Adjective"
       },
       {
         "word": "involve",
-        "pos": "Adj V"
+        "pos": "Verb"
       }
     ],
     "support_type": "A2 definition",
@@ -6416,11 +6416,11 @@
     "family_members": [
       {
         "word": "survival",
-        "pos": "N N"
+        "pos": "Noun"
       },
       {
         "word": "survivor",
-        "pos": "N N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -6625,11 +6625,11 @@
     "family_members": [
       {
         "word": "retired",
-        "pos": "Adj N"
+        "pos": "Adjective"
       },
       {
         "word": "retirement",
-        "pos": "Adj N"
+        "pos": "Noun"
       }
     ],
     "support_type": "A2 definition",
@@ -7274,15 +7274,15 @@
     "family_members": [
       {
         "word": "satisfaction",
-        "pos": "N Adj Adj"
+        "pos": "Noun"
       },
       {
         "word": "satisfactory",
-        "pos": "N Adj Adj"
+        "pos": "Adjective"
       },
       {
         "word": "satisfied",
-        "pos": "N Adj Adj"
+        "pos": "Adjective"
       }
     ],
     "support_type": "A2 definition",
@@ -7400,15 +7400,15 @@
     "family_members": [
       {
         "word": "related",
-        "pos": "Adj N Adj"
+        "pos": "Adjective"
       },
       {
         "word": "relationship",
-        "pos": "Adj N Adj"
+        "pos": "Noun"
       },
       {
         "word": "relative",
-        "pos": "Adj N Adj"
+        "pos": "Adjective"
       }
     ],
     "support_type": "A2 definition",
@@ -10416,11 +10416,11 @@
     "family_members": [
       {
         "word": "annoyed",
-        "pos": "Adj Adj"
+        "pos": "Adjective"
       },
       {
         "word": "annoying",
-        "pos": "Adj Adj"
+        "pos": "Adjective"
       }
     ],
     "mean_fr": "-",
@@ -10680,11 +10680,11 @@
     "family_members": [
       {
         "word": "download",
-        "pos": "V V"
+        "pos": "Verb"
       },
       {
         "word": "upload",
-        "pos": "V V"
+        "pos": "Verb"
       }
     ],
     "mean_fr": "-",
@@ -12814,11 +12814,11 @@
     "family_members": [
       {
         "word": "correspondent",
-        "pos": "N N"
+        "pos": "Noun"
       },
       {
         "word": "correspondence",
-        "pos": "N N"
+        "pos": "Noun"
       }
     ],
     "mean_fr": "-",
@@ -14138,11 +14138,11 @@
     "family_members": [
       {
         "word": "suspicion",
-        "pos": "N Adj"
+        "pos": "Noun"
       },
       {
         "word": "suspicious",
-        "pos": "N Adj"
+        "pos": "Adjective"
       }
     ],
     "mean_fr": "-",
@@ -14942,11 +14942,11 @@
     "family_members": [
       {
         "word": "suspicion",
-        "pos": "N Adj"
+        "pos": "Noun"
       },
       {
         "word": "suspicious",
-        "pos": "N Adj"
+        "pos": "Adjective"
       }
     ],
     "mean_fr": "-",
@@ -16728,11 +16728,11 @@
     "family_members": [
       {
         "word": "terrorism",
-        "pos": "N N, Adjective"
+        "pos": "Noun"
       },
       {
         "word": "terrorist",
-        "pos": "Phrase"
+        "pos": "Noun, Adjective"
       }
     ],
     "mean_he": "אימה; טרור",

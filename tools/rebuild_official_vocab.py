@@ -24,9 +24,8 @@ import pandas as pd
 
 
 REPO = Path(__file__).resolve().parents[1]
-WORKSPACE = REPO.parent
-OFFICIAL_DIR = WORKSPACE / "official-module-e"
-CURRENT_MASTER = WORKSPACE / "outputs/module-e-vocabulary/Module_E_2027_Vocabulary_Master.xlsx"
+OFFICIAL_DIR = REPO / "sources"
+CURRENT_MASTER = REPO / "Module_E_2027_Vocabulary_Master.xlsx"
 DATA_DIR = REPO / "data"
 CONTENT_TSV = DATA_DIR / "ab_content.tsv"
 SOURCE_JSON = DATA_DIR / "vocabulary-master.json"
@@ -35,7 +34,7 @@ OFFICIAL_FILES = {
     "A": OFFICIAL_DIR / "LISTA12.12.21.xlsx",
     "B": OFFICIAL_DIR / "LISTB12.12.21.xlsx",
     "C": OFFICIAL_DIR / "LISTC12.12.21.xlsx",
-    "D": OFFICIAL_DIR / "LIST-D-download",
+    "D": OFFICIAL_DIR / "LIST-D.xlsx",
 }
 
 OFFICIAL_URLS = {
@@ -213,6 +212,14 @@ def clean_text(value: object) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def cell_lines(value: object) -> list[str]:
+    """Split an XLSX cell on line breaks before normalizing whitespace."""
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return []
+    text = unicodedata.normalize("NFKC", str(value)).replace("\xa0", " ")
+    return [clean_text(line) for line in re.split(r"[\r\n]+", text) if clean_text(line)]
+
+
 def smart_english_punctuation(value: object) -> str:
     """Use typographic English punctuation without changing letter case."""
     text = clean_text(value).replace("'", "’")
@@ -260,18 +267,20 @@ def family_pos_label(raw: str) -> str:
 def parse_family(raw_words: object, raw_pos: object, entry: str) -> list[dict[str, str]]:
     if not clean_text(raw_words):
         return []
-    words = [clean_text(x) for x in re.split(r"[\r\n]+", str(raw_words)) if clean_text(x)]
-    raw_pos_text = clean_text(raw_pos)
-    poses = [clean_text(x) for x in re.split(r"[\r\n]+", raw_pos_text) if clean_text(x)]
-    if len(poses) == 1 and len(words) > 1 and "," not in poses[0]:
+    words = cell_lines(raw_words)
+    poses = cell_lines(raw_pos)
+    if len(poses) == 1 and len(words) > 1:
         poses *= len(words)
     family = []
     for index, word in enumerate(words):
         # Ministry sheets occasionally repeat the entry itself as a family member.
         if key_text(word) == key_text(entry):
             continue
+        correction = FAMILY_POS_CORRECTIONS.get(key_text(word))
         raw_label = poses[index] if index < len(poses) else ""
-        label = FAMILY_POS_CORRECTIONS.get(key_text(word), family_pos_label(raw_label))
+        if not raw_label and not correction:
+            raise RuntimeError(f"Missing family POS for {entry}: {word}")
+        label = correction or family_pos_label(raw_label)
         family.append({"word": smart_english_punctuation(word), "pos": label})
     return family
 
