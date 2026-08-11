@@ -372,13 +372,24 @@ def write_content_template(cards: list[dict]) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     with CONTENT_TSV.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
-        writer.writerow(["List", "Display", "POS", "Hebrew source", "A2 definition or synonyms", "English example"])
+        writer.writerow(
+            [
+                "List",
+                "Display",
+                "POS",
+                "Hebrew source",
+                "A2 definition or synonyms",
+                "English example",
+                "Hebrew example",
+            ]
+        )
         for card in sorted(cards, key=lambda x: (x["list"], key_text(x["display"]), x["pos"])):
             writer.writerow(
                 [
                     card["list"],
                     card["display"],
                     card["pos"],
+                    "",
                     "",
                     "",
                     "",
@@ -392,12 +403,32 @@ def load_content() -> dict[tuple[str, str, str], dict[str, str]]:
     result = {}
     with CONTENT_TSV.open(encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
+        required_columns = {
+            "List",
+            "Display",
+            "POS",
+            "Hebrew source",
+            "A2 definition or synonyms",
+            "English example",
+            "Hebrew example",
+        }
+        missing_columns = required_columns - set(reader.fieldnames or [])
+        if missing_columns:
+            raise RuntimeError(
+                f"Missing required column(s) in {CONTENT_TSV}: "
+                + ", ".join(sorted(missing_columns))
+            )
         for row in reader:
             key = (row["List"], key_text(row["Display"]), row["POS"])
+            if key in result:
+                raise RuntimeError(
+                    f"Duplicate curated content row: {' | '.join(key)}"
+                )
             result[key] = {
                 "hebrew_source": clean_text(row["Hebrew source"]),
                 "support_text": clean_text(row["A2 definition or synonyms"]),
                 "example": clean_text(row["English example"]),
+                "hebrew_example": clean_text(row["Hebrew example"]),
             }
     return result
 
@@ -458,6 +489,7 @@ def build_ab_groups(cards: list[dict], content: dict) -> dict[str, list[dict]]:
             or not curated["hebrew_source"]
             or not curated["support_text"]
             or not curated["example"]
+            or not curated["hebrew_example"]
         ):
             missing_content.append(key)
             continue
@@ -470,7 +502,7 @@ def build_ab_groups(cards: list[dict], content: dict) -> dict[str, list[dict]]:
             "mean_he": normalize_hebrew_meaning(curated["hebrew_source"]),
             "mean_fr": "-",
             "ex_en": smart_english_punctuation(curated["example"]),
-            "ex_he": "",
+            "ex_he": curated["hebrew_example"],
             "ex_fr": "-",
             "synonyms": synonyms,
             "official_entry": " | ".join(card["official_entries"]),
@@ -668,7 +700,7 @@ def validate(groups: dict[str, list[dict]], official_cards: dict[str, list[dict]
                 raise RuntimeError(f"Missing support text: {group} {record['en']} {record['pos']}")
             if target and re.search(rf"\b{re.escape(target)}\b", definition):
                 raise RuntimeError(f"Target repeated in definition: {group} {record['en']} -> {definition}")
-            if not record.get("mean_he") or not record.get("ex_en"):
+            if not record.get("mean_he") or not record.get("ex_en") or not record.get("ex_he"):
                 raise RuntimeError(f"Incomplete card: {group} {record['en']} {record['pos']}")
 
 

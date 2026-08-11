@@ -22,11 +22,11 @@ PHRASES = {
     # List A
     "among other things": ("including other things", "including some other things", "The center offers, among other things, free English lessons."),
     "at least": ("not less than", "not less than a number or amount", "At least ten students joined the activity."),
-    "be responsible for": ("have the duty to care for", "have the duty to do or care for something", "Maya is responsible for organizing the class trip."),
+    "be responsible for": ("have the duty to care for", "have the duty to do or care for something", "She is responsible for organizing the class trip."),
     "come after/first/last": ("be later, first or last", "be in a later, first or last position", "The short questions come after the reading text."),
     "even if": ("whether or not", "whether or not something happens", "I will walk to school even if it rains."),
-    "even though": ("although", "although something is true", "Even though Amir was tired, he finished his homework."),
-    "except that": ("but with one difference", "but with one difference", "The two rooms are the same, except that this one has a balcony."),
+    "even though": ("although", "although something is true", "Even though he was tired, he finished his homework."),
+    "except that": ("but with one difference", "but with one difference", "The rooms are the same, except that one has a balcony."),
     "focus on/upon": ("give attention to", "give special attention to someone or something", "Please focus on the main idea of the paragraph."),
     "in terms of": ("when considering", "when considering a particular part of something", "The plan is good in terms of cost."),
     "in actual fact": ("really", "used to show what is really true", "It looked easy, but in actual fact it was difficult."),
@@ -40,11 +40,11 @@ PHRASES = {
     "more or less": ("almost; about", "almost or approximately", "The work is more or less complete."),
     "not at all": ("in no way", "in no way or by no amount", "I am not at all worried about the test."),
     "not only": ("as well as", "used to add another important fact", "She is not only clever but also very kind."),
-    "on the one hand ... on the other hand": ("two different sides", "used to compare two different sides of a situation", "On the one hand the job pays well; on the other hand it is far away."),
+    "on the one hand ... on the other hand": ("two different sides", "used to compare two different sides of a situation", "On the one hand, it pays well, but it is far."),
     "out of date": ("old and no longer useful", "too old to be useful or correct", "This map is out of date."),
     "point of view": ("opinion; way of seeing", "a way of thinking about or seeing something", "From my point of view, the rule is fair."),
     "provided that": ("only if", "only if a particular condition is met", "You can borrow the bike provided that you return it today."),
-    "rely on/upon": ("depend on; trust", "depend on or trust someone or something", "You can rely on Dana to keep her promise."),
+    "rely on/upon": ("depend on; trust", "depend on or trust someone or something", "You can rely on her to keep her promise."),
     "run out of": ("have none left", "use all of something so that none remains", "We ran out of milk this morning."),
     "set up": ("start; arrange", "start or arrange something for use", "The students set up a new reading club."),
     "take advantage of": ("use a good chance", "use an opportunity in a helpful way", "We took advantage of the sunny day and went outside."),
@@ -52,12 +52,12 @@ PHRASES = {
     "throw away/out": ("put in the trash", "get rid of something that is not wanted", "Do not throw away the empty bottle; recycle it."),
     # List B
     "all of a sudden": ("suddenly", "very suddenly and without warning", "All of a sudden, the lights went out."),
-    "be in charge": ("be responsible", "have control or responsibility for something", "Rina is in charge of the school library."),
+    "be in charge": ("be responsible", "have control or responsibility for something", "She is in charge of the school library."),
     "be situated in/on/by": ("be located", "be in a particular place", "The hotel is situated by the sea."),
     "believe in": ("think is good, true or real", "think that someone or something is good, true or real", "I believe in giving everyone a fair chance."),
     "bring up": ("mention; raise", "mention a subject or raise a child", "She brought up an important question during the meeting."),
     "cut down": ("reduce; make fall", "reduce an amount or make a tree fall", "We should cut down the amount of plastic we use."),
-    "either way": ("in both cases", "used when the result is the same in both cases", "We can walk or take the bus; either way, we will arrive on time."),
+    "either way": ("in both cases", "used when the result is the same in both cases", "We can walk or take the bus; either way, we will arrive."),
     "fed up": ("tired and annoyed", "tired and annoyed because something continued too long", "He was fed up with waiting."),
     "get rid of": ("remove; throw away", "remove something that is not wanted", "We need to get rid of these broken chairs."),
     "get wrong": ("make a mistake about", "understand or answer something incorrectly", "I got the last question wrong."),
@@ -70,7 +70,7 @@ PHRASES = {
     "make sense": ("be clear and reasonable", "be easy to understand or reasonable", "Your explanation makes sense."),
     "make up": ("invent; form", "invent something or form part of a whole", "The children made up a funny story."),
     "make up your mind": ("decide", "make a decision after thinking", "Please make up your mind before Friday."),
-    "neither ... nor": ("not one and not the other", "not the first choice and not the second choice", "Neither Tom nor Maya was late."),
+    "neither ... nor": ("not one and not the other", "not the first choice and not the second choice", "Neither the teacher nor the student was late."),
     "not ... a word": ("nothing at all", "used to say that nothing was heard, said or understood", "I did not understand a word of the speech."),
     "not until": ("only after a time", "only after a particular time or event", "We did not leave until the rain stopped."),
     "on the whole": ("generally", "when considering everything together", "On the whole, the trip was successful."),
@@ -112,14 +112,14 @@ FUNCTION_WORDS = {
     ("others", "Pronoun"): ("other people or things", "other people or things that were not already named", "Some students agreed, but others did not."),
     ("otherwise", "Adverb"): ("if not; in another way", "used to show what happens if something is not done", "Leave now; otherwise, you will miss the bus."),
     ("otherwise", "Conjunction"): ("if not", "used to show a different result if something is not done", "Hurry, otherwise we will be late."),
-    ("unlike", "Preposition"): ("different from", "different from another person or thing", "Unlike his brother, Dan enjoys cooking."),
+    ("unlike", "Preposition"): ("different from", "different from another person or thing", "Unlike his friends, he enjoys cooking."),
     ("whom", "Pronoun"): ("which person", "used instead of 'who' as the object of a verb or preposition", "Whom did you invite to the meeting?"),
-    ("within", "Adverb"): ("inside; not beyond", "inside a place or before a limit is reached", "The answer came from within."),
+    ("within", "Adverb"): ("inside; not beyond", "inside a place or before a limit is reached", "The sound came from within."),
     ("within", "Preposition"): ("inside; before a limit", "inside a place, time or limit", "Please reply within three days."),
     ("would", "Verb"): ("past form of will; polite wish", "used for the past form of 'will' or to speak politely", "She said she would call later."),
     ("above", "Adjective"): ("written earlier", "written or mentioned earlier on the page", "Read the above instructions carefully."),
     ("behind", "Adverb"): ("later; slower; at the back", "at the back or making less progress than others", "After missing a week, he fell behind."),
-    ("indoors", "Adjective"): ("inside a building", "happening or used inside a building", "They planned an indoors activity because of the rain."),
+    ("indoors", "Adjective"): ("inside a building", "happening or used inside a building", "The activity was indoors because it was raining."),
     ("indoors", "Adverb"): ("inside a building", "inside a building", "It was raining, so we stayed indoors."),
     ("to", "Preposition"): ("toward; until", "used for direction, a receiver or the end of a range", "The shop is open from nine to five."),
     ("underneath", "Adverb"): ("below", "in or to a lower position", "The box is heavy, but there is a handle underneath."),
@@ -212,7 +212,7 @@ CURATED = {
     ("appear", "Verb"): ("come into view; seem", "A rainbow appeared after the rain.", "seem; come into view"),
     ("approach", "Noun"): ("a way of doing or thinking about something", "This teaching approach helps beginners.", "method; way"),
     ("approach", "Verb"): ("move closer; begin to deal with", "We approached the problem calmly.", "move closer; deal with"),
-    ("average", "Adjective"): ("ordinary; not especially high or low", "Her score was close to the average result.", "ordinary; usual"),
+    ("average", "Adjective"): ("ordinary; not especially high or low", "Her score was close to the average score.", "ordinary; usual"),
     ("challenge", "Verb"): ("question or disagree with something", "The student challenged the speaker's claim.", "question; disagree with"),
     ("chance", "Noun"): ("an opportunity or a possibility", "Everyone deserves a fair chance to succeed.", "opportunity; possibility"),
     ("change", "Verb"): ("become different; make something different", "The weather can change quickly.", "become different"),
@@ -442,7 +442,7 @@ CURATED.update({
     ("emotion", "Noun"): ("a strong feeling such as joy, fear or anger", "Music can express deep emotion.", "feeling"),
     ("exception", "Noun"): ("a person or thing not included in a general rule", "Everyone arrived on time, with one exception.", "special case"),
     ("exchange", "Verb"): ("give one thing and receive another", "The students exchanged ideas after the talk.", "trade; swap"),
-    ("expected", "Adjective"): ("believed or planned to happen", "The expected rain arrived in the afternoon.", "predicted; planned"),
+    ("expected", "Adjective"): ("believed or planned to happen", "The expected rain began in the afternoon.", "predicted; planned"),
     ("expedition", "Noun"): ("an organized journey for a special purpose", "The team went on an expedition to study the forest.", "organized journey"),
     ("expense", "Noun"): ("money needed or spent", "The hotel was our largest expense.", "cost"),
     ("export", "Noun"): ("goods sent to another country for sale", "Fruit is an important export for the region.", "goods sold abroad"),
@@ -457,7 +457,7 @@ CURATED.update({
     ("fit", "Adjective"): ("healthy; suitable for a purpose", "She exercises every day to stay fit.", "healthy; suitable"),
     ("generation", "Noun"): ("people born at about the same time", "The younger generation uses technology differently.", "age group"),
     ("genuine", "Adjective"): ("real, honest or truly felt", "Her concern for the children was genuine.", "real; sincere"),
-    ("hidden", "Adjective"): ("kept where it cannot easily be seen", "The key was hidden under a stone.", "not visible; secret"),
+    ("hidden", "Adjective"): ("kept where it cannot easily be seen", "We found a hidden key under the stone.", "not visible; secret"),
     ("highlight", "Verb"): ("make something seem especially important", "The report highlights the need for safer roads.", "emphasize"),
     ("historian", "Noun"): ("a person who studies and writes about the past", "The historian examined old letters.", "history expert"),
     ("historic", "Adjective"): ("important in the story of the past", "The leaders signed a historic agreement.", "important in history"),
@@ -744,6 +744,10 @@ def main() -> None:
     }
     with vocab.CONTENT_TSV.open(encoding="utf-8", newline="") as source:
         rows = list(csv.DictReader(source, delimiter="\t"))
+    if not rows or "Hebrew example" not in rows[0]:
+        raise SystemExit(
+            f"{vocab.CONTENT_TSV} must contain the reviewed 'Hebrew example' column"
+        )
     for row in rows:
         key = (row["List"], vocab.key_text(row["Display"]), row["POS"])
         card = official[key]

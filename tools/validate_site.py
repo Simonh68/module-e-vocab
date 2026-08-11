@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from collections import Counter, defaultdict
@@ -20,6 +21,44 @@ EXPECTED_COUNTS = {
     "C1": 83, "C2": 83, "C3": 83,
     "D1": 85, "D2": 85, "D3": 85,
 }
+EXPECTED_IDENTITY_SHA256 = {
+    "A1": "fc2ea43a37624014c4005a8cabc8abb295dd48b0f4b4f49628eb2cd78dfb95df",
+    "A2": "bda30cceff657de7dcc7f4789902ac8d71051ee5a13e9f49f4995bd3318086f0",
+    "A3": "d9f4283f922782c07d690eee548fb2fc318f27f637694837b7460d5a736c3581",
+    "B1": "67a4aa5356c1a5f2bfa156d20d2bc5ac7a32c1c36816155e3d806b75f8ec5f2a",
+    "B2": "b963c204b3bf72d66a9475a96bba1f292c87d5ecba69f669113c0e84d2c47b44",
+    "B3": "6758afd52cd647fc90c8173d080d415c5e2d36b8e8ce2ca2f37dd40ed396af96",
+    "C1": "7ec638d280aabff8d9ecd344ad0b939ebf8c7cd3c15d7b15e330a9a14634cebb",
+    "C2": "7f244c3aa59d1257f1bf251bb4a249e8d5e67d3e6a514c8645f2117db3695d9e",
+    "C3": "c12894bab80f57a6578e1a85fb546a258046c1d07a05b8bddbd597e671aa1c55",
+    "D1": "f65c5d5b33052eebf418fb1d631e96653f03169787601bc5c3bc45ebb1cd8c5c",
+    "D2": "1bbd9a1cc97a224e612866bc346a53981001aa29ee6bcf53cca6a57b5a00aa58",
+    "D3": "863aafabfe4b86a1320a47ca0e70998f86dba62df77f6ef99d2e54747484a9d7",
+}
+EXPECTED_GLOBAL_IDENTITY_SHA256 = (
+    "7efa2b5ee5396b0b1d4d4a67aa26ba60dcd10761315c4deff7e84839f5cf56ab"
+)
+MAX_EXAMPLE_WORDS = 12
+# Contractions and hyphenated compounds count as one word; punctuation does
+# not count. Numeric values count as one word. This is deliberately independent
+# of whitespace so curly quotes and punctuation cannot change the result.
+ENGLISH_WORD_RE = re.compile(
+    r"[A-Za-z]+(?:[’'][A-Za-z]+)*(?:-[A-Za-z]+(?:[’'][A-Za-z]+)*)*"
+    r"|\d+(?:[.,]\d+)*"
+)
+PLACEHOLDER_RE = re.compile(r"\b(?:sb|sth|smt)\b", re.IGNORECASE)
+# These examples were explicitly identified as fragments. Keeping the check
+# exact makes it useful without rejecting legitimate short imperatives or fixed
+# linguistic formulas.
+KNOWN_CLEAR_FRAGMENTS = {
+    "the victim of the accident",
+    "a lucky escape",
+    "computer hardware",
+    "a laser beam",
+    "a scary monster under the bed",
+    "the boy next door",
+    "yours sincerely, anna",
+}
 VALID_FAMILY_POS = set(vocab.POS_NAMES.values()) | {
     "Phrase", "Phrasal verb", "Noun phrase",
 }
@@ -36,6 +75,44 @@ def assert_valid_family_pos(pos: str, context: str) -> None:
         bool(labels) and all(label in VALID_FAMILY_POS for label in labels),
         f"Invalid family POS in {context}: {pos}",
     )
+
+
+def english_word_count(text: str) -> int:
+    """Count lexical English words; contractions/hyphenated forms count once."""
+    return len(ENGLISH_WORD_RE.findall(text))
+
+
+def identity_digest(rows: list[dict]) -> str:
+    """Hash immutable ID, displayed entry and POS tuples in their exact order."""
+    identity = [
+        (row["source_entry_id"], row["en"], row["pos"])
+        for row in rows
+    ]
+    payload = json.dumps(
+        identity, ensure_ascii=False, separators=(",", ":")
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def assert_json_matches_html(json_rows: list[dict], html_rows: list[dict]) -> None:
+    """Require byte-semantic row equality, including order, across both outputs."""
+    if json_rows == html_rows:
+        return
+    if len(json_rows) != len(html_rows):
+        raise AssertionError(
+            "Master JSON/HTML row-count mismatch: "
+            f"JSON={len(json_rows)}, HTML={len(html_rows)}"
+        )
+    for index, (json_row, html_row) in enumerate(zip(json_rows, html_rows), start=1):
+        if json_row != html_row:
+            fields = sorted(set(json_row) | set(html_row))
+            different = [field for field in fields if json_row.get(field) != html_row.get(field)]
+            identity = html_row.get("source_entry_id", f"row {index}")
+            raise AssertionError(
+                f"Master JSON/HTML mismatch at {identity}: "
+                f"different field(s): {', '.join(different)}"
+            )
+    raise AssertionError("Master JSON and HTML rows differ")
 
 
 def main() -> None:
@@ -183,11 +260,19 @@ def main() -> None:
         records_by_group[group] = records
         records_by_list[group[0]].extend(records)
         assert_true(len(records) == EXPECTED_COUNTS[group], f"Unexpected count in {group}: {len(records)}")
-        for record in records:
+        for position, record in enumerate(records, start=1):
+            context = f"{group}-{position:03d} {record.get('en', '<missing entry>')}"
             assert_true(record.get("pos"), f"Missing POS in {group}: {record.get('en')}")
             assert_true(record.get("mean_he"), f"Missing Hebrew meaning in {group}: {record.get('en')}")
             assert_true(record.get("ex_en"), f"Missing English example in {group}: {record.get('en')}")
+            assert_true(record.get("ex_he"), f"Missing Hebrew example in {context}")
             assert_true(record.get("support_text"), f"Missing A2 support in {group}: {record.get('en')}")
+            word_count = english_word_count(record.get("ex_en", ""))
+            assert_true(
+                word_count <= MAX_EXAMPLE_WORDS,
+                f"English example exceeds {MAX_EXAMPLE_WORDS} words in {context}: "
+                f"{word_count} words — {record.get('ex_en')}",
+            )
             assert_true(
                 record.get("grammar") == record.get("grammar", "").lower()
                 and not re.search(r"[.!?…;:]$", record.get("grammar", "")),
@@ -200,6 +285,21 @@ def main() -> None:
             assert_true(
                 re.search(r"[.!?…][”\"]?$", record["ex_en"]) is not None,
                 f"English example lacks terminal punctuation in {group}: {record.get('en')}",
+            )
+            assert_true(
+                re.search(r"[.!?…][”\"׳״]?\s*$", record["ex_he"]) is not None,
+                f"Hebrew example lacks terminal punctuation in {context}: {record['ex_he']}",
+            )
+            normalized_example = re.sub(
+                r"[.!?…]+$", "", record["ex_en"].strip().casefold()
+            ).strip()
+            assert_true(
+                normalized_example not in KNOWN_CLEAR_FRAGMENTS,
+                f"Known sentence fragment remains in {context}: {record['ex_en']}",
+            )
+            assert_true(
+                PLACEHOLDER_RE.search(record["ex_en"]) is None,
+                f"Learner placeholder remains in English example in {context}: {record['ex_en']}",
             )
             assert_true(
                 not re.search(r"[.!?…;:]$", record["support_text"]),
@@ -258,14 +358,80 @@ def main() -> None:
         display_by_key = {
             vocab.key_text(card["display"]): card["display"] for card in official_cards[letter]
         }
+        official_entries_by_display = defaultdict(list)
+        for row in official_rows[letter]:
+            key = vocab.key_text(row["display"])
+            if row["official_entry"] not in official_entries_by_display[key]:
+                official_entries_by_display[key].append(row["official_entry"])
         for record in records_by_list[letter]:
+            display_key = vocab.key_text(record["en"])
             assert_true(
-                record["en"] == display_by_key[vocab.key_text(record["en"])],
+                record["en"] == display_by_key[display_key],
                 f"Display capitalization mismatch: List {letter} {record['en']}",
+            )
+            expected_official_entry = " | ".join(official_entries_by_display[display_key])
+            assert_true(
+                record.get("official_entry") == expected_official_entry,
+                f"Official entry changed: List {letter} {record['en']} {record['pos']}",
             )
 
     json_rows = json.loads((REPO / "data/vocabulary-master.json").read_text(encoding="utf-8"))
-    assert_true(len(json_rows) == 982, f"Master JSON has {len(json_rows)} rows instead of 982")
+    assert_true(isinstance(json_rows, list), "Master JSON root must be an array")
+    assert_true(
+        all(isinstance(row, dict) for row in json_rows),
+        "Every master JSON row must be an object",
+    )
+    expected_total = sum(EXPECTED_COUNTS.values())
+    assert_true(
+        len(json_rows) == expected_total,
+        f"Master JSON has {len(json_rows)} rows instead of {expected_total}",
+    )
+
+    html_rows = []
+    expected_groups = []
+    expected_ids = []
+    for group in GROUPS:
+        for position, record in enumerate(records_by_group[group], start=1):
+            source_entry_id = f"{group}-{position:03d}"
+            html_rows.append(dict(record))
+            expected_groups.append(group)
+            expected_ids.append(source_entry_id)
+
+    actual_groups = [row.get("group") for row in json_rows]
+    actual_ids = [row.get("source_entry_id") for row in json_rows]
+    assert_true(
+        actual_groups == expected_groups,
+        "Master JSON group sequence differs from the 12 canonical activity groups",
+    )
+    assert_true(
+        actual_ids == expected_ids,
+        "Master JSON source_entry_id sequence is not canonical or has been reordered",
+    )
+    assert_true(
+        len(actual_ids) == len(set(actual_ids)),
+        "Duplicate source_entry_id in master JSON",
+    )
+    json_content_rows = []
+    for row in json_rows:
+        content_row = dict(row)
+        content_row.pop("group", None)
+        content_row.pop("source_entry_id", None)
+        json_content_rows.append(content_row)
+    assert_json_matches_html(json_content_rows, html_rows)
+
+    for group in GROUPS:
+        group_rows = [row for row in json_rows if row["group"] == group]
+        digest = identity_digest(group_rows)
+        assert_true(
+            digest == EXPECTED_IDENTITY_SHA256[group],
+            f"Immutable identity/POS/order changed in {group}: {digest}",
+        )
+    global_digest = identity_digest(json_rows)
+    assert_true(
+        global_digest == EXPECTED_GLOBAL_IDENTITY_SHA256,
+        f"Global identity/group order changed: {global_digest}",
+    )
+
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
     for row in json_rows:
