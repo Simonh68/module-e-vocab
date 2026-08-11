@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Module E Quiz Score Checker</title>
+<link rel="icon" href="favicon.svg?v=20260811-1" type="image/svg+xml">
+<style>
+:root{--ink:#173b2a;--muted:#52705f;--green:#276b48;--edge:#79bd94;--pale:#eefbf3;--ok:#147a43;--bad:#b42318;--focus:#8b3f00}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(145deg,#eefbf3,#ccefd9 55%,#9edbb6)}
+.skip{position:fixed;top:-100px;left:12px;z-index:10;padding:10px 14px;background:#111827;color:#fff;border-radius:9px}.skip:focus{top:12px}
+.wrap{max-width:1450px;margin:auto;padding:28px 16px 50px}
+header,.panel{background:rgba(255,255,255,.94);border:1px solid #fff;border-radius:24px;box-shadow:inset 0 2px 0 #fff,0 7px 0 var(--edge),0 20px 42px rgba(39,107,72,.18)}
+header{padding:24px 28px;margin-bottom:24px}
+h1{margin:0 0 7px;font-size:clamp(1.8rem,4vw,3rem);color:#185239}
+header p{margin:5px 0;color:var(--muted);line-height:1.5}
+.panel{padding:20px;overflow-x:auto}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+button{font:inherit;font-weight:800;border-radius:12px;padding:10px 15px;cursor:pointer;border:1px solid #368b5f}
+.primary{color:#fff;background:linear-gradient(145deg,#2f7f55,#205d3f);box-shadow:0 4px 0 #194d34}
+.secondary{color:#245d40;background:#f5fff8;border-color:#a9d4b9;box-shadow:0 4px 0 #9bcbaa}
+button:hover{filter:saturate(1.08);transform:translateY(-1px)}
+button:active{transform:translateY(2px);box-shadow:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.hint{margin-left:auto;color:var(--muted);font-size:.9rem}
+table{border-collapse:separate;border-spacing:0 10px;min-width:1240px;width:100%}
+caption{text-align:left;font-weight:800;margin-bottom:6px}
+th{font-size:.78rem;color:#456653;padding:0 4px;text-align:center;white-space:nowrap}
+th:first-child{text-align:left}
+tbody tr{background:#fafffb}
+td{padding:9px 4px;border-top:1px solid #d6eadc;border-bottom:1px solid #d6eadc;text-align:center}
+td:first-child{padding-left:10px;border-left:1px solid #d6eadc;border-radius:15px 0 0 15px}
+td:last-child{padding-right:10px;border-right:1px solid #d6eadc;border-radius:0 15px 15px 0}
+input{font:inherit;border:2px solid #b9d8c4;border-radius:9px;background:#fff;color:#173b2a;text-align:center;height:42px}
+.student{width:170px;text-align:left;padding:0 10px}.version{width:62px}.answer{width:42px;font-weight:800;font-size:1.05rem}
+.q-end{margin-right:10px}
+.answer.correct{border-color:var(--ok);background:#e9f8ef;color:#0b6535}.answer.wrong{border-color:var(--bad);background:#fff0ee;color:#981b12}
+.result{min-width:130px;font-weight:900;white-space:nowrap}.result.good{color:var(--ok)}.result.bad{color:var(--bad)}
+.row-action{width:42px;height:42px;padding:0;color:#7a271a;background:#fff5f3;border-color:#efb2ab;box-shadow:none}
+.status{min-height:24px;margin:14px 2px 0;font-weight:700}.status.error{color:var(--bad)}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:700px){.wrap{padding:16px 10px 36px}header{padding:20px}.panel{padding:14px}.hint{width:100%;margin-left:0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#checker">Skip to score checker</a>
+<main class="wrap" id="checker">
+  <header>
+    <h1>Module E Quiz Score Checker</h1>
+    <p>Enter the test version and the 15 answers (three answers for each of five questions). Student name or number is optional.</p>
+    <p>Each answer must be a number from 1 to 6.</p>
+  </header>
+  <section class="panel" aria-labelledby="records-heading">
+    <h2 class="sr-only" id="records-heading">Student records</h2>
+    <div class="toolbar">
+      <button class="primary" type="button" id="addRow">+ Add record</button>
+      <button class="secondary" type="button" id="checkAll">Check all</button>
+      <span class="hint">Typing a digit moves to the next box. You may also paste 15 digits into the first answer box.</span>
+    </div>
+    <table>
+      <caption class="sr-only">Quiz versions, student answers and scores</caption>
+      <thead><tr><th scope="col">Student (optional)</th><th scope="col">Version</th><th colspan="3" scope="colgroup">Question 1</th><th colspan="3" scope="colgroup">Question 2</th><th colspan="3" scope="colgroup">Question 3</th><th colspan="3" scope="colgroup">Question 4</th><th colspan="3" scope="colgroup">Question 5</th><th scope="col">Score</th><th scope="col">Remove</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </section>
+</main>
+<template id="rowTemplate"><tr>
+  <td><label class="sr-only">Student name or number</label><input class="student" type="text" autocomplete="off" placeholder="Optional"></td>
+  <td><label class="sr-only">Test version</label><input class="version" type="text" inputmode="numeric" maxlength="2" autocomplete="off" aria-label="Test version, 1 to 51"></td>
+  <td colspan="15" class="answers-cell"></td>
+  <td class="result" aria-live="polite">—</td>
+  <td><button class="row-action" type="button" aria-label="Remove this record">×</button></td>
+</tr></template>
+<script>
+'use strict';
+const KEYS=["653543415653263","624516645365612","261153635241614","245563614243135","316615541416215","652234543621534","362261453512564","316456312513635","623623463126652","265124146342642","351254253632423","542643346416354","216461512643563","462621215264124","163453652245641","423321213352253","632136465146163","346561312163126","425236534356216","546436321612531","241452362651231","436614426613136","143456143314261","246126123615364","643653231456314","534641431435425","243162612426542","236125462126345","165156561245621","315512451162156","634352461134524","563623253543431","615152164342453","435163152624136","134643213124435","136654514253421","431312143145142","524514431416521","651635134162615","341561541462532","263624316512613","635452513165561","425236463362456","325123612524126","563634134453564","316415325465615","235215345154312","154143342256142","462346365251126","521312451613245","653543415653263"];
+const rows=document.getElementById('rows'), status=document.getElementById('status');
+
+function answerInputs(row){return [...row.querySelectorAll('.answer')]}
+function setStatus(message,isError=false){status.textContent=message;status.className='status'+(isError?' error':'')}
+function clearResult(row){answerInputs(row).forEach(i=>i.classList.remove('correct','wrong'));const r=row.querySelector('.result');r.textContent='—';r.className='result'}
+function checkRow(row,announce=true){
+  const versionText=row.querySelector('.version').value.trim();
+  const answers=answerInputs(row), digits=answers.map(i=>i.value);
+  if(!/^([1-9]|[1-4][0-9]|5[01])$/.test(versionText)){if(announce)setStatus('Enter a version from 1 to 51.',true);row.querySelector('.version').focus();return false}
+  const invalid=answers.find(i=>!/[1-6]/.test(i.value));
+  if(invalid){if(announce)setStatus('Complete all 15 answers using numbers from 1 to 6.',true);invalid.focus();return false}
+  const key=KEYS[Number(versionText)-1];let hits=0;
+  answers.forEach((input,index)=>{const correct=input.value===key[index];input.classList.toggle('correct',correct);input.classList.toggle('wrong',!correct);if(correct)hits++});
+  const percent=Math.round(hits/15*100), result=row.querySelector('.result');
+  result.textContent=`${hits}/15 — ${percent}`;result.className='result '+(hits>=9?'good':'bad');
+  if(announce)setStatus(`Score: ${hits} out of 15 — ${percent} out of 100.`);
+  return true;
+}
+function addRow(focus=true){
+  const row=document.getElementById('rowTemplate').content.firstElementChild.cloneNode(true), cell=row.querySelector('.answers-cell');
+  cell.removeAttribute('colspan');
+  const frag=document.createDocumentFragment();
+  for(let i=0;i<15;i++){
+    const td=document.createElement('td'), input=document.createElement('input');
+    input.className='answer'+(i%3===2?' q-end':'');input.type='text';input.inputMode='numeric';input.maxLength=1;input.autocomplete='off';
+    input.setAttribute('aria-label',`Question ${Math.floor(i/3)+1}, answer ${i%3+1}`);td.append(input);frag.append(td);
+  }
+  cell.replaceWith(frag);rows.append(row);wireRow(row);if(focus)row.querySelector('.student').focus();return row;
+}
+function wireRow(row){
+  const version=row.querySelector('.version'), answers=answerInputs(row);
+  version.addEventListener('input',()=>{version.value=version.value.replace(/\D/g,'').slice(0,2);clearResult(row)});
+  version.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key==='ArrowRight'){e.preventDefault();answers[0].focus()}});
+  answers.forEach((input,index)=>{
+    input.addEventListener('input',()=>{input.value=input.value.replace(/[^1-6]/g,'').slice(-1);clearResult(row);if(input.value&&index<14)answers[index+1].focus()});
+    input.addEventListener('keydown',e=>{
+      if(e.key==='Backspace'&&!input.value&&index>0){e.preventDefault();answers[index-1].focus();answers[index-1].select()}
+      if(e.key==='ArrowLeft'&&index>0){e.preventDefault();answers[index-1].focus()}
+      if(e.key==='ArrowRight'&&index<14){e.preventDefault();answers[index+1].focus()}
+      if(e.key==='Enter'&&index===14){e.preventDefault();if(checkRow(row)){const next=row.nextElementSibling||addRow(false);next.querySelector('.student').focus()}}
+    });
+    input.addEventListener('paste',e=>{const digits=(e.clipboardData.getData('text').match(/[1-6]/g)||[]).slice(0,15-index);if(digits.length<2)return;e.preventDefault();digits.forEach((d,n)=>answers[index+n].value=d);clearResult(row);answers[Math.min(index+digits.length,14)].focus()});
+  });
+  row.querySelector('.row-action').addEventListener('click',()=>{if(rows.children.length===1){row.querySelectorAll('input').forEach(i=>i.value='');clearResult(row);row.querySelector('.student').focus()}else{const next=row.nextElementSibling||row.previousElementSibling;row.remove();next.querySelector('.student').focus()}setStatus('Record removed.')});
+}
+document.getElementById('addRow').addEventListener('click',()=>addRow());
+document.getElementById('checkAll').addEventListener('click',()=>{const all=[...rows.children], attempted=all.filter(r=>r.querySelector('.version').value||answerInputs(r).some(i=>i.value));if(!attempted.length){setStatus('Enter at least one record.',true);return}let valid=0;attempted.forEach(r=>{if(checkRow(r,false))valid++});setStatus(`${valid} of ${attempted.length} entered records checked.${valid<attempted.length?' Complete the unfinished records.':''}`,valid<attempted.length)});
+addRow(false);rows.querySelector('.student').focus();
+</script>
+</body>
+</html>
