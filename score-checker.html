@@ -127,5 +127,5 @@ document.getElementById('addRow').addEventListener('click',()=>addRow());
 document.getElementById('checkAll').addEventListener('click',()=>{const all=[...rows.children], attempted=all.filter(r=>r.querySelector('.version').value||answerInputs(r).some(i=>i.value));if(!attempted.length){setStatus('Enter at least one record.',true);return}let valid=0;attempted.forEach(r=>{if(checkRow(r,false))valid++});setStatus(`${valid} of ${attempted.length} entered records checked.${valid<attempted.length?' Complete the unfinished records.':''}`,valid<attempted.length)});
 addRow(false);rows.querySelector('.student').focus();
 </script>
-</body>
+<script src="analytics.js"></script></body>
 </html>
