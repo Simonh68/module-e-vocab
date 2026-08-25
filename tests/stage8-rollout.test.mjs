@@ -36,6 +36,7 @@ test('wave one activates only A1 and uses its first twelve approved records', as
   const rollout = context.window.EFN_STAGE8_ROLLOUT;
   assert.deepEqual(Object.keys(rollout.vocabulary), ['A1.html']);
   assert.equal(rollout.vocabulary['A1.html'].limit, 12);
+  assert.equal(rollout.vocabulary['A1.html'].analyticsActivity, 'module-e-a1');
   assert.equal(vocabApi.rolloutFor('/module-e-vocab/A1.html', rollout.vocabulary).limit, 12);
   assert.equal(vocabApi.rolloutFor('/module-e-vocab/A2.html', rollout.vocabulary), null);
   const words = wordsFrom(await readFile(new URL('../A1.html', import.meta.url), 'utf8'));
@@ -75,7 +76,7 @@ test('filler feedback does not promise an unscheduled return', () => {
   assert.ok(feedback.parts.some(part => part.lang === 'en'));
 });
 
-test('practice interactions are excluded from analytics and new code has no storage or network writes', async () => {
+test('practice answers stay excluded while only start/completion measurements are exposed', async () => {
   const files = ['learning-loop.js', 'practice-session.js', 'practice-panel.js', 'vocab-practice.js'];
   const source = (await Promise.all(files.map(file => readFile(new URL(`../${file}`, import.meta.url), 'utf8')))).join('\n');
   const styles = await readFile(new URL('../practice-shell.css', import.meta.url), 'utf8');
@@ -83,6 +84,8 @@ test('practice interactions are excluded from analytics and new code has no stor
   assert.doesNotMatch(source, /\bfetch\s*\(|\bsendBeacon\b|localStorage|sessionStorage|indexedDB|document\.cookie/);
   assert.match(source, /aria-live/);
   assert.match(source, /setTextParts/);
+  assert.match(source, /activity_complete/);
+  assert.match(source, /practice-start/);
   assert.match(source, /prefers-reduced-motion: reduce/);
   assert.match(styles, /\.efn-practice\{[^}]*box-sizing:border-box/);
   assert.match(styles, /overflow-wrap:anywhere/);
@@ -95,6 +98,6 @@ test('practice interactions are excluded from analytics and new code has no stor
 
 test('practice assets and the analytics privacy guard are cache-busted on rollout pages', async () => {
   const active = await readFile(new URL('../A1.html', import.meta.url), 'utf8');
-  assert.match(active, /vocab-practice\.js\?v=20260825-stage8/);
-  assert.match(active, /analytics\.js\?v=20260825-stage8/);
+  assert.match(active, /vocab-practice\.js\?v=20260825-stage9/);
+  assert.match(active, /analytics\.js\?v=20260825-stage9/);
 });
