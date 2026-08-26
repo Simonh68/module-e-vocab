@@ -118,6 +118,7 @@ def assert_json_matches_html(json_rows: list[dict], html_rows: list[dict]) -> No
 def main() -> None:
     assert_true((REPO / ".nojekyll").exists(), ".nojekyll is missing")
     index = (REPO / "index.html").read_text(encoding="utf-8")
+    analytics = (REPO / "analytics.js").read_text(encoding="utf-8")
     guide = (REPO / "teacher-guide.html").read_text(encoding="utf-8")
     about = (REPO / "about.html").read_text(encoding="utf-8")
     policy_pages = {
@@ -150,6 +151,8 @@ def main() -> None:
         "Future teacher resources are not clearly separated from the submitted unit",
     )
     assert_true((REPO / "site-policy.css").exists(), "Shared policy-page stylesheet is missing")
+    assert_true((REPO / "ownership.js").exists(), "Shared ownership notice is missing")
+    assert_true("ownership.js?v=1" in analytics, "Analytics does not load the shared ownership notice")
     for filename in POLICY_FILES:
         assert_true(f'href="{filename}"' in about, f"About link to {filename} is missing")
         assert_true(f'href="{filename}"' in index, f"Homepage link to {filename} is missing")
@@ -159,7 +162,9 @@ def main() -> None:
         "Accessibility statement overclaims formal certification",
     )
     assert_true(
-        "does not use registration, login forms, contact forms, advertising, analytics" in policy_pages["privacy.html"],
+        "does not use registration, login forms, advertising" in policy_pages["privacy.html"]
+        and "limited, anonymous operational analytics" in policy_pages["privacy.html"]
+        and "does not collect names, email addresses" in policy_pages["privacy.html"],
         "Privacy policy does not state the site's data-minimizing design",
     )
     assert_true(
@@ -167,6 +172,11 @@ def main() -> None:
         and "permission is limited to online use" in policy_pages["copyright.html"].lower()
         and "does not permit downloading, copying, printing, distributing, modifying" in policy_pages["copyright.html"],
         "Copyright page is missing the selected online-use-only permission",
+    )
+    assert_true(
+        "שמעון הרצל הלוי גובני" in policy_pages["copyright.html"]
+        and "all rights reserved" in policy_pages["copyright.html"].lower(),
+        "Copyright page is missing the exact owner or all-rights-reserved notice",
     )
     source_files = {
         "LISTA12.12.21.xlsx": "List A",
