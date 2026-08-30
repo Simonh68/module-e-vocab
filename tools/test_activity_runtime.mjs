@@ -123,7 +123,7 @@ function loadActivity(filename) {
   const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(
     (match) => match[1],
   );
-  const runtime = scripts.at(-1);
+  const runtime = scripts.find((script) => script.includes("function updateCard()"));
   assert(runtime?.includes("function updateCard()"), `${filename}: runtime script not found`);
 
   const ids = [
@@ -272,12 +272,27 @@ function testActivity(filename) {
   assert.equal(speech.length, beforeFlipSpeech + 1, `${filename}: example sentence did not speak once`);
   assert.equal(speech.at(-1).text, words[4].ex_en, `${filename}: wrong answer-side sentence`);
 
-  sandbox.toggleCard(event());
-  clock.advance(900);
-  assert.equal(speech.at(-1).text, words[4].en, `${filename}: word did not speak after returning`);
-  assert.equal(elements.flipButton.getAttribute("aria-pressed"), "false", `${filename}: word pressed state`);
-
+  let unguardedAnswerTransition = false;
+  const removeClass = elements.flashcard.classList.remove.bind(elements.flashcard.classList);
+  elements.flashcard.classList.remove = (...names) => {
+    if (
+      names.includes("is-flipped")
+      && elements.flashcard.classList.contains("is-flipped")
+      && elements.flashcard.style.transition !== "none"
+    ) {
+      unguardedAnswerTransition = true;
+    }
+    removeClass(...names);
+  };
   sandbox.nextCard();
+  assert.equal(unguardedAnswerTransition, false, `${filename}: next answer can appear during the return transition`);
+  assert.equal(elements.flashcard.classList.contains("is-flipped"), false, `${filename}: Next left the answer face visible`);
+  assert.equal(elements.counter.innerText, `6 / ${words.length}`, `${filename}: flipped Next counter`);
+  assert.equal(elements.transHe.innerText, words[5].he || words[5].mean_he, `${filename}: flipped Next loaded the wrong answer`);
+  assert.equal(elements.flipButton.getAttribute("aria-pressed"), "false", `${filename}: flipped Next pressed state`);
+  clock.advance(900);
+  assert.equal(speech.at(-1).text, words[5].en, `${filename}: word did not speak after flipped Next`);
+
   const beforeManualSpeech = speech.length;
   sandbox.playAudio(event());
   assert.equal(speech.length, beforeManualSpeech + 1, `${filename}: Listen button did not speak`);

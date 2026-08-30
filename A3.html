@@ -645,12 +645,20 @@
             scheduleWordSpeech();
         }
 
+        function resetCardForNavigation(card) {
+            if (!card.classList.contains('is-flipped')) return;
+            const previousTransition = card.style.transition;
+            card.style.transition = 'none';
+            card.classList.remove('is-flipped');
+            void card.offsetWidth;
+            card.style.transition = previousTransition;
+        }
+
         function updateCard() {
             if (typeof words === 'undefined' || words.length === 0) return;
-            const item = words[currentIndex];
-            
             const card = document.getElementById('flashcard');
-            card.classList.remove('is-flipped');
+            resetCardForNavigation(card);
+            const item = words[currentIndex];
             const cardFront = document.getElementById('cardFront');
             const cardBack = document.getElementById('cardBack');
             cardFront.setAttribute('aria-hidden', 'false');
