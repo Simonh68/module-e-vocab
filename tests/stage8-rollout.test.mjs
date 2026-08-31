@@ -7,6 +7,7 @@ import vm from 'node:vm';
 const require = createRequire(import.meta.url);
 require('../learning-loop.js');
 const sessionApi = require('../practice-session.js');
+const panelApi = require('../practice-panel.js');
 const vocabApi = require('../vocab-practice.js');
 const activityNames = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'D1', 'D2', 'D3'];
 
@@ -26,6 +27,8 @@ test('all twelve activities load the dormant rollout bundle without changing the
     assert.match(html, /practice-panel\.js/);
     assert.match(html, /stage8-rollout\.js/);
     assert.match(html, /vocab-practice\.js/);
+    assert.match(html, /design-system\.css\?v=2/);
+    assert.match(html, /practice-panel\.js\?v=20260831-choice1/);
   }
 });
 
@@ -57,6 +60,25 @@ test('A1 questions provide immediate Hebrew-first and reverse-direction practice
   assert.ok(review.choices.includes(review.answer));
   assert.deepEqual(primary.promptParts.map(part => part.lang), ['he', 'en', 'he']);
   assert.equal(primary.promptParts[1].text, words[0].en);
+});
+
+test('the correct answer never repeats the same display position twice in a row', () => {
+  const first = panelApi.avoidRepeatedAnswerPosition(['correct', 'one', 'two', 'three'], 'correct', -1, () => 0);
+  const second = panelApi.avoidRepeatedAnswerPosition(['correct', 'one', 'two', 'three'], 'correct', first.answerIndex, () => 0);
+  const third = panelApi.avoidRepeatedAnswerPosition(['one', 'correct', 'two', 'three'], 'correct', second.answerIndex, () => .99);
+
+  assert.equal(first.choices[first.answerIndex], 'correct');
+  assert.equal(second.choices[second.answerIndex], 'correct');
+  assert.equal(third.choices[third.answerIndex], 'correct');
+  assert.notEqual(second.answerIndex, first.answerIndex);
+  assert.notEqual(third.answerIndex, second.answerIndex);
+});
+
+test('long Module E vocabulary stays inside phone-width cards', async () => {
+  const styles = await readFile(new URL('../design-system.css', import.meta.url), 'utf8');
+  assert.match(styles, /\.word-en,[\s\S]*\.trans-he,[\s\S]*overflow-wrap: anywhere;/);
+  assert.match(styles, /@media \(max-width: 560px\) \{[\s\S]*\.word-en \{[\s\S]*font-size: clamp\(1\.45rem, 7\.8vw, 2\.2rem\);/);
+  assert.match(styles, /\.trans-row \{[\s\S]*gap: 10px;/);
 });
 
 test('filler feedback does not promise an unscheduled return', () => {

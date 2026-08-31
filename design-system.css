@@ -357,7 +357,51 @@ button.copy-link {
 }
 
 .trans-he {
+  min-width: 0;
+  max-width: 100%;
   color: #176c50;
+  overflow-wrap: anywhere;
+}
+
+.word-main-container,
+.word-en,
+.word-grammar,
+.translations-section,
+.trans-row,
+.example-box,
+.family-box,
+.synonyms-box {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.word-main-container {
+  width: 100%;
+}
+
+.word-en,
+.word-grammar,
+.trans-he,
+.trans-fr,
+.example-en,
+.example-he,
+.family-word,
+.synonyms-box {
+  overflow-wrap: anywhere;
+}
+
+.word-en {
+  text-wrap: balance;
+}
+
+.trans-row {
+  gap: 10px;
+}
+
+.trans-he,
+.trans-fr {
+  flex: 1 1 auto;
+  text-align: end;
 }
 
 .nav-container {
@@ -454,6 +498,15 @@ button.copy-link {
 
   .card-face {
     padding: 20px;
+  }
+
+  .word-en {
+    font-size: clamp(1.45rem, 7.8vw, 2.2rem);
+    line-height: 1.16;
+  }
+
+  .trans-row {
+    align-items: flex-start;
   }
 }
 

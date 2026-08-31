@@ -33,6 +33,19 @@
     });
   }
 
+  function avoidRepeatedAnswerPosition(values, answer, previousIndex = -1, random = Math.random) {
+    const output = [...values];
+    const answerIndex = output.indexOf(answer);
+    if (output.length < 2 || answerIndex < 0 || answerIndex !== previousIndex) {
+      return { choices: output, answerIndex };
+    }
+    const alternatives = output.map((_, index) => index).filter(index => index !== answerIndex);
+    const sample = Math.max(0, Math.min(.999999, Number(random?.()) || 0));
+    const swapIndex = alternatives[Math.floor(sample * alternatives.length)];
+    [output[answerIndex], output[swapIndex]] = [output[swapIndex], output[answerIndex]];
+    return { choices: output, answerIndex: swapIndex };
+  }
+
   function mount(config) {
     const document = config.document || globalThis.document;
     if (!document || !config.anchor || typeof config.createSession !== 'function') return null;
@@ -100,6 +113,7 @@
     let session = null;
     let currentQuestion = null;
     let answered = false;
+    let previousAnswerIndex = -1;
 
     function measure(event, context = {}) {
       const analytics = config.analytics || globalThis.EFNAnalytics;
@@ -142,7 +156,14 @@
       clue.dir = currentQuestion.clueDir || (clue.lang === 'he' ? 'rtl' : 'ltr');
       speak.hidden = !currentQuestion.speakText || !('speechSynthesis' in globalThis);
       choices.replaceChildren();
-      currentQuestion.choices.forEach((choice, index) => {
+      const arranged = avoidRepeatedAnswerPosition(
+        currentQuestion.choices,
+        currentQuestion.answer,
+        previousAnswerIndex,
+        config.random || Math.random
+      );
+      previousAnswerIndex = arranged.answerIndex;
+      arranged.choices.forEach((choice, index) => {
         const button = element(document, 'button', 'efn-practice__choice', choice);
         button.type = 'button';
         button.dataset.analyticsLabel = 'practice-answer';
@@ -179,6 +200,7 @@
 
     function begin() {
       session = config.createSession();
+      previousAnswerIndex = -1;
       measure('button_click', { target: 'practice-start', label: 'practice-start' });
       intro.hidden = true;
       summary.hidden = true;
@@ -214,5 +236,5 @@
     };
   }
 
-  return { mount, loadStyles, setTextParts };
+  return { mount, loadStyles, setTextParts, avoidRepeatedAnswerPosition };
 });
