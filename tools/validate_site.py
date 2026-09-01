@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import re
@@ -444,10 +445,81 @@ def main() -> None:
 
     json_keys = Counter((row["group"], row["en"], row["pos"]) for row in json_rows)
     assert_true(max(json_keys.values()) == 1, "Duplicate Group + Word/Phrase + POS in master JSON")
+    rows_by_id = {row["source_entry_id"]: row for row in json_rows}
     for row in json_rows:
+        context = f"{row['source_entry_id']} {row['en']}"
+        siblings = row.get("same_entry_record_ids")
+        assert_true(
+            row.get("record_sense_en") == row.get("support_text") and bool(row.get("record_sense_en")),
+            f"Missing or inconsistent English record sense: {context}",
+        )
+        assert_true(
+            row.get("record_sense_he") == row.get("mean_he") and bool(row.get("record_sense_he")),
+            f"Missing or inconsistent Hebrew record sense: {context}",
+        )
+        assert_true(isinstance(row.get("repeated_entry"), bool), f"Invalid repeated-entry flag: {context}")
+        assert_true(isinstance(siblings, list), f"Invalid same-entry ID list: {context}")
+        assert_true(len(siblings) == len(set(siblings)), f"Duplicate sibling IDs: {context}")
+        assert_true(row["source_entry_id"] not in siblings, f"Record links to itself: {context}")
+        assert_true(
+            row["repeated_entry"] == bool(siblings),
+            f"Repeated-entry flag disagrees with sibling links: {context}",
+        )
+        expected_scope = "record-specific" if siblings else "single-entry"
+        assert_true(
+            row.get("record_sense_scope") == expected_scope,
+            f"Invalid record sense scope: {context}",
+        )
+        for sibling_id in siblings:
+            assert_true(sibling_id in rows_by_id, f"Unknown sibling {sibling_id}: {context}")
+            sibling = rows_by_id[sibling_id]
+            assert_true(
+                vocab.key_text(sibling["en"]) == vocab.key_text(row["en"]),
+                f"Sibling spelling mismatch {sibling_id}: {context}",
+            )
+            assert_true(
+                row["source_entry_id"] in sibling.get("same_entry_record_ids", []),
+                f"Asymmetric sibling link {sibling_id}: {context}",
+            )
         for member in row.get("family_members", []):
             assert_valid_family_pos(
                 member["pos"], f"master JSON {row['group']} {row['en']} / {member['word']}"
+            )
+
+    content_path = REPO / "data/ab_content.tsv"
+    with content_path.open(encoding="utf-8", newline="") as handle:
+        content_rows = list(csv.DictReader(handle, delimiter="\t"))
+    required_content_columns = set(vocab.CONTENT_COLUMNS)
+    assert_true(
+        content_rows and required_content_columns.issubset(content_rows[0]),
+        "A/B content table is missing record-sense columns",
+    )
+    ab_rows = [row for row in json_rows if row["group"][0] in "AB"]
+    ab_by_key = {
+        (row["group"][0], vocab.key_text(row["en"]), row["pos"]): row
+        for row in ab_rows
+    }
+    assert_true(len(content_rows) == len(ab_by_key), "A/B content metadata row-count mismatch")
+    for content_row in content_rows:
+        key = (content_row["List"], vocab.key_text(content_row["Display"]), content_row["POS"])
+        assert_true(key in ab_by_key, f"Unknown A/B content row: {' | '.join(key)}")
+        row = ab_by_key[key]
+        expected = {
+            "Source Entry ID": row["source_entry_id"],
+            "Hebrew source": row["mean_he"],
+            "A2 definition or synonyms": row["support_text"],
+            "English example": row["ex_en"],
+            "Hebrew example": row["ex_he"],
+            "Record sense (English)": row["record_sense_en"],
+            "Record sense (Hebrew)": row["record_sense_he"],
+            "Repeated entry": "TRUE" if row["repeated_entry"] else "FALSE",
+            "Same-entry record IDs": "; ".join(row["same_entry_record_ids"]),
+            "Sense scope": row["record_sense_scope"],
+        }
+        for field, value in expected.items():
+            assert_true(
+                content_row.get(field) == value,
+                f"A/B content metadata mismatch in {row['source_entry_id']}: {field}",
             )
 
     all_html = {path.name: path.read_text(encoding="utf-8") for path in REPO.glob("*.html")}
@@ -465,6 +537,16 @@ def main() -> None:
             local_path = href.split("#", 1)[0].split("?", 1)[0]
             if local_path:
                 assert_true((REPO / local_path).exists(), f"Broken local link in {filename}: {href}")
+
+    support_pool, _ = vocab.current_records()
+    expected_support_keys = {
+        (row["group"], vocab.key_text(row["en"]), row["pos"])
+        for row in json_rows
+    }
+    assert_true(
+        set(support_pool) == expected_support_keys,
+        "Generator support lookup is not record/group-aware and may collapse repeated senses",
+    )
 
     print("PASS: 12 activities, 982 cards, policies, accessibility controls, privacy checks, archived A–D sources, official coverage, capitalization, punctuation, links and static assets validated.")
 

@@ -56,6 +56,11 @@ const headers = [
   "Word / Phrase",
   "POS",
   "Hebrew Meaning",
+  "Record Sense (English)",
+  "Record Sense (Hebrew)",
+  "Repeated Entry",
+  "Same-entry Record IDs",
+  "Sense Scope",
   "Support Type",
   "A2 Definition / Synonyms",
   "Boundary Examples",
@@ -78,6 +83,11 @@ const values = records.map((record) => {
     record.en,
     record.pos,
     record.mean_he,
+    record.record_sense_en,
+    record.record_sense_he,
+    record.repeated_entry,
+    (record.same_entry_record_ids || []).join("; "),
+    record.record_sense_scope,
     record.support_type,
     record.support_text,
     record.boundary_examples || "",
@@ -131,6 +141,8 @@ const rules = [
   "• Verified source-data anomalies and editorial corrections are documented in the online Teacher Guide.",
   "• Display text uses natural English capitalization, typographic punctuation and consistent Hebrew gloss separators.",
   "• Every card has a Hebrew meaning, a POS-specific English example and one A2 support route.",
+  "• Every row carries its own English and Hebrew record sense; meaning is never inferred from spelling or POS alone.",
+  "• Repeated spelling is marked in the row and linked to all same-entry record IDs; each occurrence remains independent.",
   "• Family Members are informational only; they never create separate activity cards.",
   `• Family data appears on ${familyCards} cards and contains ${familyPairs} distinct Word + POS pairs.`,
   `• Support totals: ${Object.entries(supportTotals).map(([key, value]) => `${value} ${key}`).join("; ")}.`,
@@ -166,7 +178,7 @@ summary.getRange(`A${checkRow + 1}:D${checkRow + 1}`).format = {
   fill: "#26734D",
   font: { bold: true, color: "#FFFFFF" },
 };
-summary.getRange(`A${checkRow + 2}:D${checkRow + 12}`).format = {
+summary.getRange(`A${checkRow + 2}:D${checkRow + 1 + rules.length}`).format = {
   font: { color: "#486F5D", size: 10 },
   wrapText: true,
 };
@@ -178,38 +190,40 @@ summary.freezePanes.freezeRows(4);
 vocabulary.getRangeByIndexes(0, 0, 1, headers.length).values = [headers];
 vocabulary.getRangeByIndexes(1, 0, values.length, headers.length).values = values;
 const lastRow = values.length + 1;
-const table = vocabulary.tables.add(`A1:P${lastRow}`, true, "VocabularyTable");
+const table = vocabulary.tables.add(`A1:U${lastRow}`, true, "VocabularyTable");
 table.style = "TableStyleMedium4";
 table.showFilterButton = true;
 table.showBandedRows = true;
 vocabulary.freezePanes.freezeRows(1);
 vocabulary.freezePanes.freezeColumns(2);
-vocabulary.getRange(`A1:P${lastRow}`).format = {
+vocabulary.getRange(`A1:U${lastRow}`).format = {
   verticalAlignment: "top",
   wrapText: true,
   font: { size: 9 },
 };
-vocabulary.getRange("A1:P1").format = {
+vocabulary.getRange("A1:U1").format = {
   fill: "#26734D",
   font: { bold: true, color: "#FFFFFF", size: 10 },
   horizontalAlignment: "center",
   verticalAlignment: "center",
   wrapText: true,
 };
-vocabulary.getRange("A1:P1").format.rowHeight = 38;
+vocabulary.getRange("A1:U1").format.rowHeight = 38;
 vocabulary.getRange(`E2:E${lastRow}`).format.horizontalAlignment = "right";
-vocabulary.getRange(`L2:L${lastRow}`).format.horizontalAlignment = "center";
-vocabulary.getRange(`A2:P${lastRow}`).format.rowHeight = 36;
+vocabulary.getRange(`G2:G${lastRow}`).format.horizontalAlignment = "right";
+vocabulary.getRange(`H2:H${lastRow}`).format.horizontalAlignment = "center";
+vocabulary.getRange(`Q2:Q${lastRow}`).format.horizontalAlignment = "center";
+vocabulary.getRange(`A2:U${lastRow}`).format.rowHeight = 36;
 
-const widths = [9, 16, 24, 14, 26, 19, 34, 28, 39, 15, 28, 13, 52, 40, 29, 22];
+const widths = [9, 16, 24, 14, 26, 34, 26, 13, 30, 17, 19, 34, 28, 39, 15, 28, 13, 52, 40, 29, 22];
 widths.forEach((width, index) => {
   vocabulary.getRangeByIndexes(0, index, lastRow, 1).format.columnWidth = width;
 });
 
 await fs.mkdir(previewDir, { recursive: true });
 for (const [sheetName, range, scale] of [
-  ["Summary", `A1:D${checkRow + 12}`, 1.15],
-  ["Vocabulary", "A1:P28", 0.65],
+  ["Summary", `A1:D${checkRow + 1 + rules.length}`, 1.15],
+  ["Vocabulary", "A1:U28", 0.55],
 ]) {
   const preview = await workbook.render({ sheetName, range, scale, format: "png" });
   await fs.writeFile(

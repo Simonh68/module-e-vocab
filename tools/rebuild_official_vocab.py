@@ -30,6 +30,22 @@ DATA_DIR = REPO / "data"
 CONTENT_TSV = DATA_DIR / "ab_content.tsv"
 SOURCE_JSON = DATA_DIR / "vocabulary-master.json"
 
+CONTENT_COLUMNS = [
+    "List",
+    "Display",
+    "POS",
+    "Source Entry ID",
+    "Hebrew source",
+    "A2 definition or synonyms",
+    "English example",
+    "Hebrew example",
+    "Record sense (English)",
+    "Record sense (Hebrew)",
+    "Repeated entry",
+    "Same-entry record IDs",
+    "Sense scope",
+]
+
 OFFICIAL_FILES = {
     "A": OFFICIAL_DIR / "LISTA12.12.21.xlsx",
     "B": OFFICIAL_DIR / "LISTB12.12.21.xlsx",
@@ -343,13 +359,18 @@ def read_html_records(path: Path) -> list[dict]:
     return json.loads(match.group(1))
 
 
-def current_records() -> tuple[dict[tuple[str, str], dict], dict[str, list[dict]]]:
-    pool: dict[tuple[str, str], dict] = {}
+def current_records() -> tuple[dict[tuple[str, str, str], dict], dict[str, list[dict]]]:
+    """Read current support data without collapsing same-word/same-POS senses."""
+    pool: dict[tuple[str, str, str], dict] = {}
     groups: dict[str, list[dict]] = {}
     workbook = pd.read_excel(CURRENT_MASTER, sheet_name="Vocabulary", dtype=object)
     by_key = {}
     for _, row in workbook.iterrows():
-        key = (key_text(row["Word / Phrase"]), clean_text(row["POS"]))
+        key = (
+            clean_text(row["Group"]),
+            key_text(row["Word / Phrase"]),
+            clean_text(row["POS"]),
+        )
         by_key[key] = {
             "support_type": clean_text(row["Support Type"]),
             "support_text": clean_text(row["A2 Definition / Synonyms"]),
@@ -361,7 +382,7 @@ def current_records() -> tuple[dict[tuple[str, str], dict], dict[str, list[dict]
             records = read_html_records(REPO / f"{group}.html")
             groups[group] = records
             for record in records:
-                key = (key_text(record["en"]), clean_text(record["pos"]))
+                key = (group, key_text(record["en"]), clean_text(record["pos"]))
                 merged = dict(record)
                 merged.update(by_key.get(key, {}))
                 pool.setdefault(key, merged)
@@ -372,23 +393,19 @@ def write_content_template(cards: list[dict]) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     with CONTENT_TSV.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
-        writer.writerow(
-            [
-                "List",
-                "Display",
-                "POS",
-                "Hebrew source",
-                "A2 definition or synonyms",
-                "English example",
-                "Hebrew example",
-            ]
-        )
+        writer.writerow(CONTENT_COLUMNS)
         for card in sorted(cards, key=lambda x: (x["list"], key_text(x["display"]), x["pos"])):
             writer.writerow(
                 [
                     card["list"],
                     card["display"],
                     card["pos"],
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
                     "",
                     "",
                     "",
@@ -403,15 +420,7 @@ def load_content() -> dict[tuple[str, str, str], dict[str, str]]:
     result = {}
     with CONTENT_TSV.open(encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
-        required_columns = {
-            "List",
-            "Display",
-            "POS",
-            "Hebrew source",
-            "A2 definition or synonyms",
-            "English example",
-            "Hebrew example",
-        }
+        required_columns = set(CONTENT_COLUMNS)
         missing_columns = required_columns - set(reader.fieldnames or [])
         if missing_columns:
             raise RuntimeError(
@@ -431,6 +440,66 @@ def load_content() -> dict[tuple[str, str, str], dict[str, str]]:
                 "hebrew_example": clean_text(row["Hebrew example"]),
             }
     return result
+
+
+def attach_record_sense_metadata(groups: dict[str, list[dict]]) -> None:
+    """Bind meaning to a record ID and link every repeated displayed entry."""
+    ordered_groups = [f"{letter}{number}" for letter in "ABCD" for number in range(1, 4)]
+    indexed: list[tuple[str, dict]] = []
+    by_entry: dict[str, list[str]] = defaultdict(list)
+    for group in ordered_groups:
+        for index, record in enumerate(groups[group], start=1):
+            record_id = f"{group}-{index:03d}"
+            indexed.append((record_id, record))
+            by_entry[key_text(record["en"])].append(record_id)
+
+    for record_id, record in indexed:
+        siblings = [
+            sibling_id
+            for sibling_id in by_entry[key_text(record["en"])]
+            if sibling_id != record_id
+        ]
+        record["record_sense_en"] = record["support_text"]
+        record["record_sense_he"] = record["mean_he"]
+        record["repeated_entry"] = bool(siblings)
+        record["same_entry_record_ids"] = siblings
+        record["record_sense_scope"] = "record-specific" if siblings else "single-entry"
+
+
+def synchronize_content_sense_metadata(groups: dict[str, list[dict]]) -> None:
+    """Keep the A/B curation rows explicit about record identity and sense."""
+    metadata = {}
+    for letter in "AB":
+        for number in range(1, 4):
+            group = f"{letter}{number}"
+            for index, record in enumerate(groups[group], start=1):
+                key = (letter, key_text(record["en"]), record["pos"])
+                if key in metadata:
+                    raise RuntimeError(f"Duplicate A/B metadata key: {' | '.join(key)}")
+                metadata[key] = {
+                    "Source Entry ID": f"{group}-{index:03d}",
+                    "Record sense (English)": record["record_sense_en"],
+                    "Record sense (Hebrew)": record["record_sense_he"],
+                    "Repeated entry": "TRUE" if record["repeated_entry"] else "FALSE",
+                    "Same-entry record IDs": "; ".join(record["same_entry_record_ids"]),
+                    "Sense scope": record["record_sense_scope"],
+                }
+
+    with CONTENT_TSV.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle, delimiter="\t"))
+    for row in rows:
+        key = (row["List"], key_text(row["Display"]), row["POS"])
+        if key not in metadata:
+            raise RuntimeError(f"No generated record matches curated row: {' | '.join(key)}")
+        row.update(metadata[key])
+    if len(rows) != len(metadata):
+        raise RuntimeError(
+            f"A/B metadata coverage mismatch: TSV={len(rows)}, generated={len(metadata)}"
+        )
+    with CONTENT_TSV.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CONTENT_COLUMNS, delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def support_route(text: str) -> tuple[str, list[str]]:
@@ -702,6 +771,13 @@ def validate(groups: dict[str, list[dict]], official_cards: dict[str, list[dict]
                 raise RuntimeError(f"Target repeated in definition: {group} {record['en']} -> {definition}")
             if not record.get("mean_he") or not record.get("ex_en") or not record.get("ex_he"):
                 raise RuntimeError(f"Incomplete card: {group} {record['en']} {record['pos']}")
+            if record.get("record_sense_en") != record.get("support_text"):
+                raise RuntimeError(f"Record English sense mismatch: {group} {record['en']} {record['pos']}")
+            if record.get("record_sense_he") != record.get("mean_he"):
+                raise RuntimeError(f"Record Hebrew sense mismatch: {group} {record['en']} {record['pos']}")
+            expected_scope = "record-specific" if record.get("repeated_entry") else "single-entry"
+            if record.get("record_sense_scope") != expected_scope:
+                raise RuntimeError(f"Record sense scope mismatch: {group} {record['en']} {record['pos']}")
 
 
 def main() -> None:
@@ -725,8 +801,9 @@ def main() -> None:
     # Existing C/D support data is preserved from the synchronized workbook.
     for letter in "CD":
         for number in range(1, 4):
-            for record in groups[f"{letter}{number}"]:
-                current = pool[(key_text(record["en"]), record["pos"])]
+            group = f"{letter}{number}"
+            for record in groups[group]:
+                current = pool[(group, key_text(record["en"]), record["pos"])]
                 record["grammar"] = GRAMMAR.get(record["pos"], record["pos"].lower())
                 record["mean_he"] = normalize_hebrew_meaning(
                     record.get("mean_he") or record.get("he", "")
@@ -749,6 +826,8 @@ def main() -> None:
                 record["rec_prod"] = ""
                 record["source_url"] = OFFICIAL_URLS[letter]
 
+    attach_record_sense_metadata(groups)
+    synchronize_content_sense_metadata(groups)
     validate(groups, official_cards)
     for group, records in groups.items():
         replace_words_array(REPO / f"{group}.html", records)
