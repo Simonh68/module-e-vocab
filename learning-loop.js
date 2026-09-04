@@ -129,7 +129,6 @@
 
 (() => {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
-  if (new URLSearchParams(window.location.search).get('efn_feedback') !== '1') return;
 
   const back = document.querySelector('.card-back');
   if (!back || back.querySelector('[data-efn-binary-feedback]')) return;
