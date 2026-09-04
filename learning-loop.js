@@ -167,20 +167,20 @@
   ack.textContent = '✓ תודה';
   ack.setAttribute('aria-hidden', 'true');
 
-  const send = (eventName, button) => {
+  const send = (outcome, button) => {
     button.classList.add('efn-pressed');
     window.setTimeout(() => button.classList.remove('efn-pressed'), 180);
     ack.classList.remove('efn-show');
     void ack.offsetWidth;
     ack.classList.add('efn-show');
 
-    const target = `band3-${window.location.pathname.split('/').pop()?.replace(/\.html$/i, '').toLowerCase() || 'activity'}-definition-example`;
+    const activity = window.location.pathname.split('/').pop()?.replace(/\.html$/i, '').toLowerCase() || 'activity';
     const payload = {
       site: 'module-e',
       path: window.location.pathname,
       pageKind: 'group',
-      event: eventName,
-      context: { target, feedbackPoint: 'definition_example' }
+      event: 'button_click',
+      context: { target: `band3-${activity}-definition-example-feedback`, outcome }
     };
     try {
       fetch('https://englishfornoar.co.il/api/analytics', {
@@ -193,8 +193,8 @@
     } catch (_) {}
   };
 
-  positive.addEventListener('click', (event) => { event.stopPropagation(); send('feedback_positive', positive); });
-  negative.addEventListener('click', (event) => { event.stopPropagation(); send('feedback_negative', negative); });
+  positive.addEventListener('click', (event) => { event.stopPropagation(); send('positive', positive); });
+  negative.addEventListener('click', (event) => { event.stopPropagation(); send('negative', negative); });
   wrap.append(positive, negative, ack);
   back.appendChild(wrap);
 })();
