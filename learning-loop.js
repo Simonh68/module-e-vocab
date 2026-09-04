@@ -126,3 +126,76 @@
     document.addEventListener('keydown', resumeAfterInteraction, { once: true, capture: true });
   }
 })();
+
+(() => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (new URLSearchParams(window.location.search).get('efn_feedback') !== '1') return;
+
+  const back = document.querySelector('.card-back');
+  if (!back || back.querySelector('[data-efn-binary-feedback]')) return;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .efn-binary-feedback{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;direction:rtl;position:relative;min-height:46px}
+    .efn-binary-feedback button{width:44px;height:44px;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#1e293b;font-size:22px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform .14s ease,background .14s ease,border-color .14s ease}
+    .efn-binary-feedback button:focus-visible{outline:3px solid #b45309;outline-offset:3px}
+    .efn-binary-feedback button.efn-pressed{transform:scale(.84);background:#eef2ff;border-color:#818cf8}
+    .efn-feedback-ack{position:absolute;inset-inline:0;top:100%;margin-top:2px;text-align:center;font-weight:800;font-size:.9rem;opacity:0;pointer-events:none}
+    .efn-feedback-ack.efn-show{animation:efnFeedbackAck 4s ease forwards}
+    @keyframes efnFeedbackAck{0%{opacity:0;transform:translateY(4px)}10%,70%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-3px)}}
+    @media (prefers-reduced-motion: reduce){.efn-binary-feedback button{transition:none}.efn-feedback-ack.efn-show{animation:none;opacity:1}}
+  `;
+  document.head.appendChild(style);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'efn-binary-feedback';
+  wrap.dataset.efnBinaryFeedback = 'true';
+  wrap.setAttribute('role', 'group');
+  wrap.setAttribute('aria-label', 'משוב על ההגדרה והדוגמה');
+
+  const positive = document.createElement('button');
+  positive.type = 'button';
+  positive.textContent = '👍';
+  positive.setAttribute('aria-label', 'משוב חיובי');
+
+  const negative = document.createElement('button');
+  negative.type = 'button';
+  negative.textContent = '👎';
+  negative.setAttribute('aria-label', 'משוב שלילי');
+
+  const ack = document.createElement('span');
+  ack.className = 'efn-feedback-ack';
+  ack.textContent = '✓ תודה';
+  ack.setAttribute('aria-hidden', 'true');
+
+  const send = (eventName, button) => {
+    button.classList.add('efn-pressed');
+    window.setTimeout(() => button.classList.remove('efn-pressed'), 180);
+    ack.classList.remove('efn-show');
+    void ack.offsetWidth;
+    ack.classList.add('efn-show');
+
+    const target = `band3-${window.location.pathname.split('/').pop()?.replace(/\.html$/i, '').toLowerCase() || 'activity'}-definition-example`;
+    const payload = {
+      site: 'module-e',
+      path: window.location.pathname,
+      pageKind: 'group',
+      event: eventName,
+      context: { target, feedbackPoint: 'definition_example' }
+    };
+    try {
+      fetch('https://englishfornoar.co.il/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true,
+        mode: 'cors'
+      }).catch(() => {});
+    } catch (_) {}
+  };
+
+  positive.addEventListener('click', (event) => { event.stopPropagation(); send('feedback_positive', positive); });
+  negative.addEventListener('click', (event) => { event.stopPropagation(); send('feedback_negative', negative); });
+  wrap.append(positive, negative, ack);
+  back.appendChild(wrap);
+})();
