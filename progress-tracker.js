@@ -85,11 +85,12 @@
       if (nav) nav.appendChild(link);
     }
     const isBand2Home = /\/E-Vocab-Band-II\/?(?:index\.html)?$/i.test(path);
-    const isBand3Home = /\/module-e-vocab\/?(?:index\.html)?$/i.test(path);
-    if ((isBand2Home || isBand3Home) && !document.querySelector('.efn-progress-home')) {
+    // The standalone Band III index is the independent approval surface.
+    // Its English for Noar entry gateway owns the progress-report link.
+    if (isBand2Home && !document.querySelector('.efn-progress-home')) {
       const link = document.createElement('a');
       link.href=REPORT_URL; link.className='efn-progress-report-link efn-progress-home'; link.textContent='📊 דוח ההתקדמות שלי';
-      const anchor = isBand2Home ? document.getElementById('activities') : document.querySelector('.lists');
+      const anchor = document.getElementById('activities');
       if (anchor?.parentNode) anchor.parentNode.insertBefore(link, anchor);
     }
   }
