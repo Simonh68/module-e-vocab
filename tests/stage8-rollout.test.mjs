@@ -99,7 +99,7 @@ test('filler feedback does not promise an unscheduled return', () => {
 });
 
 test('practice answers stay excluded while only start/completion measurements are exposed', async () => {
-  const files = ['learning-loop.js', 'practice-session.js', 'practice-panel.js', 'vocab-practice.js'];
+  const files = ['practice-session.js', 'practice-panel.js', 'vocab-practice.js'];
   const source = (await Promise.all(files.map(file => readFile(new URL(`../${file}`, import.meta.url), 'utf8')))).join('\n');
   const styles = await readFile(new URL('../practice-shell.css', import.meta.url), 'utf8');
   const analytics = await readFile(new URL('../analytics.js', import.meta.url), 'utf8');

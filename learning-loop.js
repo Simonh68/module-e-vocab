@@ -139,7 +139,7 @@
     .efn-binary-feedback button{width:44px;height:44px;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#1e293b;font-size:22px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform .14s ease,background .14s ease,border-color .14s ease}
     .efn-binary-feedback button:focus-visible{outline:3px solid #b45309;outline-offset:3px}
     .efn-binary-feedback button.efn-pressed{transform:scale(.84);background:#eef2ff;border-color:#818cf8}
-    .efn-feedback-ack{position:absolute;inset-inline:0;top:100%;margin-top:2px;text-align:center;font-weight:800;font-size:.9rem;opacity:0;pointer-events:none}
+    .efn-feedback-ack{position:absolute;inset-inline:0;top:100%;margin-top:2px;text-align:center;font-size:1.25rem;line-height:1;opacity:0;pointer-events:none}
     .efn-feedback-ack.efn-show{animation:efnFeedbackAck 4s ease forwards}
     @keyframes efnFeedbackAck{0%{opacity:0;transform:translateY(4px)}10%,70%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-3px)}}
     @media (prefers-reduced-motion: reduce){.efn-binary-feedback button{transition:none}.efn-feedback-ack.efn-show{animation:none;opacity:1}}
@@ -149,6 +149,7 @@
   const wrap = document.createElement('div');
   wrap.className = 'efn-binary-feedback';
   wrap.dataset.efnBinaryFeedback = 'true';
+  wrap.dataset.analyticsIgnore = 'true';
   wrap.setAttribute('role', 'group');
   wrap.setAttribute('aria-label', 'משוב על ההגדרה והדוגמה');
 
@@ -164,8 +165,8 @@
 
   const ack = document.createElement('span');
   ack.className = 'efn-feedback-ack';
-  ack.textContent = '✓ תודה';
-  ack.setAttribute('aria-hidden', 'true');
+  ack.textContent = '💬';
+  ack.setAttribute('aria-label', 'המשוב התקבל');
 
   const send = (outcome, button) => {
     button.classList.add('efn-pressed');
@@ -174,13 +175,16 @@
     void ack.offsetWidth;
     ack.classList.add('efn-show');
 
-    const activity = window.location.pathname.split('/').pop()?.replace(/\.html$/i, '').toLowerCase() || 'activity';
+    const group = window.location.pathname.split('/').pop()?.replace(/\.html$/i, '').toUpperCase() || 'ACTIVITY';
+    const item = words[currentIndex];
+    const cardId = `${group}-${String(currentIndex + 1).padStart(3, '0')}`;
+    const target = `vf1|${group}|${cardId}|definition-example|${encodeURIComponent(String(item?.en || ''))}`;
     const payload = {
       site: 'module-e',
       path: window.location.pathname,
       pageKind: 'group',
       event: 'button_click',
-      context: { target: `band3-${activity}-definition-example-feedback`, outcome }
+      context: { target, outcome }
     };
     try {
       fetch('https://englishfornoar.co.il/api/analytics', {
