@@ -99,3 +99,26 @@ test('Band III feedback click emits one precise payload for the visible card', a
   });
   assert.equal(wrap.dataset.analyticsIgnore, 'true');
 });
+
+test('Band III uses the approved youth feedback graphics in all twelve activities', async () => {
+  const ui = await readFile(path.join(root, 'feedback-youth-ui.js'), 'utf8');
+
+  assert.match(ui, /gap:44px/);
+  assert.match(ui, /data-feedback-tone="positive"/);
+  assert.match(ui, /data-feedback-tone="negative"/);
+  assert.match(ui, /#176b45/);
+  assert.match(ui, /#a33d4c/);
+  assert.match(ui, /ack\.textContent = '✓'/);
+  assert.match(ui, /2000/);
+  assert.doesNotMatch(ui, /💬|תודה/);
+  assert.doesNotMatch(ui, /fetch\(|api\/analytics|button_click/);
+
+  for (const page of pages) {
+    const html = await readFile(path.join(root, `${page}.html`), 'utf8');
+    assert.match(
+      html,
+      /learning-loop\.js\?v=20260904-feedback-card1"><\/script><script src="feedback-youth-ui\.js\?v=20260905-1"/,
+      page,
+    );
+  }
+});
