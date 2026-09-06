@@ -1,4 +1,28 @@
 (() => {
+  if (location.hostname !== 'simonh68.github.io') return;
+  if (typeof location.replace !== 'function') return;
+  const match = location.pathname.match(/^\/module-e-vocab\/([A-D][1-3]\.html)$/i);
+  if (!match) return;
+  const read = {};
+  const exactKeys = ['efn.vocab.progress.v1', 'efn.band2.local-progress-consent.v1'];
+  try {
+    for (const key of exactKeys) {
+      const value = localStorage.getItem(key);
+      if (value !== null) read[key] = value;
+    }
+  } catch {}
+  try {
+    const bytes = new TextEncoder().encode(JSON.stringify({ v: 1, source: 'band3', values: read }));
+    let binary = '';
+    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+    window.name = `efn-domain-migration:${btoa(binary)}`;
+  } catch { window.name = ''; }
+  window.__EFN_DOMAIN_MIGRATING = true;
+  location.replace(`https://englishfornoar.co.il/module-e-vocab/play/${match[1]}${location.search}${location.hash}`);
+})();
+
+(() => {
+  if (window.__EFN_DOMAIN_MIGRATING) return;
   const endpoint = 'https://englishfornoar.co.il/api/analytics';
   const visitorStorageKey = 'efn-anonymous-browser-v1';
   const roleStorageKey = 'efn-traffic-role-v1';
@@ -79,7 +103,12 @@
     const host = location.hostname.toLowerCase();
     const path = location.pathname.toLowerCase();
     if (host === 'englishfornoar.co.il' || host === 'www.englishfornoar.co.il') {
-      return path.startsWith('/word-forge') ? 'english-basic' : 'home';
+      if (path.startsWith('/read-along')) return 'read-along';
+      if (path.startsWith('/band-ii/ar')) return 'band-ii-ar';
+      if (path.startsWith('/band-ii')) return 'band-ii';
+      if (path.startsWith('/module-e-vocab/play')) return 'module-e';
+      if (path.startsWith('/word-forge') || path.startsWith('/diagnostic') || path.startsWith('/english-basic')) return 'english-basic';
+      return 'home';
     }
     if (path.includes('/module-e-vocab')) return 'module-e';
     if (path.includes('/e-vocab-band-ii/read-along')) return 'read-along';
