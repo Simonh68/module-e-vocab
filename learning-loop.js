@@ -60,59 +60,82 @@
     }
   }
 
-  function storeEnabled() {
+  let currentEnabled = readPreference();
+
+  function storePreference(enabled) {
     try {
-      window.localStorage.setItem(STORAGE_KEY, 'on');
+      window.localStorage.setItem(STORAGE_KEY, enabled ? 'on' : 'off');
     } catch (_) {
       // The current page still works when storage is blocked.
     }
   }
 
   function applyAudioState(enabled) {
+    currentEnabled = enabled;
     if (typeof automaticAudioEnabled !== 'undefined') automaticAudioEnabled = enabled;
     if (enabled && typeof hasUserInteracted !== 'undefined') hasUserInteracted = true;
 
     button.setAttribute('aria-pressed', String(enabled));
-    button.setAttribute('aria-label', enabled ? 'Automatic audio is on' : 'Turn on automatic audio');
-    button.title = enabled ? 'Automatic audio is on' : 'Turn on automatic audio';
+    button.setAttribute('aria-label', enabled ? 'Turn off automatic audio' : 'Turn on automatic audio');
+    button.title = enabled ? 'Turn off automatic audio' : 'Turn on automatic audio';
     button.innerHTML = enabled ? ICON_ON : ICON_OFF;
-    button.disabled = enabled;
+    button.disabled = false;
   }
 
   function resumePersistedAudio() {
-    if (!readPreference()) return;
+    if (!currentEnabled) return;
     applyAudioState(true);
     if ('speechSynthesis' in window) window.speechSynthesis.resume();
-    if (typeof scheduleWordSpeech === 'function') scheduleWordSpeech();
+    scheduleCurrentSide();
   }
 
-  const originalEnableAutomaticAudio = window.enableAutomaticAudio;
-  if (typeof originalEnableAutomaticAudio === 'function') {
-    window.enableAutomaticAudio = function persistedEnableAutomaticAudio(event) {
-      const result = originalEnableAutomaticAudio.call(this, event);
-      storeEnabled();
-      applyAudioState(true);
-      return result;
-    };
+  function stopAutomaticAudio() {
+    if (typeof scheduleWordSpeech === 'function') window.clearTimeout(scheduleWordSpeech.timer);
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }
+
+  function scheduleCurrentSide() {
+    const flipped = document.getElementById('flashcard')?.classList.contains('is-flipped');
+    if (flipped && typeof scheduleExampleSpeech === 'function') scheduleExampleSpeech();
+    else if (typeof scheduleWordSpeech === 'function') scheduleWordSpeech();
+  }
+
+  window.enableAutomaticAudio = function toggleAutomaticAudio(event) {
+    if (event) event.stopPropagation();
+    const enabled = !currentEnabled;
+    storePreference(enabled);
+    applyAudioState(enabled);
+    if (!enabled) {
+      stopAutomaticAudio();
+      if (typeof announceStatus === 'function') announceStatus('Automatic audio off. You can still play an individual word.');
+      return;
+    }
+    if ('speechSynthesis' in window) window.speechSynthesis.resume();
+    scheduleCurrentSide();
+    if (typeof announceStatus === 'function') announceStatus('Automatic audio on. Use the same button to turn it off.');
+  };
 
   const originalPlayAudio = window.playAudio;
   if (typeof originalPlayAudio === 'function') {
     window.playAudio = function persistedPlayAudio(event) {
-      const result = originalPlayAudio.call(this, event);
-      storeEnabled();
-      applyAudioState(true);
-      return result;
+      const previous = currentEnabled;
+      try {
+        return originalPlayAudio.call(this, event);
+      } finally {
+        // Older card handlers enable narration as a side effect. A one-word
+        // pronunciation must not change the learner's automatic-audio choice.
+        applyAudioState(previous);
+      }
     };
   }
 
-  const enabled = readPreference();
-  applyAudioState(enabled);
+  applyAudioState(currentEnabled);
 
-  if (enabled) {
+  if (currentEnabled) {
     window.addEventListener('load', resumePersistedAudio, { once: true });
 
     const resumeAfterInteraction = () => {
+      if (!currentEnabled) return;
       if ('speechSynthesis' in window) window.speechSynthesis.resume();
       if (
         typeof scheduleWordSpeech === 'function' &&

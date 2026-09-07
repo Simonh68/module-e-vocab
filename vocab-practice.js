@@ -67,18 +67,19 @@
       ],
       promptLang: 'he',
       promptDir: 'rtl',
-      clue: reverse && record.ex_en ? `רמז בהקשר: ${record.ex_en}` : '',
+      // The example contains the target word. Reveal it only in feedback.
+      clue: '',
       clueLang: 'en',
       clueDir: 'ltr',
       choices,
       answer,
       choiceLang: reverse ? 'en' : 'he',
       choiceDir: reverse ? 'ltr' : 'rtl',
-      speakText: english,
+      speakText: reverse ? '' : english,
       modeLabel: context.phase === 'retry'
         ? 'ניסיון חוזר אחרי שתי שאלות אחרות'
         : context.mode === 'review'
-          ? 'בדיקת זכירה בהקשר חדש'
+          ? 'בדיקת זכירה: מהמשמעות למילה'
           : context.filler
             ? 'חיזוק ביניים'
             : 'ניסיון עצמאי',
