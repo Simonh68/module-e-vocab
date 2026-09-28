@@ -1,0 +1,18 @@
+# Select this Blueprint path explicitly. No main-branch or homepage deployment.
+services:
+  - type: web
+    name: efn-word-rivals-pilot
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: codex/word-rivals-online-20260928
+    rootDir: pilots/word-rivals
+    buildCommand: node build.cjs && node build-online.cjs && node --test tests/*.test.cjs
+    startCommand: node start-public.cjs
+    healthCheckPath: /health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"

@@ -10,7 +10,7 @@ async function setup(){const {server,rooms,clean}=makeServer();await new Promise
 test('two independent sessions, server authority, privacy, reconnect and expiry',async t=>{
  const s=await setup();t.after(()=>s.close());
  const host=await s.api('/api/create',{});assert.equal(host.status,201);const code=host.body.code,c0=host.cookie;
- assert.match(code,/^[0-9A-F]{8}$/);assert.ok(c0);assert.ok(!JSON.stringify(host.body).includes('token'));
+ assert.match(code,/^[0-9A-F]{12}$/);assert.ok(c0);assert.ok(!JSON.stringify(host.body).includes('token'));
  assert.equal((await s.api('/api/state?room='+code)).status,403);
  const guest=await s.api('/api/join',{code}),c1=guest.cookie;assert.equal(guest.body.you,1);
  assert.equal((await s.api('/api/join',{code})).status,409);
