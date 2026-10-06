@@ -12,7 +12,7 @@ function makeServer(options={}){
  const cleanup=setInterval(clean,60000);cleanup.unref();
  const cookies=req=>Object.fromEntries((req.headers.cookie||'').split(';').map(s=>s.trim().split('=')));
  const getPlayer=(req,r)=>r.players.findIndex(p=>p.token===cookies(req)['wr_'+r.code]);
- const snapshot=(r,you)=>({revision:r.revision,code:r.code,you,status:r.status,online:r.players.map(p=>p.streams.size>0),players:r.players.length,maxPlayers:MAX_PLAYERS,game:r.game?core.publicState(r.game):null,expiresAt:Math.min(r.created+maxMs,r.touched+idleMs)});
+ const snapshot=(r,you)=>({revision:r.revision,code:r.code,you,status:r.status,matchId:r.matchId,online:r.players.map(p=>p.streams.size>0),players:r.players.length,maxPlayers:MAX_PLAYERS,game:r.game?core.publicState(r.game):null,expiresAt:Math.min(r.created+maxMs,r.touched+idleMs)});
  function broadcast(r){r.revision++;r.players.forEach((p,i)=>{const msg='data: '+JSON.stringify(snapshot(r,i))+'\n\n';for(const s of p.streams)send(s,msg);});}
  function json(res,status,body){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body));}
  function cookie(res,r,p,req){res.setHeader('Set-Cookie',`wr_${r.code}=${p.token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=7200${policy.production||req.socket.encrypted?'; Secure':''}`);}
