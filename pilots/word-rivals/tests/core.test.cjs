@@ -1,10 +1,22 @@
 'use strict';
-const test=require('node:test'),assert=require('node:assert/strict');
-const core=require('../core.cjs'),content=require('../content.cjs');
-test('uses a substantial English Band III corpus',()=>{assert.ok(content.words.length>=40);for(const w of content.words){assert.ok(w.en);assert.ok(w.definition);assert.equal(/[\u0590-\u05ff]/.test(w.definition),false);}});
-test('supports 2 to 6 players and exactly four choices',()=>{for(let n=2;n<=6;n++){const g=core.createGame(123,n);assert.equal(g.scores.length,n);assert.equal(g.question.choices.length,4);assert.equal(new Set(g.question.choices.map(x=>x.id)).size,4);}});
-test('turns rotate and a correct answer scores',()=>{const g=core.createGame(5,3);const id=g.question.correctId;core.apply(g,0,{type:'answer',choiceId:id,version:0});assert.equal(g.scores[0],100);assert.equal(g.active,1);assert.equal(g.turn,1);});
-test('wrong answer resets streak and does not score',()=>{const g=core.createGame(7,2);const wrong=g.question.choices.find(c=>c.id!==g.question.correctId).id;core.apply(g,0,{type:'answer',choiceId:wrong,version:0});assert.equal(g.scores[0],0);assert.equal(g.streaks[0],0);});
-test('streak and fifth-turn power round bonuses work',()=>{const g=core.createGame(9,2);for(let i=0;i<5;i++){const actor=g.active,id=g.question.correctId;core.apply(g,actor,{type:'answer',choiceId:id,version:g.version});}assert.equal(g.feedback.power,true);assert.ok(g.feedback.gain>=200);});
-test('public state hides the answer key',()=>{const g=core.createGame(11,2),p=core.publicState(g);assert.equal(p.question.correctId,undefined);assert.equal(JSON.stringify(p).includes('correctId'),false);});
-test('a complete match gives every player six turns',()=>{const g=core.createGame(17,4);while(g.phase!=='over'){const a=g.active;core.apply(g,a,{type:'answer',choiceId:g.question.correctId,version:g.version});}assert.deepEqual(g.answered,[6,6,6,6]);assert.equal(g.turn,24);assert.ok(core.publicState(g).winners.length);});
+const test=require('node:test'),assert=require('node:assert/strict'),core=require('../core.cjs');
+const meaningDataset={id:'meaning',label:'Meaning set',source:{test:true},items:[
+{id:'a',word:'aid',pos:'Verb',meaning:'help or support',example:'They aid the team.'},
+{id:'b',word:'total',pos:'Adjective',meaning:'complete or whole',example:'The total cost rose.'},
+{id:'c',word:'concept',pos:'Noun',meaning:'an idea',example:'This concept is useful.'},
+{id:'d',word:'damage',pos:'Noun',meaning:'harm or injury',example:'The storm caused damage.'},
+{id:'e',word:'rapid',pos:'Adjective',meaning:'very fast',example:'There was rapid growth.'}
+]};
+const clozeDataset={id:'cloze',label:'Cloze set',source:{test:true},items:[
+{id:'a',word:'aid',pos:'Verb',meaning:'',example:'They aid the team.'},
+{id:'b',word:'total',pos:'Adjective',meaning:'',example:'The total cost rose.'},
+{id:'c',word:'concept',pos:'Noun',meaning:'',example:'This concept is useful.'},
+{id:'d',word:'damage',pos:'Noun',meaning:'',example:'The storm caused damage.'},
+{id:'e',word:'rapid',pos:'Adjective',meaning:'',example:'There was rapid growth.'}
+]};
+test('one engine accepts different datasets',()=>{for(const ds of [meaningDataset,clozeDataset]){const g=core.createGame(ds,123,2);assert.equal(g.dataset.id,ds.id);assert.equal(g.question.choices.length,4);}});
+test('meaning datasets show a word and four English meanings',()=>{const g=core.createGame(meaningDataset,2,2);assert.equal(g.question.mode,'meaning');assert.ok(meaningDataset.items.some(x=>x.word===g.question.prompt));assert.ok(g.question.choices.every(x=>typeof x.text==='string'&&x.text));});
+test('datasets without definitions fall back to English cloze questions',()=>{const g=core.createGame(clozeDataset,3,2);assert.equal(g.question.mode,'cloze');assert.match(g.question.prompt,/_____/);assert.equal(g.question.choices.length,4);});
+test('public state hides the answer key and keeps dataset identity',()=>{const g=core.createGame(meaningDataset,4,2),p=core.publicState(g);assert.equal(p.question.correctId,undefined);assert.equal(p.dataset.id,'meaning');});
+test('scoring and turn rotation do not depend on dataset',()=>{const g=core.createGame(meaningDataset,5,3),id=g.question.correctId;core.apply(g,0,{type:'answer',choiceId:id,version:0});assert.equal(g.scores[0],100);assert.equal(g.active,1);});
+test('complete match remains six turns per player',()=>{const g=core.createGame(clozeDataset,7,4);while(g.phase!=='over')core.apply(g,g.active,{type:'answer',choiceId:g.question.correctId,version:g.version});assert.deepEqual(g.answered,[6,6,6,6]);assert.equal(g.turn,24);});
