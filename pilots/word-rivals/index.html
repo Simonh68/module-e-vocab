@@ -44,6 +44,7 @@ async function answer(id){try{document.querySelectorAll('.answer').forEach(b=>b.
 $('create').onclick=async()=>{try{const s=await api('/api/create',{datasetId:$('dataset').value});history.replaceState(null,'','?room='+s.code);connect(s.code);render(s)}catch(e){toast(e.message)}};
 $('join').onclick=async()=>{try{const code=$('codeInput').value.trim();const s=await api('/api/join',{code});history.replaceState(null,'','?room='+code);connect(code);render(s)}catch(e){toast(e.message)}};
 $('start').onclick=async()=>{try{const s=await api('/api/action?room='+state.code,{type:'start'});render(s)}catch(e){toast(e.message)}};
-$('codeInput').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\\D/g,'').slice(0,6)});\nconst q=new URLSearchParams(location.search).get('room');if(q&&/^\d{6}$/.test(q))$('codeInput').value=q;
+$('codeInput').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6)});
+const q=new URLSearchParams(location.search).get('room');if(q&&/^\d{6}$/.test(q))$('codeInput').value=q;
 function confetti(){const box=$('confetti');for(let i=0;i<45;i++){const s=document.createElement('i');s.className='spark';s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.8+'s';s.style.opacity=.5+Math.random()*.5;s.style.transform='translateY(-12vh) rotate('+Math.random()*180+'deg)';box.appendChild(s)}setTimeout(()=>box.innerHTML='',2600)}
 </script></body></html>
