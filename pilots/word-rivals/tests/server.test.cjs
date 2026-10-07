@@ -12,5 +12,5 @@ test('default remains Band III for backward compatibility',async t=>{const s=awa
 test('unknown datasets fail without creating a room',async t=>{const s=await setup();t.after(()=>s.close());const a=await s.api('/api/create',{datasetId:'nope'});assert.equal(a.status,400);assert.equal(s.rooms.size,0);});
 test('personal-data fields remain rejected',async t=>{const s=await setup();t.after(()=>s.close());assert.equal((await s.api('/api/create',{name:'student'})).status,400);});
 
-test('room codes contain exactly six digits',async t=>{const s=await setup();t.after(()=>s.close());for(let i=0;i<20;i++){const x=await s.api('/api/create',{});assert.match(x.body.code,/^\\d{6}$/);}});
+test('room codes contain exactly six digits',async t=>{const s=await setup();t.after(()=>s.close());for(let i=0;i<20;i++){const x=await s.api('/api/create',{});assert.match(x.body.code,/^\d{6}$/);}});
 test('join rejects letters in room codes',async t=>{const s=await setup();t.after(()=>s.close());assert.equal((await s.api('/api/join',{code:'12a456'})).status,400);});
