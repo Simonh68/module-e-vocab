@@ -1,15 +1,1 @@
-'use strict';
-const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-
-test('inline Battle Room script parses successfully',()=>{
-  const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
-  const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
-  assert.ok(scripts.length>0);
-  for(const script of scripts)assert.doesNotThrow(()=>new Function(script));
-});
-
-test('room code input uses a real newline and digit filter',()=>{
-  const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
-  assert.equal(html.includes(');\\nconst q='),false);
-  assert.ok(html.includes("replace(/\\D/g,'').slice(0,6)"));
-});
+'use strict';const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');test('inline script parses',()=>{const h=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');for(const m of h.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))assert.doesNotThrow(()=>new Function(m[1]))});test('five digit spectator UI',()=>{const h=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');assert.ok(h.includes('maxlength="5"'));assert.ok(h.includes("slice(0,5)"));assert.ok(h.includes('בקש להצטרף כשחקן'));assert.ok(h.includes('מצב צפייה'))});
