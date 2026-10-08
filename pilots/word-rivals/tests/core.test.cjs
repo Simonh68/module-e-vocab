@@ -1,22 +1,7 @@
-'use strict';
-const test=require('node:test'),assert=require('node:assert/strict'),core=require('../core.cjs');
-const meaningDataset={id:'meaning',label:'Meaning set',source:{test:true},items:[
-{id:'a',word:'aid',pos:'Verb',meaning:'help or support',example:'They aid the team.'},
-{id:'b',word:'total',pos:'Adjective',meaning:'complete or whole',example:'The total cost rose.'},
-{id:'c',word:'concept',pos:'Noun',meaning:'an idea',example:'This concept is useful.'},
-{id:'d',word:'damage',pos:'Noun',meaning:'harm or injury',example:'The storm caused damage.'},
-{id:'e',word:'rapid',pos:'Adjective',meaning:'very fast',example:'There was rapid growth.'}
-]};
-const clozeDataset={id:'cloze',label:'Cloze set',source:{test:true},items:[
-{id:'a',word:'aid',pos:'Verb',meaning:'',example:'They aid the team.'},
-{id:'b',word:'total',pos:'Adjective',meaning:'',example:'The total cost rose.'},
-{id:'c',word:'concept',pos:'Noun',meaning:'',example:'This concept is useful.'},
-{id:'d',word:'damage',pos:'Noun',meaning:'',example:'The storm caused damage.'},
-{id:'e',word:'rapid',pos:'Adjective',meaning:'',example:'There was rapid growth.'}
-]};
-test('one engine accepts different datasets',()=>{for(const ds of [meaningDataset,clozeDataset]){const g=core.createGame(ds,123,2);assert.equal(g.dataset.id,ds.id);assert.equal(g.question.choices.length,4);}});
-test('meaning datasets show a word and four English meanings',()=>{const g=core.createGame(meaningDataset,2,2);assert.equal(g.question.mode,'meaning');assert.ok(meaningDataset.items.some(x=>x.word===g.question.prompt));assert.ok(g.question.choices.every(x=>typeof x.text==='string'&&x.text));});
-test('datasets without definitions fall back to English cloze questions',()=>{const g=core.createGame(clozeDataset,3,2);assert.equal(g.question.mode,'cloze');assert.match(g.question.prompt,/_____/);assert.equal(g.question.choices.length,4);});
-test('public state hides the answer key and keeps dataset identity',()=>{const g=core.createGame(meaningDataset,4,2),p=core.publicState(g);assert.equal(p.question.correctId,undefined);assert.equal(p.dataset.id,'meaning');});
-test('scoring and turn rotation do not depend on dataset',()=>{const g=core.createGame(meaningDataset,5,3),id=g.question.correctId;core.apply(g,0,{type:'answer',choiceId:id,version:0});assert.equal(g.scores[0],100);assert.equal(g.active,1);});
-test('complete match remains six turns per player',()=>{const g=core.createGame(clozeDataset,7,4);while(g.phase!=='over')core.apply(g,g.active,{type:'answer',choiceId:g.question.correctId,version:g.version});assert.deepEqual(g.answered,[6,6,6,6]);assert.equal(g.turn,24);});
+'use strict';const test=require('node:test'),assert=require('node:assert/strict'),core=require('../core.cjs');const mk=p=>({id:p,items:Array.from({length:8},(_,i)=>({id:p+i,word:'word'+i,pos:'noun',meaning:'definition '+i,meaningHe:'פירוש '+i}))}),ds={band2:mk('b2'),band3:mk('b3')},right=g=>g.question.correctId,wrong=g=>g.question.choices.find(x=>x.id!==g.question.correctId).id;
+test('Band II EN to HE and Band III EN to EN',()=>{const g=core.createGame(ds,1,2);assert.ok(g.question.choices.every(x=>x.text.startsWith('פירוש')));core.apply(g,0,{type:'answer',choiceId:right(g),version:g.version});core.apply(g,0,{type:'raise',version:g.version});assert.ok(g.question.choices.every(x=>x.text.startsWith('definition')))});
+test('bank is 100',()=>{const g=core.createGame(ds,2,2);core.apply(g,0,{type:'answer',choiceId:right(g),version:g.version});core.apply(g,0,{type:'bank',version:g.version});assert.equal(g.scores[0],100);assert.equal(g.active,1)});
+test('raise right is 250',()=>{const g=core.createGame(ds,3,2);core.apply(g,0,{type:'answer',choiceId:right(g),version:g.version});core.apply(g,0,{type:'raise',version:g.version});core.apply(g,0,{type:'answer',choiceId:right(g),version:g.version});assert.equal(g.scores[0],250)});
+test('raise wrong preserves old score',()=>{const g=core.createGame(ds,4,2);g.scores[0]=500;core.apply(g,0,{type:'answer',choiceId:right(g),version:g.version});core.apply(g,0,{type:'raise',version:g.version});core.apply(g,0,{type:'answer',choiceId:wrong(g),version:g.version});assert.equal(g.scores[0],500)});
+test('Band II wrong is zero and passes',()=>{const g=core.createGame(ds,5,2);core.apply(g,0,{type:'answer',choiceId:wrong(g),version:g.version});assert.equal(g.scores[0],0);assert.equal(g.active,1)});
+test('2-6 players full match',()=>{for(let n=2;n<=6;n++){const g=core.createGame(ds,10+n,n);while(g.phase!=='over'){core.apply(g,g.active,{type:'answer',choiceId:right(g),version:g.version});core.apply(g,g.active,{type:'bank',version:g.version})}assert.equal(g.turn,n*core.ROUNDS_PER_PLAYER)}});
