@@ -2,33 +2,11 @@
 const ROUNDS_PER_PLAYER=6;
 function rng(seed){let s=seed>>>0;return()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296;};}
 function shuffle(a,r){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function cloze(item){const i=item.example.toLowerCase().indexOf(item.word.toLowerCase());if(i<0)return null;return item.example.slice(0,i)+'_____'+item.example.slice(i+item.word.length);}
-function makeQuestion(g){
- const items=g.dataset.items,r=rng(g.seed+g.turn*104729+17),target=items[Math.floor(r()*items.length)];
- let mode='meaning',prompt=target.word,pool=items.filter(x=>x.id!==target.id&&x.meaning&&x.meaning.toLowerCase()!==String(target.meaning||'').toLowerCase()),answer=target.meaning;
- if(!answer||pool.length<3){mode='cloze';prompt=cloze(target);pool=items.filter(x=>x.id!==target.id&&x.word.toLowerCase()!==target.word.toLowerCase());answer=target.word;if(!prompt)throw new Error('Dataset item has no usable English clue');}
- const distractors=shuffle(pool,r).slice(0,3);
- const choices=shuffle([{id:target.id,text:answer},...distractors.map(x=>({id:x.id,text:mode==='meaning'?x.meaning:x.word}))],r);
- return{targetId:target.id,mode,prompt,word:target.word,pos:target.pos,choices,correctId:target.id};
-}
-function createGame(dataset,seed,playerCount,starter=0){
- if(!dataset||!Array.isArray(dataset.items)||dataset.items.length<4)throw new Error('Invalid vocabulary dataset');
- if(!Number.isSafeInteger(seed)||!Number.isInteger(playerCount)||playerCount<2||playerCount>6||starter<0||starter>=playerCount)throw new Error('Invalid game setup');
- const g={dataset,seed:seed>>>0,playerCount,starter,active:starter,turn:0,totalTurns:playerCount*ROUNDS_PER_PLAYER,version:0,phase:'playing',scores:Array(playerCount).fill(0),streaks:Array(playerCount).fill(0),correct:Array(playerCount).fill(0),answered:Array(playerCount).fill(0),feedback:null,question:null};
- g.question=makeQuestion(g);return g;
-}
+function makeQuestion(g,band){const d=band==='band2'?g.datasets.band2:g.datasets.band3,items=d.items,r=rng(g.seed+g.turn*104729+(band==='band2'?17:7919)),target=items[Math.floor(r()*items.length)],field=band==='band2'?'meaningHe':'meaning',answer=String(target[field]||'').trim();if(!answer)throw new Error('Dataset item has no usable meaning');const pool=items.filter(x=>x.id!==target.id&&x[field]&&String(x[field]).trim().toLowerCase()!==answer.toLowerCase());if(pool.length<3)throw new Error('Dataset has too few distinct meanings');const choices=shuffle([{id:target.id,text:answer},...shuffle(pool,r).slice(0,3).map(x=>({id:x.id,text:String(x[field]).trim()}))],r);return{band,prompt:target.word,word:target.word,pos:target.pos,choices,correctId:target.id};}
+function createGame(datasets,seed,playerCount,starter=0){if(!datasets?.band2?.items||!datasets?.band3?.items||datasets.band2.items.length<4||datasets.band3.items.length<4)throw new Error('Invalid vocabulary datasets');if(!Number.isSafeInteger(seed)||!Number.isInteger(playerCount)||playerCount<2||playerCount>6||starter<0||starter>=playerCount)throw new Error('Invalid game setup');const g={datasets,seed:seed>>>0,playerCount,starter,active:starter,turn:0,totalTurns:playerCount*ROUNDS_PER_PLAYER,version:0,phase:'playing',step:'band2',scores:Array(playerCount).fill(0),streaks:Array(playerCount).fill(0),correct:Array(playerCount).fill(0),answered:Array(playerCount).fill(0),feedback:null,question:null,pending:0};g.question=makeQuestion(g,'band2');return g;}
 function leaders(g){const m=Math.max(...g.scores);return g.scores.map((s,i)=>s===m?i:null).filter(i=>i!==null);}
-function apply(g,actor,a){
- if(!a||!Number.isInteger(a.version)||a.version!==g.version)throw new Error('Stale move; refresh');
- if(g.phase==='over')throw new Error('The game has finished');if(actor!==g.active)throw new Error('Not your turn');
- if(a.type!=='answer'||typeof a.choiceId!=='string')throw new Error('Invalid action');if(!g.question.choices.some(c=>c.id===a.choiceId))throw new Error('Unknown choice');
- const ok=a.choiceId===g.question.correctId,power=(g.turn+1)%5===0,beforeLeader=Math.max(...g.scores.filter((_,i)=>i!==actor)),comeback=g.scores[actor]+150<beforeLeader;
- if(ok){g.streaks[actor]++;g.correct[actor]++;let gain=100+Math.min(4,g.streaks[actor]-1)*25;if(power)gain*=2;if(comeback)gain+=50;g.scores[actor]+=gain;g.feedback={actor,ok:true,gain,power,comeback,streak:g.streaks[actor],answer:g.question.choices.find(c=>c.id===g.question.correctId).text,word:g.question.word};}
- else{g.streaks[actor]=0;g.feedback={actor,ok:false,gain:0,power,comeback:false,streak:0,answer:g.question.choices.find(c=>c.id===g.question.correctId).text,word:g.question.word};}
- g.answered[actor]++;g.turn++;if(g.turn>=g.totalTurns){g.phase='over';g.question=null}else{g.active=(g.active+1)%g.playerCount;g.question=makeQuestion(g)}g.version++;return g;
-}
-function publicState(g){
- const q=g.question?{mode:g.question.mode,prompt:g.question.prompt,word:g.question.word,pos:g.question.pos,choices:g.question.choices.map(c=>({...c})),power:(g.turn+1)%5===0}:null;
- return{version:g.version,phase:g.phase,active:g.active,turn:g.turn,totalTurns:g.totalTurns,scores:[...g.scores],streaks:[...g.streaks],correct:[...g.correct],answered:[...g.answered],question:q,feedback:g.feedback?{...g.feedback}:null,winners:g.phase==='over'?leaders(g):[],dataset:{id:g.dataset.id,label:g.dataset.label},source:g.dataset.source};
-}
-module.exports={createGame,apply,publicState,ROUNDS_PER_PLAYER,makeQuestion,cloze};
+function comebackBonus(g,a){const other=Math.max(...g.scores.filter((_,i)=>i!==a));return other-g.scores[a]>=300?25:0;}function streakBonus(g,a){return Math.min(20,Math.max(0,g.streaks[a]-1)*5);}
+function finishTurn(g,a,gain,ok,answer,band){const bonus=ok?streakBonus(g,a)+comebackBonus(g,a):0;g.scores[a]+=gain+bonus;g.feedback={actor:a,ok,gain,bonus,band,streak:g.streaks[a],answer,word:g.question?.word||''};g.turn++;g.pending=0;if(g.turn>=g.totalTurns){g.phase='over';g.step='over';g.question=null}else{g.active=(g.active+1)%g.playerCount;g.step='band2';g.question=makeQuestion(g,'band2')}g.version++;}
+function apply(g,a,x){if(!x||!Number.isInteger(x.version)||x.version!==g.version)throw new Error('Stale move; refresh');if(g.phase==='over')throw new Error('The game has finished');if(a!==g.active)throw new Error('Not your turn');if(g.step==='decision'){if(x.type==='bank'){g.streaks[a]++;return finishTurn(g,a,100,true,'BANK','bank')}if(x.type==='raise'){g.step='band3';g.pending=100;g.question=makeQuestion(g,'band3');g.feedback={actor:a,ok:true,gain:0,bonus:0,band:'band2',streak:g.streaks[a],answer:'',word:g.question.word};g.version++;return g}throw new Error('Choose BANK or RAISE')}if(x.type!=='answer'||typeof x.choiceId!=='string')throw new Error('Invalid action');if(!g.question?.choices.some(c=>c.id===x.choiceId))throw new Error('Unknown choice');const ok=x.choiceId===g.question.correctId,answer=g.question.choices.find(c=>c.id===g.question.correctId).text,band=g.step;g.answered[a]++;if(band==='band2'){if(!ok){g.streaks[a]=0;return finishTurn(g,a,0,false,answer,'band2')}g.correct[a]++;g.step='decision';g.pending=100;g.feedback={actor:a,ok:true,gain:0,bonus:0,band:'band2',streak:g.streaks[a],answer,word:g.question.word};g.question=null;g.version++;return g}if(ok){g.streaks[a]++;g.correct[a]++;return finishTurn(g,a,250,true,answer,'band3')}g.streaks[a]=0;return finishTurn(g,a,0,false,answer,'band3');}
+function publicState(g){const q=g.question?{band:g.question.band,prompt:g.question.prompt,word:g.question.word,pos:g.question.pos,choices:g.question.choices.map(c=>({...c}))}:null;return{version:g.version,phase:g.phase,step:g.step,pending:g.pending,active:g.active,turn:g.turn,totalTurns:g.totalTurns,scores:[...g.scores],streaks:[...g.streaks],correct:[...g.correct],answered:[...g.answered],question:q,feedback:g.feedback?{...g.feedback}:null,winners:g.phase==='over'?leaders(g):[]};}
+module.exports={createGame,apply,publicState,ROUNDS_PER_PLAYER,makeQuestion};
